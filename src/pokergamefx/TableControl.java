@@ -71,6 +71,9 @@ public class TableControl extends AnchorPane implements Initializable {
     @FXML
     private Text roundMessageText;
     
+    @FXML
+    private Text singlePlayerPot,player1Pot,player2Pot,player3Pot,player4Pot;
+    
     private List<HBox> playerCardsList;
     
     private Dealer dealer;
@@ -409,6 +412,8 @@ public class TableControl extends AnchorPane implements Initializable {
         
         bindPlayersChips(allPlayers);
         
+        bindPlayerPots(allPlayers);
+        
     }
     
     void showPreFlopRoundAnimation(){
@@ -479,6 +484,20 @@ public class TableControl extends AnchorPane implements Initializable {
             
         }
     }    
+
+    private void bindPlayerPots(List<Player> allPlayers) {
+        List<Text> playerPotControlList = new ArrayList<>(allPlayers.size());
+        playerPotControlList.add(singlePlayerPot);
+        playerPotControlList.add(player1Pot);
+        playerPotControlList.add(player2Pot);
+        playerPotControlList.add(player3Pot);
+        playerPotControlList.add(player4Pot);
+
+        for(int i=0;i<allPlayers.size();i++){
+            playerPotControlList.get(i).textProperty().bind(dealer.getTable().getTablePot().getPlayerPots().get(i).playerContributionProperty().asString("%.0f"));           
+            
+        }
+    }
     
       
     

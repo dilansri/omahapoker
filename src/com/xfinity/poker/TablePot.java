@@ -16,7 +16,11 @@ public class TablePot {
 	private void initializeTablePot(List<Player> players){
 		for(Player player:players)
 			playerPots.add(new PlayerPot(player));			
-	}	 
+	}
+        
+        public List<PlayerPot> getPlayerPots(){
+            return playerPots;
+        }
 	
 	
 	public double getTablePotChips(){

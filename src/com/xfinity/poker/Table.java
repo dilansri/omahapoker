@@ -1,5 +1,6 @@
 package com.xfinity.poker;
 
+import static com.xfinity.poker.DealerRules.PLAYER_HAND_SIZE;
 import java.util.List;
 
 public class Table implements TableRules {
@@ -10,6 +11,8 @@ public class Table implements TableRules {
 	
 	private int bigBlind;
 	private int smallBlind;
+        
+        
 	
 	
 	public Table(List<Player> players)
@@ -19,6 +22,10 @@ public class Table implements TableRules {
 		bigBlind = INITIAL_BIG_BLIND;
 		smallBlind = INITIAL_SMALL_BLIND;
 	}
+        
+        public TablePot getTablePot(){
+            return tablePot;
+        }
 	
 	private double getTableChips()
 	{
@@ -33,13 +40,15 @@ public class Table implements TableRules {
 		return (playerList == null)? 0 : playerList.size();
 	}
 
-	public void takeBigBlindFromPlayer(int i) {
+	synchronized public void takeBigBlindFromPlayer(int i) {
 		
 		playerList.get(i%numberOfPlayers()).takeChips(bigBlind);
+                getTablePot().getPlayerPots().get(i).addToPot(bigBlind);
 	}
 
-	public void takeSmallBlindFromPlayer(int i) {
-		playerList.get(i%numberOfPlayers()).takeChips(smallBlind);	
+	synchronized public void takeSmallBlindFromPlayer(int i) {
+		playerList.get(i%numberOfPlayers()).takeChips(smallBlind);
+                getTablePot().getPlayerPots().get(i).addToPot(smallBlind);
 	}
 
 }

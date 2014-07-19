@@ -40,7 +40,7 @@ public class Dealer implements DealerRules {
 	}
 	
 	private void getSmallBlind() {
-		table.takeSmallBlindFromPlayer(dealingPlayerOrder);
+		table.takeSmallBlindFromPlayer(dealingPlayerOrder);                
 	}
 
 	private void getBigBlind() {
