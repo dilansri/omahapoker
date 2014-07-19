@@ -6,17 +6,15 @@
 
 package pokergamefx;
 
+import com.xfinity.poker.ComputerPlayer;
 import com.xfinity.poker.Dealer;
 import static com.xfinity.poker.GameRules.GAME_PLAYERS;
+import com.xfinity.poker.HumanPlayer;
 import com.xfinity.poker.Player;
 import com.xfinity.poker.Table;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.application.Application;
-import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
@@ -62,12 +60,12 @@ public class PokerGameFX extends Application {
     }
 
     private void createPlayers() {
-        singlePlayer = new Player("Single Player",0);
+        singlePlayer = new HumanPlayer("Single Player",0);
 		singlePlayer.setDealer(true);
 		
 		computerPlayers = new ArrayList<Player>();
 		for(int i=1;i<GAME_PLAYERS;i++)
-			computerPlayers.add(new Player("CP"+i,i));
+			computerPlayers.add(new ComputerPlayer("CP"+i,i));
     }
 
     private void createTable() {

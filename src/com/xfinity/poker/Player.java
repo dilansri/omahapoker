@@ -11,10 +11,11 @@ public class Player implements PlayerRules {
 	private PlayerHand playerHand;
 	private DoubleProperty playerChips;
 	private int order;
-	private boolean isDealer;
-	
+	private boolean isDealer;	
 	private boolean allIn;	
-	
+        private boolean folded;
+        
+        public enum PlayerAction{CALL,RAISE,CHECK,FOLD,ALL_IN};	
 	
 	public Player(String name,int order){
 		this.name = new ReadOnlyStringWrapper(this,NAME_PROP_NAME, name);
@@ -23,6 +24,7 @@ public class Player implements PlayerRules {
 		playerChips = new SimpleDoubleProperty(PLAYER_INITIAL_CHIPS);
 		isDealer = false;
 		this.order = order;
+                folded = false;
 	}
 	/*
 	private List<Chip> createChipsFromMoney(int playerMoney) {
@@ -32,6 +34,14 @@ public class Player implements PlayerRules {
         
         public ReadOnlyStringProperty nameProperty() {
             return name.getReadOnlyProperty();
+        }
+        
+        public boolean isFolded(){
+            return folded;
+        }
+        
+        public void setFolded(boolean value){
+            folded = value;
         }
 
 	public void giveCard(Card card){
@@ -90,6 +100,10 @@ public class Player implements PlayerRules {
         
         public DoubleProperty getPlayerChipsProperty(){
             return playerChips;
+        }
+        
+        public PlayerAction getAction(){
+            return null;
         }
 	
 }

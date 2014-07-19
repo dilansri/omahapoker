@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite errors="0" failures="0" hostname="DILAN-PC" name="com.xfinity.poker.ChipsTestsJUnitTest" skipped="0" tests="1" time="0.08" timestamp="2014-07-19T13:55:09">
+<testsuite errors="0" failures="0" hostname="DILAN-PC" name="com.xfinity.poker.ChipsTestsJUnitTest" skipped="0" tests="1" time="0.084" timestamp="2014-07-19T19:07:17">
   <properties>
     <property name="netbeans.autoupdate.country" value="US" />
     <property name="javafx.binarycss" value="false" />
@@ -47,7 +47,7 @@
     <property name="user.name" value="Administrator" />
     <property name="copylibs.rebase" value="true" />
     <property name="libs.swing-layout.maven-pom" value="" />
-    <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner com.xfinity.poker.ChipsTestsJUnitTest filtertrace=true haltOnError=false haltOnFailure=false showoutput=true outputtoformatters=true logfailedtests=true logtestlistenerevents=true formatter=org.apache.tools.ant.taskdefs.optional.junit.BriefJUnitResultFormatter formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,C:\win7New\JavaFX\PokerGameFX\build\test\results\TEST-com.xfinity.poker.ChipsTestsJUnitTest.xml crashfile=C:\win7New\JavaFX\PokerGameFX\build\junitvmwatcher3132780338862265097.properties propsfile=C:\win7New\JavaFX\PokerGameFX\build\junit379098483049558962.properties" />
+    <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner com.xfinity.poker.ChipsTestsJUnitTest filtertrace=true haltOnError=false haltOnFailure=false showoutput=true outputtoformatters=true logfailedtests=true logtestlistenerevents=true formatter=org.apache.tools.ant.taskdefs.optional.junit.BriefJUnitResultFormatter formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,C:\win7New\JavaFX\PokerGameFX\build\test\results\TEST-com.xfinity.poker.ChipsTestsJUnitTest.xml crashfile=C:\win7New\JavaFX\PokerGameFX\build\junitvmwatcher5040966517032812704.properties propsfile=C:\win7New\JavaFX\PokerGameFX\build\junit7558982919537899016.properties" />
     <property name="build.classes.dir" value="build/classes" />
     <property name="netbeans.accept_license_class" value="org.netbeans.license.AcceptLicense" />
     <property name="build.sysclasspath" value="ignore" />
@@ -342,7 +342,7 @@
     <property name="awt.toolkit" value="sun.awt.windows.WToolkit" />
     <property name="javafx.deploy.installpermanently" value="false" />
   </properties>
-  <testcase classname="com.xfinity.poker.ChipsTestsJUnitTest" name="TakingSmallAndBigBlindShowReducePlayerChips" time="0.025" />
+  <testcase classname="com.xfinity.poker.ChipsTestsJUnitTest" name="TakingSmallAndBigBlindShowReducePlayerChips" time="0.026" />
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

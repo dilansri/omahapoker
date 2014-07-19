@@ -7,15 +7,19 @@
 package pokergamefx;
 
 import com.xfinity.poker.Card;
+import com.xfinity.poker.ComputerPlayer;
 import com.xfinity.poker.Dealer;
 import static com.xfinity.poker.DealerRules.PLAYER_HAND_SIZE;
 import static com.xfinity.poker.GameRules.GAME_PLAYERS;
+import com.xfinity.poker.HumanPlayer;
 import com.xfinity.poker.Player;
+import com.xfinity.poker.Player.PlayerAction;
 import com.xfinity.poker.Value;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.ResourceBundle;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
@@ -28,7 +32,6 @@ import javafx.animation.Transition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -240,7 +243,6 @@ public class TableControl extends AnchorPane implements Initializable {
         List<Card> cards = dealer.getTable().getPlayers().get(player).getPlayerHand().getCards();
         
         List<Pane> playerCardPanes = new ArrayList<Pane>(cards.size());
-        List<Transition> cardTransitions = new ArrayList<Transition>(cards.size());
             
         for(Card card: cards){
             CardControl cardControl =new CardControl(card.getSuit().getSuitType().toString(),card.getValue().getCardValue());
@@ -253,8 +255,6 @@ public class TableControl extends AnchorPane implements Initializable {
             rt.setAxis(Rotate.Y_AXIS);
             rt.setByAngle(180);
             rt.play();
-            
-            cardTransitions.add(rt);
             
         }
         
@@ -280,7 +280,72 @@ public class TableControl extends AnchorPane implements Initializable {
     }
     
     private void startBettingRound() {
+        int betStartingPlayer = dealer.getDealingPlayerOrder();
         
+        List<Timeline> bettingTimelines = new ArrayList<>();
+        for(int i=betStartingPlayer;i<GAME_PLAYERS+betStartingPlayer;i++){
+            Player player = dealer.getTable().getPlayers().get(i % GAME_PLAYERS);
+            if(player.isFolded() || player.isAllIn()){
+                continue;
+            }
+            
+            PlayerAction action = null;
+            
+            if(player instanceof HumanPlayer){
+                action = player.getAction();
+                continue;
+            }else if(player instanceof ComputerPlayer){
+                action = player.getAction();
+            }
+            
+            bettingTimelines.add(getPlayerBettingTransition(action,i%GAME_PLAYERS));
+            
+        }
+        
+        SequentialTransition seqTransition = new SequentialTransition();
+        seqTransition.getChildren().addAll(bettingTimelines);
+        seqTransition.play();
+    }
+    
+    private Timeline getPlayerBettingTransition(PlayerAction action, int player) {
+        Rectangle messageBox = null;
+        Text messageText = null;
+        switch (player) {
+            case 0:
+                messageBox = singlePlayerMessageBox;
+                messageText = singlePlayerMessageText;
+                break;
+            case 1:
+                messageBox = player1MessageBox;
+                messageText = player1MessageText;
+                break;
+            case 2:
+                messageBox = player2MessageBox;
+                messageText = player2MessageText;
+                break;
+            case 3:
+                messageBox = player3MessageBox;
+                messageText = player3MessageText;
+                break;
+            case 4:
+                messageBox = player4MessageBox;
+                messageText = player4MessageText;
+                break;
+        }
+        
+        messageText.setText("hmm...");
+        
+        Random rand = new Random();
+
+        KeyValue valueBox = new KeyValue(messageBox.fillProperty(), Paint.valueOf("3b72ff"), Interpolator.LINEAR);
+        KeyValue valueText = new KeyValue(messageText.textProperty(),action.toString());
+        KeyFrame keyFrame = new KeyFrame(Duration.millis(1000), valueBox,valueText);
+        Timeline timeline = new Timeline();
+        timeline.getKeyFrames().add(keyFrame);
+        timeline.setCycleCount(5);
+        timeline.setAutoReverse(true);
+        
+        return timeline;
     }
     
 
@@ -324,11 +389,11 @@ public class TableControl extends AnchorPane implements Initializable {
         
        KeyValue valueX = new KeyValue(card.layoutXProperty(),destinationX,Interpolator.EASE_OUT);       
        KeyValue valueY = new KeyValue(card.layoutYProperty(),destinationY,Interpolator.EASE_OUT);       
-       KeyFrame keyFrame = new KeyFrame(Duration.millis(1000), valueX, valueY);       
+       KeyFrame keyFrame = new KeyFrame(Duration.millis(500), valueX, valueY);       
        Timeline timeline = new Timeline();
        timeline.getKeyFrames().add(keyFrame);
        
-       RotateTransition rotateTransition = new RotateTransition(Duration.millis(1000), card);
+       RotateTransition rotateTransition = new RotateTransition(Duration.millis(500), card);
        rotateTransition.setByAngle(720f);        
        ParallelTransition parallel =  new ParallelTransition();        
        parallel.getChildren().addAll(timeline,rotateTransition);
