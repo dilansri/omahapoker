@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+
+<Pane fx:id="card" prefHeight="60.0" prefWidth="45.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Rectangle arcHeight="15.0" arcWidth="15.0" fill="WHITE" height="60.0" stroke="#d0d0d0" strokeType="INSIDE" width="45.0" />
+      <Text fx:id="suit" fill="RED" layoutX="12.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="♥">
+         <font>
+            <Font size="29.0" />
+         </font>
+      </Text>
+      <Text fx:id="value" fill="RED" layoutX="4.0" layoutY="20.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1" wrappingWidth="31.13671875">
+         <font>
+            <Font size="19.0" />
+         </font>
+      </Text>
+   </children>
+</Pane>
