@@ -15,7 +15,12 @@ import com.xfinity.poker.Table;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /**
@@ -31,9 +36,9 @@ public class PokerGameFX extends Application {
     TableControl tableControl;
     
     @Override
-    public void start(final Stage stage) throws Exception {
+    public void start(Stage stage) throws Exception {
         //Parent root = FXMLLoader.load(getClass().getResource("FXMLTable.fxml"));
-        
+        //clickShow();
         createPlayers();
         createTable();
         createDealer();
@@ -43,6 +48,22 @@ public class PokerGameFX extends Application {
         stage.show();
         tableControl.startGame();
         
+    }
+    
+    //WindowShow Dialog
+    private void clickShow() {
+        Stage stage = new Stage();
+        Parent root = null;
+        try{
+            root = FXMLLoader.load(TableCardController.class.getResource("TableCard.fxml"));
+        }catch(Exception e){
+            
+        }
+        stage.setScene(new Scene(root));
+        stage.setTitle("My modal window");
+        stage.initModality(Modality.WINDOW_MODAL);
+        //stage.initOwner(parentStage.getScene().getWindow());
+        stage.showAndWait();
     }
 
     /**

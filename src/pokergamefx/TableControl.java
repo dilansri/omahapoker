@@ -37,6 +37,8 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -44,6 +46,8 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 /**
@@ -269,7 +273,7 @@ public class TableControl extends AnchorPane implements Initializable {
 
             @Override
             public void handle(ActionEvent event) {
-                startBettingRound();
+                startBettingRound();                 
             }  
 
             
@@ -280,9 +284,12 @@ public class TableControl extends AnchorPane implements Initializable {
     }
     
     private void startBettingRound() {
-        int betStartingPlayer = dealer.getDealingPlayerOrder();
+        int betStartingPlayer = dealer.getDealingPlayerOrder()+2;
         
-        List<Timeline> bettingTimelines = new ArrayList<>();
+        boolean playerPassed = false;
+        
+        List<Transition> bettingTransitionsBeforePlayerChoice = new ArrayList<>();
+        List<Transition> bettingTransitionsAfterPlayerChoice = new ArrayList<>();
         for(int i=betStartingPlayer;i<GAME_PLAYERS+betStartingPlayer;i++){
             Player player = dealer.getTable().getPlayers().get(i % GAME_PLAYERS);
             if(player.isFolded() || player.isAllIn()){
@@ -292,22 +299,67 @@ public class TableControl extends AnchorPane implements Initializable {
             PlayerAction action = null;
             
             if(player instanceof HumanPlayer){
-                action = player.getAction();
+                //action = player.getAction();
+                playerPassed = true;
                 continue;
             }else if(player instanceof ComputerPlayer){
                 action = player.getAction();
             }
-            
-            bettingTimelines.add(getPlayerBettingTransition(action,i%GAME_PLAYERS));
+            if(!playerPassed)
+                bettingTransitionsBeforePlayerChoice.add(getPlayerBettingTransition(action,i%GAME_PLAYERS));
+            else
+                bettingTransitionsAfterPlayerChoice.add(getPlayerBettingTransition(action,i%GAME_PLAYERS));
             
         }
         
         SequentialTransition seqTransition = new SequentialTransition();
-        seqTransition.getChildren().addAll(bettingTimelines);
+        seqTransition.getChildren().addAll(bettingTransitionsBeforePlayerChoice);
+        seqTransition.setOnFinished(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+                //showPlayerTurnAnimation();
+                //getSinglePlayerChoice();
+               //System.out.println("LLOOOP");
+            }
+
+            
+
+            
+        });
         seqTransition.play();
+        
+        
+        
+    }  
+    private void showPlayerTurnAnimation() {
+        roundMessageText.setText("Your Turn");
+        roundMessageText.setOpacity(0);
+       KeyValue valueOpacity = new KeyValue(roundMessageText.opacityProperty(),1,Interpolator.LINEAR);      
+       KeyFrame keyFrame = new KeyFrame(Duration.millis(1000), valueOpacity);       
+       Timeline timeline = new Timeline();
+       timeline.getKeyFrames().add(keyFrame);
+       timeline.setAutoReverse(true);
+       timeline.setDelay(Duration.millis(1000));
+       timeline.play();
+    }
+
+    private void getSinglePlayerChoice() {
+        Stage stage = new Stage();
+        Parent root = null;
+        try{
+            root = FXMLLoader.load(TableCardController.class.getResource("TableCard.fxml"));
+        }catch(Exception e){
+            
+        }
+        stage.setScene(new Scene(root));
+        stage.setTitle("My modal window");
+        stage.initModality(Modality.WINDOW_MODAL);
+        //stage.initOwner(parentStage.getScene().getWindow());
+        stage.showAndWait();
     }
     
-    private Timeline getPlayerBettingTransition(PlayerAction action, int player) {
+    private Transition getPlayerBettingTransition(PlayerAction action, int player) {
         Rectangle messageBox = null;
         Text messageText = null;
         switch (player) {
@@ -337,15 +389,22 @@ public class TableControl extends AnchorPane implements Initializable {
         
         Random rand = new Random();
 
-        KeyValue valueBox = new KeyValue(messageBox.fillProperty(), Paint.valueOf("3b72ff"), Interpolator.LINEAR);
+        KeyValue valueBox = new KeyValue(messageBox.fillProperty(), Paint.valueOf("3b72ff"), Interpolator.EASE_IN);        
+        KeyFrame keyFrameBox = new KeyFrame(Duration.millis(300), valueBox);
+        Timeline timelineBox = new Timeline();
+        timelineBox.getKeyFrames().add(keyFrameBox);
+        timelineBox.setCycleCount(15);
+        timelineBox.setDelay(Duration.millis(2000));
+        timelineBox.setAutoReverse(true);
         KeyValue valueText = new KeyValue(messageText.textProperty(),action.toString());
-        KeyFrame keyFrame = new KeyFrame(Duration.millis(1000), valueBox,valueText);
-        Timeline timeline = new Timeline();
-        timeline.getKeyFrames().add(keyFrame);
-        timeline.setCycleCount(5);
-        timeline.setAutoReverse(true);
+        KeyFrame keyFrameText = new KeyFrame(Duration.millis(1), valueText);
+        Timeline timelineText = new Timeline();
+        timelineText.setDelay(Duration.millis(rand.nextInt(3000)+1000));
+        timelineText.getKeyFrames().add(keyFrameText);
         
-        return timeline;
+        SequentialTransition seqTrans = new SequentialTransition();
+        seqTrans.getChildren().addAll(timelineBox,timelineText);
+        return seqTrans;
     }
     
 
@@ -443,23 +502,29 @@ public class TableControl extends AnchorPane implements Initializable {
     
     private void adjustCardLists(){
         
+        List<Timeline> cardAjustTimeLines = new ArrayList<>();
+        
         for(HBox playerCards: playerCardsList)
         {
             KeyValue valueX = new KeyValue(playerCards.prefWidthProperty(),50,Interpolator.EASE_OUT);
             KeyFrame keyFrame = new KeyFrame(Duration.millis(500), valueX);       
             Timeline timeline = new Timeline();
-            timeline.getKeyFrames().add(keyFrame);
-            timeline.play();
+            timeline.getKeyFrames().add(keyFrame);          
+            cardAjustTimeLines.add(timeline);
             
-            timeline.setOnFinished(new EventHandler<ActionEvent>() {
+        }
+        
+        ParallelTransition transition = new ParallelTransition();
+        transition.getChildren().addAll(cardAjustTimeLines);
+        transition.setOnFinished(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
                     showPlayerCards(0);
                 }
 
             });
-            
-        }
+        transition.play();
+        
     }
 
     void bindPlayers(List<Player> allPlayers) {
