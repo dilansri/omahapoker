@@ -335,7 +335,7 @@
             </Pane>
          </children>
       </HBox>
-      <HBox fx:id="playerCards3" layoutX="533.0" layoutY="202.0" prefHeight="58.0" prefWidth="177.0" rotate="26.6">
+      <HBox fx:id="playerCards3" layoutX="533.0" layoutY="202.0" prefHeight="58.0" prefWidth="177.0">
          <children>
             <Pane prefHeight="71.0" prefWidth="45.0">
                <children>
@@ -399,7 +399,7 @@
             </Pane>
          </children>
       </HBox>
-      <HBox fx:id="playerCards4" layoutX="516.0" layoutY="365.0" prefHeight="58.0" prefWidth="177.0" rotate="-33.7">
+      <HBox fx:id="playerCards4" layoutX="516.0" layoutY="365.0" prefHeight="58.0" prefWidth="177.0">
          <children>
             <Pane prefHeight="71.0" prefWidth="45.0">
                <children>

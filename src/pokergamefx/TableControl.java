@@ -134,7 +134,11 @@ public class TableControl extends AnchorPane implements Initializable {
                 if(timelinePlayerActionAnimation != null){
                     timelinePlayerActionAnimation.jumpTo(Duration.millis(PLAYER_TIME_OUT_SECONDS * 1000));
                 }
+                
+                setPlayerActionText(playerSelectedAction);
             }
+
+            
 
             
         });
@@ -143,6 +147,9 @@ public class TableControl extends AnchorPane implements Initializable {
             @Override public void handle(ActionEvent e) {
                 hidePlayerControls();
                 playerSelectedAction = PlayerAction.RAISE;
+                if(timelinePlayerActionAnimation != null){
+                    timelinePlayerActionAnimation.jumpTo(Duration.millis(PLAYER_TIME_OUT_SECONDS * 1000));
+                }
             }
         });
         
@@ -150,6 +157,9 @@ public class TableControl extends AnchorPane implements Initializable {
             @Override public void handle(ActionEvent e) {
                 hidePlayerControls();
                 playerSelectedAction = PlayerAction.CHECK;
+                if(timelinePlayerActionAnimation != null){
+                    timelinePlayerActionAnimation.jumpTo(Duration.millis(PLAYER_TIME_OUT_SECONDS * 1000));
+                }
                 
             }
         });
@@ -158,6 +168,9 @@ public class TableControl extends AnchorPane implements Initializable {
             @Override public void handle(ActionEvent e) {
                 hidePlayerControls();
                 playerSelectedAction = PlayerAction.FOLD;
+                if(timelinePlayerActionAnimation != null){
+                    timelinePlayerActionAnimation.jumpTo(Duration.millis(PLAYER_TIME_OUT_SECONDS * 1000));
+                }
             }
         });
         
@@ -165,6 +178,9 @@ public class TableControl extends AnchorPane implements Initializable {
             @Override public void handle(ActionEvent e) {
                 hidePlayerControls();
                 playerSelectedAction = PlayerAction.ALL_IN;
+                if(timelinePlayerActionAnimation != null){
+                    timelinePlayerActionAnimation.jumpTo(Duration.millis(PLAYER_TIME_OUT_SECONDS * 1000));
+                }
             }
         });
     }
@@ -172,6 +188,10 @@ public class TableControl extends AnchorPane implements Initializable {
     private void hidePlayerControls() {
         playerActionsPane.setOpacity(0);
         playerTimeIndicatior.setVisible(false);
+    }
+    
+    private void setPlayerActionText(PlayerAction playerSelectedAction) {
+        singlePlayerMessageText.setText(playerSelectedAction.toString());
     }
     
     public void startGame(){
@@ -275,11 +295,7 @@ public class TableControl extends AnchorPane implements Initializable {
             public void handle(ActionEvent event) {
                 adjustCardLists();
                 showStartBettingAnimation("Pre Flop Round");                
-            }           
-
-            
-
-            
+            }    
         });
                 
                 
@@ -372,7 +388,7 @@ public class TableControl extends AnchorPane implements Initializable {
         boolean playerPassed = false;
         
         List<Transition> bettingTransitionsBeforePlayerChoice = new ArrayList<>();
-        List<Transition> bettingTransitionsAfterPlayerChoice = new ArrayList<>();
+        final List<Transition> bettingTransitionsAfterPlayerChoice = new ArrayList<>();
         for(int i=betStartingPlayer;i<GAME_PLAYERS+betStartingPlayer;i++){
             Player player = table.getPlayers().get(i % GAME_PLAYERS);
             if(player.isFolded() || player.isAllIn()){
@@ -401,7 +417,7 @@ public class TableControl extends AnchorPane implements Initializable {
 
             @Override
             public void handle(ActionEvent event) {
-                showPlayerTurnAnimation();
+                showPlayerTurnAnimation(bettingTransitionsAfterPlayerChoice);
                 //application.getSinglePlayerChoice();              
             }
 
@@ -415,7 +431,7 @@ public class TableControl extends AnchorPane implements Initializable {
         
         
     }  
-    private void showPlayerTurnAnimation() {
+    private void showPlayerTurnAnimation(final List<Transition> afterTransitions) {
         roundMessageText.setText("Your Turn");
         roundMessageText.setOpacity(0);
        KeyValue valueOpacity = new KeyValue(roundMessageText.opacityProperty(),1,Interpolator.LINEAR);      
@@ -429,13 +445,13 @@ public class TableControl extends AnchorPane implements Initializable {
 
             @Override
             public void handle(ActionEvent event) { 
-               showAndWaitPlayerControls();
+               showAndWaitPlayerControls(afterTransitions);
             }
         });
        timeline.play();
     }
     
-    private void showAndWaitPlayerControls() {
+    private void showAndWaitPlayerControls(final List<Transition> afterTransitions) {
         
         setPlayerControlsToDefault();
         List<PlayerAction> possibleActions = dealer.getPlayerPossibleActions(0);
@@ -463,7 +479,7 @@ public class TableControl extends AnchorPane implements Initializable {
 
             @Override
             public void handle(ActionEvent event) {
-                showPlayerTimerAnimation();
+                showPlayerTimerAnimation(afterTransitions);
             }
             
         });
@@ -472,8 +488,9 @@ public class TableControl extends AnchorPane implements Initializable {
         
     }
     
-    private void showPlayerTimerAnimation() {
+    private void showPlayerTimerAnimation(final List<Transition> afterTransitions) {
         playerTimeIndicatior.setVisible(true);
+        playerTimeIndicatior.setProgress(0);
         playerSelectedAction = PlayerAction.FOLD;
         KeyValue valueProgress = new KeyValue(playerTimeIndicatior.progressProperty(), 1, Interpolator.LINEAR);
         KeyFrame keyFrame = new KeyFrame(Duration.millis(PLAYER_TIME_OUT_SECONDS*1000), valueProgress);
@@ -485,13 +502,33 @@ public class TableControl extends AnchorPane implements Initializable {
             @Override
             public void handle(ActionEvent event) {
                 hidePlayerControls();
-                System.out.println("SUCCESSFULLY FINISHED");
+                showAfterPlayerTransitions(afterTransitions);
             }
+
+            
             
         });
         timelinePlayerActionAnimation.play();
     }
+    private void showAfterPlayerTransitions(List<Transition> afterTransitions) {
+    
+        final SequentialTransition seqTransition = new SequentialTransition();
+        seqTransition.getChildren().addAll(afterTransitions);
+        seqTransition.setOnFinished(new EventHandler<ActionEvent>() {
 
+            @Override
+            public void handle(ActionEvent event) {
+                //showPlayerTurnAnimation(bettingTransitionsAfterPlayerChoice);
+                //application.getSinglePlayerChoice();  
+                //System.out.println("AFTER DONE");
+                
+                if(!table.isSamePotValues()){                    
+                    startBettingRound();
+                }
+            }           
+        });
+        seqTransition.play(); 
+    }
     private void setPlayerControlsToDefault() {
         raiseButton.setDisable(true);
         callButton.setDisable(true);
@@ -526,12 +563,13 @@ public class TableControl extends AnchorPane implements Initializable {
                 break;
         }
         
-        messageText.setText("hmm...");
-        
+       // messageText.setText("hmm...");
+        messageBox.setFill(Paint.valueOf("e4e4e4"));
         Random rand = new Random();
 
         KeyValue valueBox = new KeyValue(messageBox.fillProperty(), Paint.valueOf("3b72ff"), Interpolator.EASE_IN);        
-        KeyFrame keyFrameBox = new KeyFrame(Duration.millis(300), valueBox);
+        KeyValue valueTextThinking = new KeyValue(messageText.textProperty(),"Hmmm..");
+        KeyFrame keyFrameBox = new KeyFrame(Duration.millis(300), valueBox,valueTextThinking);
         Timeline timelineBox = new Timeline();
         timelineBox.getKeyFrames().add(keyFrameBox);
         timelineBox.setCycleCount(15);

@@ -61,4 +61,8 @@ public class Table implements TableRules {
                 getTablePot().getPlayerPots().get(i).addToPot(smallBlind);
 	}
 
+    public boolean isSamePotValues() {
+        return false;
+    }
+
 }

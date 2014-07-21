@@ -48,9 +48,10 @@ public class PokerGameFX extends Application {
         createDealer();
         tableControl = new TableControl(dealer,this);
         Scene scene = new Scene(tableControl);
-        stage.setScene(scene);
-        stage.initStyle(StageStyle.UNDECORATED);
-    //    stage.setFullScreen(true);
+        stage.setScene(scene);        
+        //stage.initStyle(StageStyle.UNDECORATED);
+        //stage.setFullScreen(true);
+        //stage.
         stage.show();
         tableControl.startGame(); 
         
