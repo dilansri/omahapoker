@@ -12,7 +12,7 @@ public class Table implements TableRules {
 	private int bigBlind;
 	private int smallBlind;
         
-        
+        private double highestPotValue;
 	
 	
 	public Table(List<Player> players)
@@ -22,6 +22,14 @@ public class Table implements TableRules {
 		bigBlind = INITIAL_BIG_BLIND;
 		smallBlind = INITIAL_SMALL_BLIND;
 	}
+        
+        public double getHighestPotValue(){
+            return highestPotValue;
+        }
+        
+        public double getRaiseAmount(){
+            return highestPotValue + bigBlind;
+        }
         
         public TablePot getTablePot(){
             return tablePot;
@@ -44,6 +52,8 @@ public class Table implements TableRules {
 		
 		playerList.get(i%numberOfPlayers()).takeChips(bigBlind);
                 getTablePot().getPlayerPots().get(i).addToPot(bigBlind);
+                
+                highestPotValue = bigBlind;
 	}
 
 	synchronized public void takeSmallBlindFromPlayer(int i) {

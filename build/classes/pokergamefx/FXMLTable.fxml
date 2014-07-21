@@ -335,7 +335,7 @@
             </Pane>
          </children>
       </HBox>
-      <HBox fx:id="playerCards3" layoutX="533.0" layoutY="202.0" prefHeight="58.0" prefWidth="177.0">
+      <HBox fx:id="playerCards3" layoutX="533.0" layoutY="202.0" prefHeight="58.0" prefWidth="177.0" rotate="26.6">
          <children>
             <Pane prefHeight="71.0" prefWidth="45.0">
                <children>
@@ -399,7 +399,7 @@
             </Pane>
          </children>
       </HBox>
-      <HBox fx:id="playerCards4" layoutX="516.0" layoutY="365.0" prefHeight="58.0" prefWidth="177.0">
+      <HBox fx:id="playerCards4" layoutX="516.0" layoutY="365.0" prefHeight="58.0" prefWidth="177.0" rotate="-33.7">
          <children>
             <Pane prefHeight="71.0" prefWidth="45.0">
                <children>
@@ -700,5 +700,15 @@
             <Font size="56.0" />
          </font>
       </Text>
+      <Pane fx:id="playerActionsPane" layoutX="126.0" layoutY="159.0" opacity="0.0">
+         <children>
+            <Button fx:id="raiseButton" disable="true" layoutX="132.0" layoutY="1.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="111.0" text="RAISE" />
+            <Button fx:id="callButton" disable="true" layoutY="1.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="111.0" text="CALL" />
+            <Button fx:id="foldButton" disable="true" layoutX="394.0" layoutY="1.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="111.0" text="FOLD" />
+            <Button fx:id="allInButton" disable="true" layoutX="525.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="111.0" text="ALL IN" />
+            <Button fx:id="checkButton" disable="true" layoutX="254.0" layoutY="1.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="111.0" text="CHECK" />
+         </children>
+      </Pane>
+      <ProgressIndicator fx:id="playerTimeIndicatior" layoutX="55.0" layoutY="159.0" progress="0.0" scaleX="2.5" scaleY="2.5" visible="false" />
     </children>
 </fx:root>

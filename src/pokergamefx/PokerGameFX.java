@@ -22,6 +22,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 /**
  *
@@ -35,18 +36,23 @@ public class PokerGameFX extends Application {
     Table table;
     TableControl tableControl;
     
+    Stage primaryOwner;
+    
     @Override
     public void start(Stage stage) throws Exception {
         //Parent root = FXMLLoader.load(getClass().getResource("FXMLTable.fxml"));
         //clickShow();
+        primaryOwner = stage;
         createPlayers();
         createTable();
         createDealer();
-        tableControl = new TableControl(dealer);
+        tableControl = new TableControl(dealer,this);
         Scene scene = new Scene(tableControl);
         stage.setScene(scene);
+        stage.initStyle(StageStyle.UNDECORATED);
+    //    stage.setFullScreen(true);
         stage.show();
-        tableControl.startGame();
+        tableControl.startGame(); 
         
     }
     
