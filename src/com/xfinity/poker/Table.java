@@ -62,7 +62,30 @@ public class Table implements TableRules {
 	}
 
     public boolean isSamePotValues() {
-        return false;
+        List<PlayerPot> pots = tablePot.getPlayerPots();
+        
+        int startPosition=0;
+        
+        for(int i=0;i<pots.size();i++){
+            Player player = getPlayers().get(i);
+            if(player.isFolded() )
+                continue;
+            startPosition = i;
+            break;
+        }
+        
+        double potCheckValue = tablePot.getPlayerPots().get(startPosition).getPlayerContribution();
+        
+        for(int i=startPosition+1;i<startPosition+pots.size();i++){
+            if(potCheckValue != tablePot.getPlayerPots().get(i%pots.size()).getPlayerContribution() 
+                    && !getPlayers().get(i%pots.size()).isFolded() )
+                return false;
+        }
+        return true;
+    }
+    
+    public void setHighestPotValue(double value){
+        highestPotValue = value;
     }
 
 }

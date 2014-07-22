@@ -8,7 +8,7 @@ import javafx.beans.property.SimpleDoubleProperty;
 public class Player implements PlayerRules {
 	private final static String NAME_PROP_NAME = "name";
 	private ReadOnlyStringWrapper name;
-	private PlayerHand playerHand;
+	protected PlayerHand playerHand;
 	private DoubleProperty playerChips;
 	private int order;
 	private boolean isDealer;	
@@ -100,10 +100,7 @@ public class Player implements PlayerRules {
         
         public DoubleProperty getPlayerChipsProperty(){
             return playerChips;
-        }
+        }      
         
-        public PlayerAction getAction(){
-            return null;
-        }
 	
 }

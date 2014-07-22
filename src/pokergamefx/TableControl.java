@@ -6,6 +6,7 @@
 
 package pokergamefx;
 
+import com.sun.prism.paint.Color;
 import com.xfinity.poker.Card;
 import com.xfinity.poker.ComputerPlayer;
 import com.xfinity.poker.Dealer;
@@ -105,12 +106,12 @@ public class TableControl extends AnchorPane implements Initializable {
     
     Task secondTask;
     
-    public TableControl(Dealer dealer,PokerGameFX application){
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXMLTable.fxml"));
+    public TableControl(Dealer dealerRef,PokerGameFX application){
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXMLTable(1).fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
-        this.dealer = dealer;
-        table = dealer.getTable();
+        this.dealer = dealerRef;
+        table = dealerRef.getTable();
         this.application = application;
         try {
             fxmlLoader.load();
@@ -136,6 +137,7 @@ public class TableControl extends AnchorPane implements Initializable {
                 }
                 
                 setPlayerActionText(playerSelectedAction);
+                dealer.getCallFrom(0);
             }
 
             
@@ -150,6 +152,9 @@ public class TableControl extends AnchorPane implements Initializable {
                 if(timelinePlayerActionAnimation != null){
                     timelinePlayerActionAnimation.jumpTo(Duration.millis(PLAYER_TIME_OUT_SECONDS * 1000));
                 }
+                setPlayerActionText(playerSelectedAction);
+                dealer.getRaiseFrom(0);
+                
             }
         });
         
@@ -161,6 +166,8 @@ public class TableControl extends AnchorPane implements Initializable {
                     timelinePlayerActionAnimation.jumpTo(Duration.millis(PLAYER_TIME_OUT_SECONDS * 1000));
                 }
                 
+                setPlayerActionText(playerSelectedAction);
+                
             }
         });
         
@@ -171,6 +178,8 @@ public class TableControl extends AnchorPane implements Initializable {
                 if(timelinePlayerActionAnimation != null){
                     timelinePlayerActionAnimation.jumpTo(Duration.millis(PLAYER_TIME_OUT_SECONDS * 1000));
                 }
+                
+                setPlayerActionText(playerSelectedAction);
             }
         });
         
@@ -181,6 +190,8 @@ public class TableControl extends AnchorPane implements Initializable {
                 if(timelinePlayerActionAnimation != null){
                     timelinePlayerActionAnimation.jumpTo(Duration.millis(PLAYER_TIME_OUT_SECONDS * 1000));
                 }
+                
+                setPlayerActionText(playerSelectedAction);
             }
         });
     }
@@ -395,19 +406,20 @@ public class TableControl extends AnchorPane implements Initializable {
                 continue;
             }
             
-            PlayerAction action = null;
+            //PlayerAction action = null;
             
             if(player instanceof HumanPlayer){
                 //action = player.getAction();
                 playerPassed = true;
                 continue;
             }else if(player instanceof ComputerPlayer){
-                action = player.getAction();
+                //action = ((ComputerPlayer)player).getAction(dealer.getPlayerPossibleActions(i%GAME_PLAYERS),dealer.getRound());
+                
             }
             if(!playerPassed)
-                bettingTransitionsBeforePlayerChoice.add(getPlayerBettingTransition(action,i%GAME_PLAYERS));
+                bettingTransitionsBeforePlayerChoice.add(getPlayerBettingTransition(i%GAME_PLAYERS));
             else
-                bettingTransitionsAfterPlayerChoice.add(getPlayerBettingTransition(action,i%GAME_PLAYERS));
+                bettingTransitionsAfterPlayerChoice.add(getPlayerBettingTransition(i%GAME_PLAYERS));
             
         }
         
@@ -502,6 +514,10 @@ public class TableControl extends AnchorPane implements Initializable {
             @Override
             public void handle(ActionEvent event) {
                 hidePlayerControls();
+                setPlayerActionText(playerSelectedAction);
+                //handle single player default actions
+                if(playerSelectedAction == PlayerAction.FOLD)
+                    dealer.setFlod(0);
                 showAfterPlayerTransitions(afterTransitions);
             }
 
@@ -514,20 +530,19 @@ public class TableControl extends AnchorPane implements Initializable {
     
         final SequentialTransition seqTransition = new SequentialTransition();
         seqTransition.getChildren().addAll(afterTransitions);
+        
+        seqTransition.play(); 
         seqTransition.setOnFinished(new EventHandler<ActionEvent>() {
 
             @Override
-            public void handle(ActionEvent event) {
-                //showPlayerTurnAnimation(bettingTransitionsAfterPlayerChoice);
-                //application.getSinglePlayerChoice();  
-                //System.out.println("AFTER DONE");
+            public void handle(ActionEvent event) {                
                 
-                if(!table.isSamePotValues()){                    
+                if(!table.isSamePotValues()){     
                     startBettingRound();
+                    
                 }
             }           
         });
-        seqTransition.play(); 
     }
     private void setPlayerControlsToDefault() {
         raiseButton.setDisable(true);
@@ -537,10 +552,10 @@ public class TableControl extends AnchorPane implements Initializable {
         allInButton.setDisable(true);
     }
     
-    private Transition getPlayerBettingTransition(PlayerAction action, int player) {
+    private Transition getPlayerBettingTransition(final int playerPos) {
         Rectangle messageBox = null;
         Text messageText = null;
-        switch (player) {
+        switch (playerPos) {
             case 0:
                 messageBox = singlePlayerMessageBox;
                 messageText = singlePlayerMessageText;
@@ -563,9 +578,11 @@ public class TableControl extends AnchorPane implements Initializable {
                 break;
         }
         
-       // messageText.setText("hmm...");
+        final Text finalMessageText = messageText;
+        
+        messageText.setText("");
         messageBox.setFill(Paint.valueOf("e4e4e4"));
-        Random rand = new Random();
+        
 
         KeyValue valueBox = new KeyValue(messageBox.fillProperty(), Paint.valueOf("3b72ff"), Interpolator.EASE_IN);        
         KeyValue valueTextThinking = new KeyValue(messageText.textProperty(),"Hmmm..");
@@ -575,17 +592,45 @@ public class TableControl extends AnchorPane implements Initializable {
         timelineBox.setCycleCount(15);
         timelineBox.setDelay(Duration.millis(2000));
         timelineBox.setAutoReverse(true);
-        KeyValue valueText = new KeyValue(messageText.textProperty(),action.toString());
-        KeyFrame keyFrameText = new KeyFrame(Duration.millis(1), valueText);
-        Timeline timelineText = new Timeline();
-        timelineText.setDelay(Duration.millis(rand.nextInt(3000)+1000));
-        timelineText.getKeyFrames().add(keyFrameText);
+        
         
         SequentialTransition seqTrans = new SequentialTransition();
-        seqTrans.getChildren().addAll(timelineBox,timelineText);
+        seqTrans.getChildren().addAll(timelineBox);
+        seqTrans.setOnFinished(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) { 
+                showAndDoPlayerAction(finalMessageText,playerPos);
+            }           
+
+            
+        });
         return seqTrans;
     }
-    
+    private void showAndDoPlayerAction(final Text finalMessageText,final int playerPos) {
+        Player player = table.getPlayers().get(playerPos);
+                final PlayerAction action = ((ComputerPlayer)player).getAction(dealer.getPlayerPossibleActions(playerPos),dealer.getRound()); //for now
+                
+                Random rand = new Random();
+                KeyValue valueText = new KeyValue(finalMessageText.textProperty(),action.toString());
+                KeyFrame keyFrameText = new KeyFrame(Duration.millis(1000), valueText);
+                Timeline timelineText = new Timeline();
+                timelineText.setDelay(Duration.millis(400));
+                timelineText.getKeyFrames().add(keyFrameText);
+                timelineText.play();
+                if(action == PlayerAction.CALL)
+                    dealer.getCallFrom(playerPos);
+                else if(action == PlayerAction.FOLD)
+                    dealer.setFlod(playerPos);
+                
+                timelineText.setOnFinished(new EventHandler<ActionEvent>() {
+
+                    @Override
+                    public void handle(ActionEvent event) {
+                        
+                    }
+                });
+     }
 
     private Transition dealToPlayerAnimation(final int i) {
         final CardControl testCard = new CardControl("DIAMONDS",Value.CardValue.TWO);
@@ -745,10 +790,11 @@ public class TableControl extends AnchorPane implements Initializable {
         playerChipsControlList.add(player2Chips);
         playerChipsControlList.add(player3Chips);
         playerChipsControlList.add(player4Chips);
-        
+        /*
         for(int i=0;i<allPlayers.size();i++){
             final int j = i;
             playerChipsControlList.get(i).textProperty().bind(allPlayers.get(i).getPlayerChipsProperty().asString());
+            
             playerChipsControlList.get(i).textProperty().addListener( new ChangeListener<String>(){
                 @Override
                 public void changed(ObservableValue<? extends String> ov, String oldVal, String newVal) {
@@ -778,20 +824,21 @@ public class TableControl extends AnchorPane implements Initializable {
                     }
                     
                     Double changedValue = Double.parseDouble(newVal) - Double.parseDouble(oldVal);
-                    messageText.setText("$"+changedValue);
+                    //messageText.setText("$"+changedValue);
                     
                     KeyValue valueBox = new KeyValue(messageBox.fillProperty(),Paint.valueOf("ffb476"),Interpolator.EASE_OUT);
-                    
-                    KeyFrame keyFrame = new KeyFrame(Duration.millis(500), valueBox);       
+                    KeyValue valueText = new KeyValue(messageText.textProperty(),"$"+changedValue);
+                    KeyFrame keyFrame = new KeyFrame(Duration.millis(500), valueBox,valueText);       
                     Timeline timeline = new Timeline();
                     timeline.getKeyFrames().add(keyFrame);
                     timeline.setCycleCount(5);
                     timeline.setAutoReverse(true);
+                    //timeline.setDelay(Duration.millis(400));
                     timeline.play();                         
                 }
             });
             
-        }
+        } */
     }    
 
     private void bindPlayerPots(List<Player> allPlayers) {
@@ -803,7 +850,40 @@ public class TableControl extends AnchorPane implements Initializable {
         playerPotControlList.add(player4Pot);
 
         for(int i=0;i<allPlayers.size();i++){
+            final int j = i;
             playerPotControlList.get(i).textProperty().bind(table.getTablePot().getPlayerPots().get(i).playerContributionProperty().asString("%.0f"));           
+            playerPotControlList.get(i).textProperty().addListener( new ChangeListener<String>(){
+                @Override
+                public void changed(ObservableValue<? extends String> ov, String oldVal, String newVal) {
+                    Text playerPot = null;
+                    
+                    switch(j){
+                        case 0:
+                            playerPot = singlePlayerPot;
+                            break;
+                        case 1:
+                            playerPot = player1Pot;
+                            break;
+                        case 2:
+                            playerPot = player2Pot;
+                            break;
+                        case 3:
+                            playerPot = player3Pot;
+                            break;
+                        case 4: 
+                            playerPot = player4Pot;
+                            break;
+                    }
+                    
+                    KeyValue valueFill = new KeyValue(playerPot.fillProperty(),Paint.valueOf("ff0000"),Interpolator.EASE_IN);
+                     KeyFrame keyFrame = new KeyFrame(Duration.millis(1000), valueFill); 
+                     Timeline timeline = new Timeline();
+                    timeline.getKeyFrames().add(keyFrame);
+                    timeline.setCycleCount(6);
+                    timeline.setAutoReverse(true);
+                    timeline.play();
+                }
+            });
             
         }
     }

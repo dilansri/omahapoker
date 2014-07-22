@@ -6,6 +6,9 @@
 
 package com.xfinity.poker;
 
+import com.xfinity.poker.Dealer.Round;
+import java.util.List;
+
 /**
  *
  * @author Administrator
@@ -16,9 +19,36 @@ public class ComputerPlayer extends Player {
         super(name,order);
     }
     
-    @Override
-    public PlayerAction getAction(){
-        return PlayerAction.FOLD;
+    
+    public PlayerAction getAction(List<PlayerAction> possibleActions,Round currentRound){
+        
+        PlayerAction action = PlayerAction.FOLD;
+        
+        int highValue = getHighHandValue();
+        
+        if(currentRound == Round.PRE_FLOP){
+            action = PlayerAction.CALL;
+            if(highValue <= 32)
+                action = PlayerAction.FOLD;
+            else if(highValue >= 53 && possibleActions.contains(PlayerAction.RAISE))
+                action = PlayerAction.RAISE;
+            else if(possibleActions.contains(PlayerAction.CHECK))
+                action = PlayerAction.CHECK;
+                
+        }
+            
+        return action;
+    }
+
+    public int getHighHandValue() {
+        int value = 0;
+        
+        for(Card card:playerHand.getCards()){
+            value += card.getValue().getCardValue();
+        }
+        System.out.println(value);
+        return value;
+        
     }
     
 }

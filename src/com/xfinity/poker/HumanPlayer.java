@@ -16,9 +16,6 @@ public class HumanPlayer extends Player {
         super(name,order);
     }
     
-    @Override
-    public PlayerAction getAction(){
-        return PlayerAction.RAISE;
-    }
+    
     
 }
