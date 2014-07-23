@@ -143,7 +143,7 @@
             </Pane>
          </children>
       </HBox>
-      <HBox fx:id="singlePlayerCards" layoutX="146.0" layoutY="365.0" prefHeight="58.0" prefWidth="177.0">
+      <HBox fx:id="singlePlayerCards" layoutX="114.0" layoutY="365.0" prefHeight="58.0" prefWidth="177.0">
          <children>
             <Pane prefHeight="71.0" prefWidth="45.0">
                <children>
@@ -207,7 +207,7 @@
             </Pane>
          </children>
       </HBox>
-      <HBox fx:id="playerCards1" layoutX="114.0" layoutY="200.0" prefHeight="58.0" prefWidth="177.0">
+      <HBox fx:id="playerCards1" layoutX="114.0" layoutY="194.0" prefHeight="58.0" prefWidth="177.0">
          <children>
             <Pane prefHeight="71.0" prefWidth="45.0">
                <children>
@@ -335,7 +335,7 @@
             </Pane>
          </children>
       </HBox>
-      <HBox fx:id="playerCards3" layoutX="516.0" layoutY="200.0" prefHeight="58.0" prefWidth="177.0">
+      <HBox fx:id="playerCards3" layoutX="503.0" layoutY="194.0" prefHeight="58.0" prefWidth="177.0">
          <children>
             <Pane prefHeight="71.0" prefWidth="45.0">
                <children>
@@ -399,7 +399,7 @@
             </Pane>
          </children>
       </HBox>
-      <HBox fx:id="playerCards4" layoutX="510.0" layoutY="365.0" prefHeight="58.0" prefWidth="177.0">
+      <HBox fx:id="playerCards4" layoutX="503.0" layoutY="365.0" prefHeight="58.0" prefWidth="177.0">
          <children>
             <Pane prefHeight="71.0" prefWidth="45.0">
                <children>
@@ -527,7 +527,7 @@
             </Pane>
          </children>
       </HBox>
-      <Group layoutX="356.0" layoutY="-78.0">
+      <Group layoutX="345.0" layoutY="-70.0">
          <children>
             <Circle layoutX="100.0" layoutY="200.0" radius="15.0" stroke="#5a4505" strokeType="INSIDE">
                <fill>
@@ -547,7 +547,7 @@
             </Text>
          </children>
       </Group>
-      <Group layoutX="109.0" layoutY="-41.0">
+      <Group layoutX="106.0" layoutY="-38.0">
          <children>
             <Circle layoutX="100.0" layoutY="200.0" radius="15.0" stroke="#5a4505" strokeType="INSIDE">
                <fill>
@@ -567,7 +567,7 @@
             </Text>
          </children>
       </Group>
-      <Group layoutX="27.0" layoutY="212.0">
+      <Group layoutX="106.0" layoutY="253.0">
          <children>
             <Circle layoutX="100.0" layoutY="200.0" radius="15.0" stroke="#5a4505" strokeType="INSIDE">
                <fill>
@@ -695,11 +695,6 @@
             </Text>
          </children>
       </Group>
-      <Text fx:id="roundMessageText" layoutX="52.0" layoutY="331.0" opacity="0.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" textAlignment="CENTER" wrappingWidth="700.0">
-         <font>
-            <Font size="56.0" />
-         </font>
-      </Text>
       <Pane fx:id="playerActionsPane" layoutX="126.0" layoutY="159.0" opacity="0.0">
          <children>
             <Button fx:id="raiseButton" disable="true" layoutX="132.0" layoutY="1.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="111.0" style="-fx-background-color: rgb(149,153,152);" text="RAISE">
@@ -725,5 +720,15 @@
          </children>
       </Pane>
       <ProgressIndicator fx:id="playerTimeIndicatior" layoutX="55.0" layoutY="159.0" progress="0.0" scaleX="2.5" scaleY="2.5" visible="false" />
+      <Group>
+         <children>
+            <Rectangle fx:id="roundMessageBox" arcHeight="90.0" arcWidth="90.0" fill="#000000e0" height="101.0" layoutX="47.0" layoutY="258.0" opacity="0.0" stroke="#aeaeae" strokeLineCap="ROUND" strokeType="OUTSIDE" width="697.0" />
+            <Text fx:id="roundMessageText" fill="WHITE" layoutX="46.0" layoutY="331.0" opacity="0.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" textAlignment="CENTER" wrappingWidth="700.0">
+               <font>
+                  <Font size="56.0" />
+               </font>
+            </Text>
+         </children>
+      </Group>
     </children>
 </fx:root>

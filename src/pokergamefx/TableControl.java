@@ -80,6 +80,9 @@ public class TableControl extends AnchorPane implements Initializable {
     private Text roundMessageText;
     
     @FXML
+    private Rectangle roundMessageBox;
+    
+    @FXML
     private Text singlePlayerPot,player1Pot,player2Pot,player3Pot,player4Pot;
     
     @FXML
@@ -533,9 +536,10 @@ public class TableControl extends AnchorPane implements Initializable {
     
     private void showStartBettingAnimation(String message) {
         roundMessageText.setText(message);
+        roundMessageBox.setOpacity(0);
        KeyValue valueOpacity = new KeyValue(roundMessageText.opacityProperty(),1,Interpolator.EASE_OUT);       
-    //   KeyValue valueY = new KeyValue(card.layoutYProperty(),destinationY,Interpolator.EASE_OUT);       
-       KeyFrame keyFrame = new KeyFrame(Duration.millis(2000), valueOpacity);       
+       KeyValue valueBoxOpacity = new KeyValue(roundMessageBox.opacityProperty(),1,Interpolator.EASE_OUT);       
+       KeyFrame keyFrame = new KeyFrame(Duration.millis(2000), valueOpacity,valueBoxOpacity);       
        Timeline timeline = new Timeline();
        timeline.getKeyFrames().add(keyFrame);
        timeline.setAutoReverse(true);
@@ -667,8 +671,10 @@ public class TableControl extends AnchorPane implements Initializable {
     private void showPlayerTurnAnimation(final List<Transition> afterTransitions) {
         roundMessageText.setText("Your Turn");
         roundMessageText.setOpacity(0);
-       KeyValue valueOpacity = new KeyValue(roundMessageText.opacityProperty(),1,Interpolator.LINEAR);      
-       KeyFrame keyFrame = new KeyFrame(Duration.millis(500), valueOpacity);       
+        roundMessageBox.setOpacity(0);
+       KeyValue valueOpacity = new KeyValue(roundMessageText.opacityProperty(),1,Interpolator.LINEAR);   
+       KeyValue valueBoxOpacity = new KeyValue(roundMessageBox.opacityProperty(),1,Interpolator.EASE_IN);
+       KeyFrame keyFrame = new KeyFrame(Duration.millis(500), valueOpacity,valueBoxOpacity);       
        Timeline timeline = new Timeline();
        timeline.getKeyFrames().add(keyFrame);
        timeline.setCycleCount(2);
@@ -869,9 +875,10 @@ public class TableControl extends AnchorPane implements Initializable {
     
     public void showFlopRoundMessage(){
          roundMessageText.setText("Dealing Flop");
+         roundMessageBox.setOpacity(0);
        KeyValue valueOpacity = new KeyValue(roundMessageText.opacityProperty(),1,Interpolator.EASE_OUT);       
-    //   KeyValue valueY = new KeyValue(card.layoutYProperty(),destinationY,Interpolator.EASE_OUT);       
-       KeyFrame keyFrame = new KeyFrame(Duration.millis(2000), valueOpacity);       
+       KeyValue valueBoxOpacity = new KeyValue(roundMessageBox.opacityProperty(),1,Interpolator.EASE_OUT);       
+       KeyFrame keyFrame = new KeyFrame(Duration.millis(2000), valueOpacity,valueBoxOpacity);       
        Timeline timeline = new Timeline();
        timeline.getKeyFrames().add(keyFrame);
        timeline.setAutoReverse(true);
