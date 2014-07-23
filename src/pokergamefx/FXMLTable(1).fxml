@@ -143,7 +143,7 @@
             </Pane>
          </children>
       </HBox>
-      <HBox fx:id="singlePlayerCards" layoutX="146.0" layoutY="365.0" prefHeight="58.0" prefWidth="177.0">
+      <HBox fx:id="singlePlayerCards" layoutX="114.0" layoutY="365.0" prefHeight="58.0" prefWidth="177.0">
          <children>
             <Pane prefHeight="71.0" prefWidth="45.0">
                <children>
@@ -207,7 +207,7 @@
             </Pane>
          </children>
       </HBox>
-      <HBox fx:id="playerCards1" layoutX="114.0" layoutY="200.0" prefHeight="58.0" prefWidth="177.0">
+      <HBox fx:id="playerCards1" layoutX="114.0" layoutY="194.0" prefHeight="58.0" prefWidth="177.0">
          <children>
             <Pane prefHeight="71.0" prefWidth="45.0">
                <children>
@@ -335,7 +335,7 @@
             </Pane>
          </children>
       </HBox>
-      <HBox fx:id="playerCards3" layoutX="516.0" layoutY="200.0" prefHeight="58.0" prefWidth="177.0">
+      <HBox fx:id="playerCards3" layoutX="503.0" layoutY="194.0" prefHeight="58.0" prefWidth="177.0">
          <children>
             <Pane prefHeight="71.0" prefWidth="45.0">
                <children>
@@ -399,7 +399,7 @@
             </Pane>
          </children>
       </HBox>
-      <HBox fx:id="playerCards4" layoutX="510.0" layoutY="365.0" prefHeight="58.0" prefWidth="177.0">
+      <HBox fx:id="playerCards4" layoutX="503.0" layoutY="365.0" prefHeight="58.0" prefWidth="177.0">
          <children>
             <Pane prefHeight="71.0" prefWidth="45.0">
                <children>
@@ -527,7 +527,7 @@
             </Pane>
          </children>
       </HBox>
-      <Group layoutX="356.0" layoutY="-78.0">
+      <Group layoutX="345.0" layoutY="-70.0">
          <children>
             <Circle layoutX="100.0" layoutY="200.0" radius="15.0" stroke="#5a4505" strokeType="INSIDE">
                <fill>
@@ -547,7 +547,7 @@
             </Text>
          </children>
       </Group>
-      <Group layoutX="109.0" layoutY="-41.0">
+      <Group layoutX="106.0" layoutY="-38.0">
          <children>
             <Circle layoutX="100.0" layoutY="200.0" radius="15.0" stroke="#5a4505" strokeType="INSIDE">
                <fill>
@@ -567,7 +567,7 @@
             </Text>
          </children>
       </Group>
-      <Group layoutX="27.0" layoutY="212.0">
+      <Group layoutX="106.0" layoutY="253.0">
          <children>
             <Circle layoutX="100.0" layoutY="200.0" radius="15.0" stroke="#5a4505" strokeType="INSIDE">
                <fill>
