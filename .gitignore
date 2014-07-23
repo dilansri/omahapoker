@@ -1,0 +1,7 @@
+# netbeans specific
+nbproject/private/
+nbproject/configs/
+build/
+nbbuild/
+dist/
+nbdist/
