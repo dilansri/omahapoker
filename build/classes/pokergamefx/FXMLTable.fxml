@@ -10,18 +10,18 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<fx:root fx:id="tableAnchor" prefHeight="600" prefWidth="800" style="-fx-background-color: rgb(244,190,79); -fx-border-color: #FFFFFF;" type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root fx:id="tableAnchor" prefHeight="600" prefWidth="800" style="-fx-background-color: #FFFFFF; -fx-border-color: #FFFFFF;" type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-      <Ellipse fill="#046101" layoutX="396.0" layoutY="308.0" radiusX="359.0" radiusY="209.0" stroke="#612a0e" strokeType="INSIDE" strokeWidth="10.0" />
-      <Circle fill="#f4be4f" layoutX="400.0" layoutY="517.0" radius="79.0" stroke="#f4be4f" strokeType="INSIDE" />
+      <Ellipse fill="#25c993" layoutX="400.0" layoutY="309.0" radiusX="354.0" radiusY="209.0" stroke="#3fdd66" strokeType="INSIDE" />
+      <Circle fill="WHITE" layoutX="400.0" layoutY="517.0" radius="79.0" stroke="WHITE" strokeType="INSIDE" />
         <Label fx:id="label" layoutX="126.0" layoutY="129.0" minHeight="16" minWidth="69" />
         <Button fx:id="button" layoutX="4.0" layoutY="13.0" text="Click Me!" />
-      <Circle fill="#3ba40e" layoutX="400.0" layoutY="102.0" radius="32.0" stroke="WHITE" strokeType="INSIDE" />
-      <Circle fill="#3ba40e" layoutX="154.0" layoutY="159.0" radius="32.0" stroke="WHITE" strokeType="INSIDE" />
-      <Circle fill="#3ba40e" layoutX="643.0" layoutY="159.0" radius="32.0" stroke="WHITE" strokeType="INSIDE" />
-      <Circle fill="#3ba40e" layoutX="154.0" layoutY="459.0" radius="32.0" stroke="WHITE" strokeType="INSIDE" />
-      <Circle fill="#3ba40e" layoutX="643.0" layoutY="459.0" radius="32.0" stroke="WHITE" strokeType="INSIDE" />
-      <Circle fill="#116db8" layoutX="400.0" layoutY="492.0" radius="32.0" stroke="#161749" strokeType="INSIDE" />
+      <Circle fill="#c5f2db" layoutX="400.0" layoutY="102.0" radius="32.0" stroke="WHITE" strokeType="INSIDE" />
+      <Circle fill="#c5f2db" layoutX="154.0" layoutY="159.0" radius="32.0" stroke="WHITE" strokeType="INSIDE" />
+      <Circle fill="#c5f2db" layoutX="643.0" layoutY="159.0" radius="32.0" stroke="WHITE" strokeType="INSIDE" />
+      <Circle fill="#c5f2db" layoutX="154.0" layoutY="459.0" radius="32.0" stroke="WHITE" strokeType="INSIDE" />
+      <Circle fill="#c5f2db" layoutX="643.0" layoutY="459.0" radius="32.0" stroke="WHITE" strokeType="INSIDE" />
+      <Circle fill="#618e9e" layoutX="400.0" layoutY="492.0" radius="32.0" stroke="#3fdd66" strokeType="INSIDE" />
       <Ellipse fill="#e4e4e4" layoutX="127.0" layoutY="106.0" radiusX="5.0" radiusY="13.0" stroke="#ffffff00" strokeType="INSIDE" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e4e4e4" height="25.0" layoutX="46.0" layoutY="85.0" stroke="#ffffff00" strokeType="INSIDE" width="100.0" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e4e4e4" height="25.0" layoutX="46.0" layoutY="506.0" stroke="#ffffff00" strokeType="INSIDE" width="100.0" />
@@ -143,7 +143,7 @@
             </Pane>
          </children>
       </HBox>
-      <HBox fx:id="singlePlayerCards" layoutX="114.0" layoutY="365.0" prefHeight="58.0" prefWidth="177.0">
+      <HBox fx:id="singlePlayerCards" layoutX="146.0" layoutY="365.0" prefHeight="58.0" prefWidth="177.0">
          <children>
             <Pane prefHeight="71.0" prefWidth="45.0">
                <children>
@@ -207,7 +207,7 @@
             </Pane>
          </children>
       </HBox>
-      <HBox fx:id="playerCards1" layoutX="114.0" layoutY="194.0" prefHeight="58.0" prefWidth="177.0">
+      <HBox fx:id="playerCards1" layoutX="126.0" layoutY="208.0" prefHeight="58.0" prefWidth="177.0">
          <children>
             <Pane prefHeight="71.0" prefWidth="45.0">
                <children>
@@ -335,7 +335,7 @@
             </Pane>
          </children>
       </HBox>
-      <HBox fx:id="playerCards3" layoutX="503.0" layoutY="194.0" prefHeight="58.0" prefWidth="177.0">
+      <HBox fx:id="playerCards3" layoutX="533.0" layoutY="202.0" prefHeight="58.0" prefWidth="177.0">
          <children>
             <Pane prefHeight="71.0" prefWidth="45.0">
                <children>
@@ -399,7 +399,7 @@
             </Pane>
          </children>
       </HBox>
-      <HBox fx:id="playerCards4" layoutX="503.0" layoutY="365.0" prefHeight="58.0" prefWidth="177.0">
+      <HBox fx:id="playerCards4" layoutX="516.0" layoutY="365.0" prefHeight="58.0" prefWidth="177.0">
          <children>
             <Pane prefHeight="71.0" prefWidth="45.0">
                <children>
@@ -527,9 +527,9 @@
             </Pane>
          </children>
       </HBox>
-      <Group layoutX="345.0" layoutY="-70.0">
+      <Group layoutX="356.0" layoutY="-78.0">
          <children>
-            <Circle layoutX="100.0" layoutY="200.0" radius="15.0" stroke="#5a4505" strokeType="INSIDE">
+            <Circle layoutX="100.0" layoutY="200.0" radius="15.0" stroke="#d3d3d3" strokeType="INSIDE">
                <fill>
                   <RadialGradient centerX="0.5" centerY="0.5" focusAngle="18.43" radius="0.5232558139534884">
                      <stops>
@@ -539,17 +539,17 @@
                   </RadialGradient>
                </fill>
             </Circle>
-            <Circle fill="#d0ca59" layoutX="100.0" layoutY="200.0" radius="12.0" stroke="#7f630e" strokeType="INSIDE" />
-            <Text fill="#535151" layoutX="-125.0" layoutY="5.0" strokeType="OUTSIDE" strokeWidth="0.0" text="BB" textAlignment="CENTER" wrappingWidth="49.63671875" x="200.0" y="200.0">
+            <Circle fill="WHITE" layoutX="100.0" layoutY="200.0" radius="12.0" stroke="#e8e8e8" strokeType="INSIDE" />
+            <Text fill="#9e9e9e" layoutX="-125.0" layoutY="5.0" strokeType="OUTSIDE" strokeWidth="0.0" text="BB" textAlignment="CENTER" wrappingWidth="49.63671875" x="200.0" y="200.0">
                <font>
                   <Font size="14.0" />
                </font>
             </Text>
          </children>
       </Group>
-      <Group layoutX="106.0" layoutY="-38.0">
+      <Group layoutX="109.0" layoutY="-41.0">
          <children>
-            <Circle layoutX="100.0" layoutY="200.0" radius="15.0" stroke="#5a4505" strokeType="INSIDE">
+            <Circle layoutX="100.0" layoutY="200.0" radius="15.0" stroke="#d3d3d3" strokeType="INSIDE">
                <fill>
                   <RadialGradient centerX="0.5" centerY="0.5" focusAngle="18.43" radius="0.5232558139534884">
                      <stops>
@@ -559,17 +559,17 @@
                   </RadialGradient>
                </fill>
             </Circle>
-            <Circle fill="#d0ca59" layoutX="100.0" layoutY="200.0" radius="12.0" stroke="#7f630e" strokeType="INSIDE" />
-            <Text fill="#535151" layoutX="-125.0" layoutY="5.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SB" textAlignment="CENTER" wrappingWidth="49.63671875" x="200.0" y="200.0">
+            <Circle fill="WHITE" layoutX="100.0" layoutY="200.0" radius="12.0" stroke="#e8e8e8" strokeType="INSIDE" />
+            <Text fill="#9e9e9e" layoutX="-125.0" layoutY="5.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SB" textAlignment="CENTER" wrappingWidth="49.63671875" x="200.0" y="200.0">
                <font>
                   <Font size="14.0" />
                </font>
             </Text>
          </children>
       </Group>
-      <Group layoutX="106.0" layoutY="253.0">
+      <Group layoutX="27.0" layoutY="212.0">
          <children>
-            <Circle layoutX="100.0" layoutY="200.0" radius="15.0" stroke="#5a4505" strokeType="INSIDE">
+            <Circle layoutX="100.0" layoutY="200.0" radius="15.0" stroke="#d3d3d3" strokeType="INSIDE">
                <fill>
                   <RadialGradient centerX="0.5" centerY="0.5" focusAngle="18.43" radius="0.5232558139534884">
                      <stops>
@@ -579,8 +579,8 @@
                   </RadialGradient>
                </fill>
             </Circle>
-            <Circle fill="#d0ca59" layoutX="100.0" layoutY="200.0" radius="12.0" stroke="#7f630e" strokeType="INSIDE" />
-            <Text fill="#535151" layoutX="-125.0" layoutY="5.0" strokeType="OUTSIDE" strokeWidth="0.0" text="D" textAlignment="CENTER" wrappingWidth="49.63671875" x="200.0" y="200.0">
+            <Circle fill="WHITE" layoutX="100.0" layoutY="200.0" radius="12.0" stroke="#e8e8e8" strokeType="INSIDE" />
+            <Text fill="#9e9e9e" layoutX="-125.0" layoutY="5.0" strokeType="OUTSIDE" strokeWidth="0.0" text="D" textAlignment="CENTER" wrappingWidth="49.63671875" x="200.0" y="200.0">
                <font>
                   <Font size="14.0" />
                </font>
@@ -695,41 +695,20 @@
             </Text>
          </children>
       </Group>
+      <Text fx:id="roundMessageText" layoutX="52.0" layoutY="331.0" opacity="0.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" textAlignment="CENTER" wrappingWidth="700.0">
+         <font>
+            <Font size="56.0" />
+         </font>
+      </Text>
       <Pane fx:id="playerActionsPane" layoutX="126.0" layoutY="159.0" opacity="0.0">
          <children>
-            <Button fx:id="raiseButton" disable="true" layoutX="132.0" layoutY="1.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="111.0" style="-fx-background-color: rgb(149,153,152);" text="RAISE">
-               <font>
-                  <Font name="Lucida Handwriting Italic" size="18.0" />
-               </font></Button>
-            <Button fx:id="callButton" disable="true" layoutY="1.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="111.0" style="-fx-background-color: rgb(149,153,152);" text="CALL">
-               <font>
-                  <Font name="Lucida Handwriting Italic" size="18.0" />
-               </font></Button>
-            <Button fx:id="foldButton" disable="true" layoutX="394.0" layoutY="1.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="111.0" style="-fx-background-color: rgb(149,153,152);" text="FOLD">
-               <font>
-                  <Font name="Lucida Handwriting Italic" size="18.0" />
-               </font></Button>
-            <Button fx:id="allInButton" disable="true" layoutX="525.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="111.0" style="-fx-background-color: rgb(149,153,152);" text="ALL IN">
-               <font>
-                  <Font name="Lucida Handwriting Italic" size="18.0" />
-               </font></Button>
-            <Button fx:id="checkButton" disable="true" layoutX="254.0" layoutY="1.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="111.0" text="CHECK">
-               <font>
-                  <Font name="Lucida Handwriting Italic" size="18.0" />
-               </font></Button>
+            <Button fx:id="raiseButton" disable="true" layoutX="132.0" layoutY="1.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="111.0" text="RAISE" />
+            <Button fx:id="callButton" disable="true" layoutY="1.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="111.0" text="CALL" />
+            <Button fx:id="foldButton" disable="true" layoutX="394.0" layoutY="1.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="111.0" text="FOLD" />
+            <Button fx:id="allInButton" disable="true" layoutX="525.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="111.0" text="ALL IN" />
+            <Button fx:id="checkButton" disable="true" layoutX="254.0" layoutY="1.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="111.0" text="CHECK" />
          </children>
       </Pane>
       <ProgressIndicator fx:id="playerTimeIndicatior" layoutX="55.0" layoutY="159.0" progress="0.0" scaleX="2.5" scaleY="2.5" visible="false" />
-      <Group>
-         <children>
-            <Rectangle fx:id="roundMessageBox" arcHeight="90.0" arcWidth="90.0" fill="#000000e0" height="101.0" layoutX="47.0" layoutY="258.0" opacity="0.0" stroke="#aeaeae" strokeLineCap="ROUND" strokeType="OUTSIDE" width="697.0" />
-
-            <Text fx:id="roundMessageText" fill="WHITE" layoutX="46.0" layoutY="331.0" opacity="0.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" textAlignment="CENTER" wrappingWidth="700.0">
-               <font>
-                  <Font size="56.0" />
-               </font>
-            </Text>
-         </children>
-      </Group>
     </children>
 </fx:root>
