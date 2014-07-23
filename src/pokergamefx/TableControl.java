@@ -625,6 +625,7 @@ public class TableControl extends AnchorPane implements Initializable {
         
         List<Transition> bettingTransitionsBeforePlayerChoice = new ArrayList<>();
         final List<Transition> bettingTransitionsAfterPlayerChoice = new ArrayList<>();
+        
         for(int i=betStartingPlayer;i<GAME_PLAYERS+betStartingPlayer;i++){
             Player player = table.getPlayers().get(i % GAME_PLAYERS);
             if(player.isFolded() || player.isAllIn()){
@@ -669,25 +670,30 @@ public class TableControl extends AnchorPane implements Initializable {
         
     }  
     private void showPlayerTurnAnimation(final List<Transition> afterTransitions) {
-        roundMessageText.setText("Your Turn");
-        roundMessageText.setOpacity(0);
-        roundMessageBox.setOpacity(0);
-       KeyValue valueOpacity = new KeyValue(roundMessageText.opacityProperty(),1,Interpolator.LINEAR);   
-       KeyValue valueBoxOpacity = new KeyValue(roundMessageBox.opacityProperty(),1,Interpolator.EASE_IN);
-       KeyFrame keyFrame = new KeyFrame(Duration.millis(500), valueOpacity,valueBoxOpacity);       
-       Timeline timeline = new Timeline();
-       timeline.getKeyFrames().add(keyFrame);
-       timeline.setCycleCount(2);
-       timeline.setAutoReverse(true);
-       timeline.setDelay(Duration.millis(1000));
-       timeline.setOnFinished(new EventHandler<ActionEvent>() {
+        
+        if(table.getPlayers().get(0).isFolded() ||table.getPlayers().get(0).isAllIn() ){
+             showAfterPlayerTransitions(afterTransitions);
+        }else{
+            roundMessageText.setText("Your Turn");
+            roundMessageText.setOpacity(0);
+            roundMessageBox.setOpacity(0);
+           KeyValue valueOpacity = new KeyValue(roundMessageText.opacityProperty(),1,Interpolator.LINEAR);   
+           KeyValue valueBoxOpacity = new KeyValue(roundMessageBox.opacityProperty(),1,Interpolator.EASE_IN);
+           KeyFrame keyFrame = new KeyFrame(Duration.millis(500), valueOpacity,valueBoxOpacity);       
+           Timeline timeline = new Timeline();
+           timeline.getKeyFrames().add(keyFrame);
+           timeline.setCycleCount(2);
+           timeline.setAutoReverse(true);
+           timeline.setDelay(Duration.millis(1000));
+           timeline.setOnFinished(new EventHandler<ActionEvent>() {
 
-            @Override
-            public void handle(ActionEvent event) { 
-               showAndWaitPlayerControls(afterTransitions);
-            }
-        });
-       timeline.play();
+                @Override
+                public void handle(ActionEvent event) { 
+                   showAndWaitPlayerControls(afterTransitions);
+                }
+            });
+           timeline.play();
+        }
     }
     
     private void showAndWaitPlayerControls(final List<Transition> afterTransitions) {
@@ -840,7 +846,7 @@ public class TableControl extends AnchorPane implements Initializable {
     }
     private void showAndDoPlayerAction(final Text finalMessageText,final int playerPos) {
         Player player = table.getPlayers().get(playerPos);
-        final PlayerAction action = ((ComputerPlayer) player).getAction(dealer.getPlayerPossibleActions(playerPos), dealer.getRound(), dealer.getRoundCount()); //for now
+        final PlayerAction action = ((ComputerPlayer) player).getAction(dealer.getPlayerPossibleActions(playerPos),table.getCommunityCards(), dealer.getRound(), dealer.getRoundCount()); //for now
 
         //Random rand = new Random();
         KeyValue valueText = new KeyValue(finalMessageText.textProperty(), action.toString());
@@ -853,6 +859,8 @@ public class TableControl extends AnchorPane implements Initializable {
             dealer.getCallFrom(playerPos);
         } else if (action == PlayerAction.FOLD) {
             dealer.setFlod(playerPos);
+        } else if(action == PlayerAction.RAISE){
+            dealer.getRaiseFrom(playerPos);
         }
 
         timelineText.setOnFinished(new EventHandler<ActionEvent>() {
@@ -991,8 +999,10 @@ public class TableControl extends AnchorPane implements Initializable {
        timeline.setOnFinished(new EventHandler<ActionEvent>() {
 
             @Override
-            public void handle(ActionEvent event) {               
-                //startBettingRound();                 
+            public void handle(ActionEvent event) {    
+                dealer.setRound(Round.FLOP);
+                dealer.setRoundCount(0);
+                startBettingRound();                 
             }  
 
             

@@ -80,7 +80,31 @@ public class PlayerPotTestsJUnitTest {
             for(int i=0;i<5;i++)
             {
                 ComputerPlayer player = (ComputerPlayer)table.getPlayers().get(i);
-                System.out.println(player.getHighHandValue());
+                //System.out.println(player.getHighHandValue());
+            }
+        }
+        
+        assertTrue(true);
+    }
+    
+    @Test
+    public void FlopRoundPlayerValues(){
+        for(int j=0;j<500;j++){
+            List<Player> computerPlayers = new ArrayList<Player>();
+            for(int i=0;i<5;i++)
+                            computerPlayers.add(new ComputerPlayer("CP"+i,i));
+            Table table = new Table(computerPlayers);
+            Dealer dealer = new Dealer();
+            dealer.shuffleDeck();
+            dealer.setTable(table);
+            dealer.dealToPlayers();
+            
+            dealer.setRound(Dealer.Round.FLOP);
+            dealer.dealFlop();
+            for(int i=0;i<5;i++)
+            {
+                ComputerPlayer player = (ComputerPlayer)table.getPlayers().get(i);
+                player.getAction(null, table.getCommunityCards(), Dealer.Round.FLOP, i);
             }
         }
         

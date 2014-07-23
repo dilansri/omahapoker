@@ -15,42 +15,33 @@ import java.util.List;
  */
 public class ComputerPlayer extends Player {
     
+    AIAnalyser aiAnalyser;
+    
     public ComputerPlayer(String name,int order){
         super(name,order);
+        
+        aiAnalyser = new AIAnalyser();
     }
     
     
-    public PlayerAction getAction(List<PlayerAction> possibleActions,Round currentRound,final int roundCount){
+    public PlayerAction getAction(List<PlayerAction> possibleActions,List<Card> communityCards,Round currentRound,final int roundCount){
         
-        PlayerAction action = PlayerAction.FOLD;
+        PlayerAction action = PlayerAction.FOLD;      
         
-        int highValue = getHighHandValue();
         
-        int roundCountAdjustment = (roundCount-1)*2+1;
         
-        if(currentRound == Round.PRE_FLOP){
-            action = PlayerAction.CALL;
-            if(highValue <= (25 + roundCountAdjustment))
-                action = PlayerAction.FOLD;
-            else if(highValue >= 53 && possibleActions.contains(PlayerAction.RAISE))
-                action = PlayerAction.RAISE;
-            else if(possibleActions.contains(PlayerAction.CHECK))
-                action = PlayerAction.CHECK;
+        
+        if(currentRound == Round.PRE_FLOP){            
+            action = aiAnalyser.getPreFlopAction(playerHand,possibleActions,roundCount);        
+            //action = PlayerAction.RAISE;
                 
-        }
-            
+        }else if(currentRound == Round.FLOP){
+            action = PlayerAction.ALL_IN;
+            action = aiAnalyser.getFlopAction(playerHand,communityCards,possibleActions,roundCount);
+        }            
         return action;
     }
 
-    public int getHighHandValue() {
-        int value = 0;
-        
-        for(Card card:playerHand.getCards()){
-            value += card.getValue().getCardValue();
-        }
-        System.out.println(value);
-        return value;
-        
-    }
+    
     
 }

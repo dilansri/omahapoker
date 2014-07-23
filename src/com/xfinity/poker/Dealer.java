@@ -152,19 +152,19 @@ public class Dealer implements DealerRules {
         possibleActions.add(PlayerAction.FOLD);
 
         //ALLIN
-        if (table.getPlayers().get(i).getPlayerChips() >= HIGHEST_POT_VALUE) {
+        if (table.getPlayers().get(i).getPlayerChips() > 0) {
             possibleActions.add(PlayerAction.ALL_IN);
         }
 
         //CALL
-        if (table.getPlayers().get(i).getPlayerChips() > HIGHEST_POT_VALUE
+        if (table.getPlayers().get(i).getPlayerChips() > HIGHEST_POT_VALUE - (table.getTablePot().getPlayerPots().get(i).getPlayerContribution())
                 && table.getTablePot().getPlayerPots().get(i).getPlayerContribution() < HIGHEST_POT_VALUE) {
             possibleActions.add(PlayerAction.CALL);
         }
 
         //CHECK
         if (table.getTablePot().getPlayerPots().get(i).getPlayerContribution() == HIGHEST_POT_VALUE
-                && table.getPlayers().get(i).getPlayerChips() >= HIGHEST_POT_VALUE) {
+                && table.getPlayers().get(i).getPlayerChips() > 0) {
             possibleActions.add(PlayerAction.CHECK);
         }
 

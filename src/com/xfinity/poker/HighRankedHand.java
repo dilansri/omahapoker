@@ -1,163 +1,245 @@
 package com.xfinity.poker;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
 
 import com.xfinity.poker.Suit.SuitType;
+import com.xfinity.poker.Value.CardValue;
+import java.util.Arrays;
+import java.util.Collections;
 
-public class HighRankedHand {
+public class HighRankedHand {    
 
-	public boolean isRoyalFlush(List<Card> cardlist){
+    public static boolean isRoyalFlush(List<Card> cardlist) {
 
-		if(!sameSuit(cardlist)){
-			return false;
-		}
+        if (!sameSuit(cardlist)) {
+            return false;
+        }        
 
-		for(Card card: cardlist){
-			/*
-		 SuitType suitType = card.getSuit().getSuitType();		 
-		 if(suitType == SuitType.CLUBS){
+        for (Card card : cardlist) {
+            int value = card.getValue().getCardValue();
+            if(!(value == CardValue.ACE 
+               || value == CardValue.KING
+               || value == CardValue.QUEEN
+               || value == CardValue.TEN
+               || value == CardValue.JACK))
+                return false;
+        }
+        return true;
 
-		 }
+    }
+    
+    public static Card straightFlush(List<Card> cardsList){
+        
+        if(cardsList == null || cardsList.isEmpty() ||cardsList.size() != 5 || !sameSuit(cardsList))
+            return null;                
+        Collections.sort(cardsList);        
+        int checkValue = cardsList.get(0).getValue().getCardValue();
+        
+        for(int i=1;i<cardsList.size();i++){
+            if(cardsList.get(i).getValue().getCardValue()-1 != checkValue)
+                return null;
+            checkValue = cardsList.get(i).getValue().getCardValue();
+        }
+        
+        return cardsList.get(cardsList.size()-1);        
+        
+    }
+    
+    public static Card straight(List<Card> cardsList){
+        if(cardsList == null || cardsList.isEmpty() ||cardsList.size() != 5 )
+            return null;                
+        Collections.sort(cardsList);        
+        int checkValue = cardsList.get(0).getValue().getCardValue();
+        
+        for(int i=1;i<cardsList.size();i++){
+            if(cardsList.get(i).getValue().getCardValue()-1 != checkValue)
+                return null;
+            checkValue = cardsList.get(i).getValue().getCardValue();
+        }
+        
+        return cardsList.get(cardsList.size()-1);
+    }
 
-		 Value cardValue = card.getValue();
+    public static boolean sameSuit(List<Card> cardlist) {
 
-		 int intValue = cardValue.getCardValue();
+        SuitType type = cardlist.get(0).getSuit().getSuitType();
 
-		 if(intValue == CardValue.KING){
+        for (int i = 1; i < cardlist.size(); i++) {
+            SuitType cardType = cardlist.get(i).getSuit().getSuitType();
+            if (type != cardType) {
+                return false;
+            }
 
-		 }
-			 */
-		}
-		return true;
+        }
+        return true;
+    }
 
-	}
+    public static Card getHighRankCard(List<Card> cardList) {
+        if (cardList == null || cardList.size() == 0) {
+            return null;
+        }
+        Card highCard = cardList.get(0);
 
-	private boolean sameSuit(List<Card> cardlist) {
+        for (int i = 1; i < cardList.size(); i++) {
+            Card currentCard = cardList.get(i);
+            if (highCard.getValue().getCardValue() < currentCard.getValue().getCardValue()) {
+                highCard = currentCard;
+            }
+        }
 
-		SuitType type = cardlist.get(0).getSuit().getSuitType();
+        return highCard;
+    }
 
-		for(int i=1;i<cardlist.size();i++)
-		{
-			SuitType cardType =  cardlist.get(i).getSuit().getSuitType();
-			if(type != cardType)
+    public static List<Card> twoPairs(List<Card> cardsList) {
+        if (cardsList == null || cardsList.isEmpty()) {
+            return null;
+        }        
+        
+        int[] cardsCount = getCardsCounts(cardsList);        
+        List<Card> twoPairs = new ArrayList<>();        
+        int maxValue = 0;
+        boolean found = false;
+        
+        for(int i=Value.CardValue.TWO;i<cardsCount.length;i++){
+            if(cardsCount[i] == 2){
+                twoPairs.add(new Card(null,Value.getValue(i)));
+                found  = true;
+            }            
+            if (!found && cardsCount[i] > 0) {
+                maxValue = i;
+            }            
+            found = false;
+        }
 
-			{
-				return false;
-			}
+	if(twoPairs.size() != 2)
+            return null;
+        twoPairs.add(new Card(null,Value.getValue(maxValue)));
+        return twoPairs;
 
+    }
 
-		}
-		return true;
-	}   
+    public static Card flush(List<Card> cardList) {
+        if (!sameSuit(cardList) || cardList.isEmpty()) {
+            return null;
+        }
+        Card highCard = cardList.get(0);
 
+        for (int i = 1; i < cardList.size(); i++) {
+            Card currentCard = cardList.get(i);
+            if (highCard.getValue().getCardValue() < currentCard.getValue().getCardValue()) {
+                highCard = currentCard;
+            }
+        }
+        return highCard;
 
-	public Card getHighRankCard(List<Card> cardList){
-		if(cardList == null || cardList.size() == 0)
-			return null;
-		Card highCard = cardList.get(0);
+    }
 
-		for(int i=1;i<cardList.size();i++)
-		{
-			Card currentCard = cardList.get(i);
-			if(highCard.getValue().getCardValue() < currentCard.getValue().getCardValue())
-				highCard = currentCard;		
-		}	
+    public static List<Card> fullHouse(List<Card> cardList) {
+        if (cardList == null || cardList.size() != Dealer.EVALUATE_HAND_SIZE) {
+            return null;
+        }
+        List<Card> fullHouse = new ArrayList<Card>();
+        int[] cardsCount = getCardsCounts(cardList);
+        Arrays.sort(cardsCount);
+        for (int i = Value.CardValue.TWO; i < cardsCount.length; i++) {
+            if (cardsCount[i] == 3) {
+                fullHouse.add( new Card(null, Value.getValue(i)));
+            } else if (cardsCount[i] == 2) {
+                fullHouse.add( new Card(null, Value.getValue(i)));
+            }
+        }
+        if(fullHouse.size() < 2)
+            return null;
+        return fullHouse;
+    }
 
-		return highCard;
-	}
+    public static List<Card> threeOfKind(List<Card> cardList) {
+        if (cardList == null || cardList.size() <3) {
+            return null;
+        }
+        List<Card> threeOfKind = new ArrayList<Card>(2);
+        int[] cardsCount = getCardsCounts(cardList);
 
-	public List<Card> twoPairs(List<Card> cardList){
-		if(cardList == null || cardList.size() != Dealer.EVALUATE_HAND_SIZE)
-			return null;
+        int maxValue = 0;
+        boolean found = false;
 
-		//TODO use a hashmap to count the same value card. if two pairs available return both cards including the highest value card
-		// in a list
-		return null;
+        for (int i = Value.CardValue.TWO; i < cardsCount.length; i++) {
 
-	}
-	
+            if (cardsCount[i] == 3) {
+                threeOfKind.add(new Card(null, Value.getValue(i)));
+                found = true;
+            }
+            if (!found && cardsCount[i] > 0) {
+                maxValue = i;
+            }
+            
+            found = false;
 
-	
-	public Card flush(List<Card> cardList){
-		 if(!sameSuit (cardList)){
-			 return null;
-		 }
-		 Card highCard = cardList.get(0);
+        }
 
-			for(int i=1;i<cardList.size();i++)
-			{
-				Card currentCard = cardList.get(i);
-				if(highCard.getValue().getCardValue() < currentCard.getValue().getCardValue())
-					highCard = currentCard;		
-			}	
-			return highCard;
+        if (threeOfKind.size() != 1) {
+            return null;
+        } else {
+            threeOfKind.add(new Card(null, Value.getValue(maxValue)));
+        }
 
-	} 
+        return threeOfKind;
 
-	public static List<Card> fullHouse(List<Card> cardList){
-		if(cardList == null || cardList.size() != Dealer.EVALUATE_HAND_SIZE)
-			return null;
-		List<Card> fullHouse = new ArrayList<Card>(2);
-		int[] cardsCount = getCardsCounts(cardList);
-		
-		for(int i=Value.CardValue.TWO;i<cardsCount.length;i++){
-			if(cardsCount[i] == 3){
-				fullHouse.add(0,new Card(null,Value.getValue(i)));
-			}else if(cardsCount[i] == 2){
-				fullHouse.add(0,new Card(null,Value.getValue(i)));
-			}
-		}
-		
-		return fullHouse;
-	}
-	
-	public static List<Card> threeOfKind(List<Card> cardList){
-		if(cardList == null || cardList.size() != Dealer.EVALUATE_HAND_SIZE)
-			return null;
-		List<Card> threeOfKind = new ArrayList<Card>(2);
-		int[] cardsCount = getCardsCounts(cardList);
-		
-		int maxValue = 0;
-		boolean found = false;
-		
-		for(int i=Value.CardValue.TWO;i<cardsCount.length;i++){
-			
-			if(cardsCount[i] == 3)
-			{
-				threeOfKind.add(new Card(null,Value.getValue(i)));
-				found = true;
-			}		
-			if(!found && cardsCount[i] > 0)
-				maxValue = i;
-			
-		}
-		
-		if(!found){
-			return null;
-		}else{
-			threeOfKind.add(new Card(null,Value.getValue(maxValue)));
-		}
-		
-		return threeOfKind;
-		
+    }
 
-	}
+    private static int[] getCardsCounts(List<Card> cardList) {
 
-	private static int[] getCardsCounts(List<Card> cardList) {
-		
-		int[] returnCards = new int[Value.CardValue.ACE+1];
-		for(Card card: cardList){
-			returnCards[card.getValue().getCardValue()]++;			
-		}
-		return returnCards;
-	}
+        int[] returnCards = new int[Value.CardValue.ACE + 1];
+        for (Card card : cardList) {
+            returnCards[card.getValue().getCardValue()]++;
+        }
+        return returnCards;
+    }
+    
+    public static List<Card> fourOfaKind(List<Card> cardList) {
+        if (cardList == null || cardList.size() < 4) {
+            return null;
+        }
+        List<Card> fourOfaKind = new ArrayList<Card>(2);
+        int[] cardsCount = getCardsCounts(cardList);
+
+        int maxValue = 0;
+        boolean found = false;
+
+        for (int i = Value.CardValue.TWO; i < cardsCount.length; i++) {
+
+            if (cardsCount[i] == 4) {
+                fourOfaKind.add(new Card(null, Value.getValue(i)));
+                found = true;
+            }
+            if (!found && cardsCount[i] > 0) {
+                maxValue = i;
+            }
+
+        }
+
+        if (!found) {
+            return null;
+        } else {
+            fourOfaKind.add(new Card(null, Value.getValue(maxValue)));
+        }
+
+        return fourOfaKind;
+
+    }
+    
+    public static boolean hasPair(List<Card> cards) {
+        int[] cardsCount = getCardsCounts(cards);
+        
+        for(int i=0;i<cardsCount.length;i++)
+        {
+            if(cardsCount[i] == 2){
+                return true;
+            }
+        }
+        
+        return false;
+    }
 
 }
-
-
-
-
