@@ -909,8 +909,10 @@ public class TableControl extends AnchorPane implements Initializable {
 
             @Override
             public void handle(ActionEvent event) {
-                
+                showTableCards();
             }
+
+            
         });
     }
     
@@ -951,6 +953,51 @@ public class TableControl extends AnchorPane implements Initializable {
             
         });
        return parallel;
+    }
+    
+    private void showTableCards() {
+         
+        tableCards.getChildren().clear();
+        
+        
+        
+        List<Card> cards = table.getCommunityCards();
+        
+        List<Pane> tableCardPanes = new ArrayList<Pane>(cards.size());
+            
+        for(Card card: cards){
+            CardControl cardControl =new CardControl(card.getSuit().getSuitType().toString(),card.getValue().getCardValue());
+            
+            cardControl.getCard().setScaleX(1.2);
+            cardControl.getCard().setScaleY(1.2);
+            tableCardPanes.add(cardControl.getCard());
+            cardControl.getCard().setRotationAxis(Rotate.Y_AXIS);
+            cardControl.getCard().setRotate(180);
+            
+            RotateTransition rt = new RotateTransition(Duration.millis(1000), cardControl.getCard());
+            rt.setAxis(Rotate.Y_AXIS);
+            rt.setByAngle(180);
+            rt.play();
+            
+        }
+        
+       tableCards.getChildren().addAll(tableCardPanes);
+       
+       KeyValue valueSize = new KeyValue(tableCards.prefWidthProperty(),280,Interpolator.EASE_OUT);      
+       KeyFrame keyFrame = new KeyFrame(Duration.millis(1000), valueSize);       
+       Timeline timeline = new Timeline();
+       timeline.getKeyFrames().add(keyFrame);
+       timeline.play();
+       timeline.setOnFinished(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {               
+                //startBettingRound();                 
+            }  
+
+            
+            
+        });
     }
 
     

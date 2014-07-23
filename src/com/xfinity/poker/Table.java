@@ -1,6 +1,7 @@
 package com.xfinity.poker;
 
 import static com.xfinity.poker.DealerRules.PLAYER_HAND_SIZE;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Table implements TableRules {
@@ -13,6 +14,8 @@ public class Table implements TableRules {
 	private int smallBlind;
         
         private double highestPotValue;
+        
+        private List<Card> communityCards;
 	
 	
 	public Table(List<Player> players)
@@ -21,10 +24,15 @@ public class Table implements TableRules {
 		tablePot = new TablePot(playerList);
 		bigBlind = INITIAL_BIG_BLIND;
 		smallBlind = INITIAL_SMALL_BLIND;
+                 communityCards = new ArrayList<>(5);
 	}
         
         public double getHighestPotValue(){
             return highestPotValue;
+        }
+        
+        public List<Card> getCommunityCards(){
+            return communityCards;
         }
         
         public double getRaiseAmount(){

@@ -11,7 +11,7 @@ public class Dealer implements DealerRules {
     private CardDeck deck;
     private Table table;
 	//HighHandCardAnalyser highAnalyser;
-    private List<Card> communityCards;
+    
 
     private Round currentRound;
     
@@ -28,7 +28,7 @@ public class Dealer implements DealerRules {
 
     public Dealer() {
         deck = new CardDeck();
-        communityCards = new ArrayList<>(5);
+       
         dealingPlayerOrder = 1;
         currentRound = Round.PRE_FLOP;
         roundCount = 0;
@@ -96,7 +96,7 @@ public class Dealer implements DealerRules {
 
     public void dealFlop() {
         for(int i=0;i<NUMBER_OF_FLOP_CARDS;i++)
-            communityCards.add(deck.getTopCard());
+            table.getCommunityCards().add(deck.getTopCard());
     }
 
     public void dealTurn() {
