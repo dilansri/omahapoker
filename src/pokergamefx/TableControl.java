@@ -861,8 +861,30 @@ public class TableControl extends AnchorPane implements Initializable {
     
     public void startFlopRound(){
         dealer.dealFlop();
-        showDealingFlopAnimations();
         
+        showFlopRoundMessage();
+        
+        
+    }
+    
+    public void showFlopRoundMessage(){
+         roundMessageText.setText("Dealing Flop");
+       KeyValue valueOpacity = new KeyValue(roundMessageText.opacityProperty(),1,Interpolator.EASE_OUT);       
+    //   KeyValue valueY = new KeyValue(card.layoutYProperty(),destinationY,Interpolator.EASE_OUT);       
+       KeyFrame keyFrame = new KeyFrame(Duration.millis(2000), valueOpacity);       
+       Timeline timeline = new Timeline();
+       timeline.getKeyFrames().add(keyFrame);
+       timeline.setAutoReverse(true);
+       timeline.setCycleCount(2);
+       timeline.setDelay(Duration.millis(2000));
+       timeline.setOnFinished(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+                showDealingFlopAnimations();
+            }
+       });
+       timeline.play();
     }
     
     public void showDealingFlopAnimations(){
@@ -870,9 +892,19 @@ public class TableControl extends AnchorPane implements Initializable {
         for(int i=0;i<NUMBER_OF_FLOP_CARDS;i++)
             flopDealingTransitions.add(getDealingFlopAnimations());
         
+        //tableCards.setPrefWidth(USE_COMPUTED_SIZE);
+        tableCards.setMinWidth(280);
+        tableCards.setSpacing(10);
         SequentialTransition seqTrans = new SequentialTransition();
         seqTrans.getChildren().addAll(flopDealingTransitions);
         seqTrans.play();
+        seqTrans.setOnFinished(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+                
+            }
+        });
     }
     
     public Transition getDealingFlopAnimations(){
@@ -893,9 +925,11 @@ public class TableControl extends AnchorPane implements Initializable {
        KeyFrame keyFrame = new KeyFrame(Duration.millis(500), valueX, valueY,valueScaleX,valueScaleY);       
        Timeline timeline = new Timeline();
        timeline.getKeyFrames().add(keyFrame);
+       //timeline.setDelay(Duration.millis(2000));
        
        RotateTransition rotateTransition = new RotateTransition(Duration.millis(500), card);
-       rotateTransition.setByAngle(720f);        
+       rotateTransition.setByAngle(720f);     
+       //rotateTransition.setDelay(Duration.millis(2000));
        ParallelTransition parallel =  new ParallelTransition();        
        parallel.getChildren().addAll(timeline,rotateTransition);
        
