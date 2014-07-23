@@ -695,11 +695,6 @@
             </Text>
          </children>
       </Group>
-      <Text fx:id="roundMessageText" layoutX="52.0" layoutY="331.0" opacity="0.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" textAlignment="CENTER" wrappingWidth="700.0">
-         <font>
-            <Font size="56.0" />
-         </font>
-      </Text>
       <Pane fx:id="playerActionsPane" layoutX="126.0" layoutY="159.0" opacity="0.0">
          <children>
             <Button fx:id="raiseButton" disable="true" layoutX="132.0" layoutY="1.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="111.0" style="-fx-background-color: rgb(149,153,152);" text="RAISE">
@@ -725,5 +720,15 @@
          </children>
       </Pane>
       <ProgressIndicator fx:id="playerTimeIndicatior" layoutX="55.0" layoutY="159.0" progress="0.0" scaleX="2.5" scaleY="2.5" visible="false" />
+      <Group>
+         <children>
+            <Rectangle fx:id="rectan" arcHeight="90.0" arcWidth="90.0" fill="#000000e0" height="101.0" layoutX="47.0" layoutY="258.0" stroke="#aeaeae" strokeLineCap="ROUND" strokeType="OUTSIDE" width="697.0" />
+            <Text fx:id="roundMessageText" fill="WHITE" layoutX="46.0" layoutY="331.0" opacity="0.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" textAlignment="CENTER" wrappingWidth="700.0">
+               <font>
+                  <Font size="56.0" />
+               </font>
+            </Text>
+         </children>
+      </Group>
     </children>
 </fx:root>
