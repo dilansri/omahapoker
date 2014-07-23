@@ -6,10 +6,10 @@
 
 package pokergamefx;
 
-import com.sun.prism.paint.Color;
 import com.xfinity.poker.Card;
 import com.xfinity.poker.ComputerPlayer;
 import com.xfinity.poker.Dealer;
+import com.xfinity.poker.Dealer.Round;
 import static com.xfinity.poker.DealerRules.PLAYER_HAND_SIZE;
 import static com.xfinity.poker.GameRules.GAME_PLAYERS;
 import static com.xfinity.poker.GameRules.PLAYER_TIME_OUT_SECONDS;
@@ -17,12 +17,12 @@ import com.xfinity.poker.HumanPlayer;
 import com.xfinity.poker.Player;
 import com.xfinity.poker.Player.PlayerAction;
 import com.xfinity.poker.Table;
+import static com.xfinity.poker.TableRules.NUMBER_OF_FLOP_CARDS;
 import com.xfinity.poker.Value;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.ResourceBundle;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
@@ -312,335 +312,15 @@ public class TableControl extends AnchorPane implements Initializable {
                 
     }
     
-    private void showStartBettingAnimation(String message) {
-        roundMessageText.setText(message);
-       KeyValue valueOpacity = new KeyValue(roundMessageText.opacityProperty(),1,Interpolator.EASE_OUT);       
-    //   KeyValue valueY = new KeyValue(card.layoutYProperty(),destinationY,Interpolator.EASE_OUT);       
-       KeyFrame keyFrame = new KeyFrame(Duration.millis(2000), valueOpacity);       
-       Timeline timeline = new Timeline();
-       timeline.getKeyFrames().add(keyFrame);
-       timeline.setAutoReverse(true);
-       timeline.setCycleCount(2);
-       timeline.play();
-    }
-    
-    private HBox getPlayerCardsHBox(int player){
-        HBox cardsList = null;       
-        switch(player){
-            case 0:
-                cardsList = singlePlayerCards;
-                break;
-            case 1:
-                cardsList = playerCards1;
-                break;
-            case 2:
-                cardsList = playerCards2;
-                break;
-            case 3:
-                cardsList = playerCards3;
-                break;
-            case 4:
-                cardsList = playerCards4;
-                break;
-        }       
-        
-        return cardsList;
-    }
-    
-    private void showPlayerCards(int player) {
-        //List<Pane> playerCards = getPlayerCardsPanes(player);
-        HBox playerCards = getPlayerCardsHBox(player); 
-        playerCards.getChildren().clear();
-        
-        
-        
-        List<Card> cards = table.getPlayers().get(player).getPlayerHand().getCards();
-        
-        List<Pane> playerCardPanes = new ArrayList<Pane>(cards.size());
-            
-        for(Card card: cards){
-            CardControl cardControl =new CardControl(card.getSuit().getSuitType().toString(),card.getValue().getCardValue());
-            
-            playerCardPanes.add(cardControl.getCard());
-            cardControl.getCard().setRotationAxis(Rotate.Y_AXIS);
-            cardControl.getCard().setRotate(180);
-            
-            RotateTransition rt = new RotateTransition(Duration.millis(1000), cardControl.getCard());
-            rt.setAxis(Rotate.Y_AXIS);
-            rt.setByAngle(180);
-            rt.play();
-            
-        }
-        
-       playerCards.getChildren().addAll(playerCardPanes);
-       
-       KeyValue valueSize = new KeyValue(playerCards.prefWidthProperty(),180,Interpolator.EASE_OUT);      
-       KeyFrame keyFrame = new KeyFrame(Duration.millis(1000), valueSize);       
-       Timeline timeline = new Timeline();
-       timeline.getKeyFrames().add(keyFrame);
-       timeline.play();
-       timeline.setOnFinished(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent event) {               
-                startBettingRound();                 
-            }  
-
-            
-            
-        });
-       
-               
-    }
-    
-    private void startBettingRound() {
-        int betStartingPlayer = dealer.getDealingPlayerOrder()+2;
-        
-        boolean playerPassed = false;
-        
-        List<Transition> bettingTransitionsBeforePlayerChoice = new ArrayList<>();
-        final List<Transition> bettingTransitionsAfterPlayerChoice = new ArrayList<>();
-        for(int i=betStartingPlayer;i<GAME_PLAYERS+betStartingPlayer;i++){
-            Player player = table.getPlayers().get(i % GAME_PLAYERS);
-            if(player.isFolded() || player.isAllIn()){
-                continue;
-            }
-            
-            //PlayerAction action = null;
-            
-            if(player instanceof HumanPlayer){
-                //action = player.getAction();
-                playerPassed = true;
-                continue;
-            }else if(player instanceof ComputerPlayer){
-                //action = ((ComputerPlayer)player).getAction(dealer.getPlayerPossibleActions(i%GAME_PLAYERS),dealer.getRound());
-                
-            }
-            if(!playerPassed)
-                bettingTransitionsBeforePlayerChoice.add(getPlayerBettingTransition(i%GAME_PLAYERS));
-            else
-                bettingTransitionsAfterPlayerChoice.add(getPlayerBettingTransition(i%GAME_PLAYERS));
-            
-        }
-        
-        SequentialTransition seqTransition = new SequentialTransition();
-        seqTransition.getChildren().addAll(bettingTransitionsBeforePlayerChoice);
-        seqTransition.setOnFinished(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent event) {
-                showPlayerTurnAnimation(bettingTransitionsAfterPlayerChoice);
-                //application.getSinglePlayerChoice();              
-            }
-
-            
-
-            
-        });
-        seqTransition.play();       
-        
-        
-        
-        
-    }  
-    private void showPlayerTurnAnimation(final List<Transition> afterTransitions) {
-        roundMessageText.setText("Your Turn");
-        roundMessageText.setOpacity(0);
-       KeyValue valueOpacity = new KeyValue(roundMessageText.opacityProperty(),1,Interpolator.LINEAR);      
-       KeyFrame keyFrame = new KeyFrame(Duration.millis(500), valueOpacity);       
-       Timeline timeline = new Timeline();
-       timeline.getKeyFrames().add(keyFrame);
-       timeline.setCycleCount(2);
-       timeline.setAutoReverse(true);
-       timeline.setDelay(Duration.millis(1000));
-       timeline.setOnFinished(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent event) { 
-               showAndWaitPlayerControls(afterTransitions);
-            }
-        });
-       timeline.play();
-    }
-    
-    private void showAndWaitPlayerControls(final List<Transition> afterTransitions) {
-        
-        setPlayerControlsToDefault();
-        List<PlayerAction> possibleActions = dealer.getPlayerPossibleActions(0);
-        
-        for(PlayerAction action : possibleActions){
-            if(action == PlayerAction.CALL)
-                callButton.setDisable(false);
-            else if(action  == PlayerAction.RAISE)
-                raiseButton.setDisable(false);
-            else if(action == PlayerAction.CHECK)
-                checkButton.setDisable(false);
-            else if(action == PlayerAction.FOLD)
-                foldButton.setDisable(false);
-            else if(action == PlayerAction.ALL_IN)
-                allInButton.setDisable(false);            
-        }
-        playerActionsPane.setVisible(true);
-        playerActionsPane.setOpacity(0);
-        KeyValue valueOpacity = new KeyValue(playerActionsPane.opacityProperty(), 1, Interpolator.LINEAR);
-        KeyFrame keyFrame = new KeyFrame(Duration.millis(500), valueOpacity);
-        Timeline timeline = new Timeline();
-        timeline.getKeyFrames().add(keyFrame);
-        timeline.setDelay(Duration.millis(500));
-        timeline.setOnFinished(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent event) {
-                showPlayerTimerAnimation(afterTransitions);
-            }
-            
-        });
-        timeline.play();
-        
-        
-    }
-    
-    private void showPlayerTimerAnimation(final List<Transition> afterTransitions) {
-        playerTimeIndicatior.setVisible(true);
-        playerTimeIndicatior.setProgress(0);
-        playerSelectedAction = PlayerAction.FOLD;
-        KeyValue valueProgress = new KeyValue(playerTimeIndicatior.progressProperty(), 1, Interpolator.LINEAR);
-        KeyFrame keyFrame = new KeyFrame(Duration.millis(PLAYER_TIME_OUT_SECONDS*1000), valueProgress);
-        timelinePlayerActionAnimation = new Timeline();
-        timelinePlayerActionAnimation.getKeyFrames().add(keyFrame);
-        timelinePlayerActionAnimation.setDelay(Duration.millis(500));
-        timelinePlayerActionAnimation.setOnFinished(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent event) {
-                hidePlayerControls();
-                setPlayerActionText(playerSelectedAction);
-                //handle single player default actions
-                if(playerSelectedAction == PlayerAction.FOLD)
-                    dealer.setFlod(0);
-                showAfterPlayerTransitions(afterTransitions);
-            }
-
-            
-            
-        });
-        timelinePlayerActionAnimation.play();
-    }
-    private void showAfterPlayerTransitions(List<Transition> afterTransitions) {
-    
-        final SequentialTransition seqTransition = new SequentialTransition();
-        seqTransition.getChildren().addAll(afterTransitions);
-        
-        seqTransition.play(); 
-        seqTransition.setOnFinished(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent event) {                
-                
-                if(!table.isSamePotValues()){     
-                    startBettingRound();
-                    
-                }
-            }           
-        });
-    }
-    private void setPlayerControlsToDefault() {
-        raiseButton.setDisable(true);
-        callButton.setDisable(true);
-        checkButton.setDisable(true);
-        foldButton.setDisable(true);
-        allInButton.setDisable(true);
-    }
-    
-    private Transition getPlayerBettingTransition(final int playerPos) {
-        Rectangle messageBox = null;
-        Text messageText = null;
-        switch (playerPos) {
-            case 0:
-                messageBox = singlePlayerMessageBox;
-                messageText = singlePlayerMessageText;
-                break;
-            case 1:
-                messageBox = player1MessageBox;
-                messageText = player1MessageText;
-                break;
-            case 2:
-                messageBox = player2MessageBox;
-                messageText = player2MessageText;
-                break;
-            case 3:
-                messageBox = player3MessageBox;
-                messageText = player3MessageText;
-                break;
-            case 4:
-                messageBox = player4MessageBox;
-                messageText = player4MessageText;
-                break;
-        }
-        
-        final Text finalMessageText = messageText;
-        
-        messageText.setText("");
-        messageBox.setFill(Paint.valueOf("e4e4e4"));
-        
-
-        KeyValue valueBox = new KeyValue(messageBox.fillProperty(), Paint.valueOf("3b72ff"), Interpolator.EASE_IN);        
-        KeyValue valueTextThinking = new KeyValue(messageText.textProperty(),"Hmmm..");
-        KeyFrame keyFrameBox = new KeyFrame(Duration.millis(300), valueBox,valueTextThinking);
-        Timeline timelineBox = new Timeline();
-        timelineBox.getKeyFrames().add(keyFrameBox);
-        timelineBox.setCycleCount(15);
-        timelineBox.setDelay(Duration.millis(2000));
-        timelineBox.setAutoReverse(true);
-        
-        
-        SequentialTransition seqTrans = new SequentialTransition();
-        seqTrans.getChildren().addAll(timelineBox);
-        seqTrans.setOnFinished(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent event) { 
-                showAndDoPlayerAction(finalMessageText,playerPos);
-            }           
-
-            
-        });
-        return seqTrans;
-    }
-    private void showAndDoPlayerAction(final Text finalMessageText,final int playerPos) {
-        Player player = table.getPlayers().get(playerPos);
-                final PlayerAction action = ((ComputerPlayer)player).getAction(dealer.getPlayerPossibleActions(playerPos),dealer.getRound()); //for now
-                
-                Random rand = new Random();
-                KeyValue valueText = new KeyValue(finalMessageText.textProperty(),action.toString());
-                KeyFrame keyFrameText = new KeyFrame(Duration.millis(1000), valueText);
-                Timeline timelineText = new Timeline();
-                timelineText.setDelay(Duration.millis(400));
-                timelineText.getKeyFrames().add(keyFrameText);
-                timelineText.play();
-                if(action == PlayerAction.CALL)
-                    dealer.getCallFrom(playerPos);
-                else if(action == PlayerAction.FOLD)
-                    dealer.setFlod(playerPos);
-                
-                timelineText.setOnFinished(new EventHandler<ActionEvent>() {
-
-                    @Override
-                    public void handle(ActionEvent event) {
-                        
-                    }
-                });
-     }
-
     private Transition dealToPlayerAnimation(final int i) {
-        final CardControl testCard = new CardControl("DIAMONDS",Value.CardValue.TWO);
-        final Pane card = testCard.getCard();
+        final CardControl showingCard = new CardControl("DIAMONDS",Value.CardValue.TWO);
+        final Pane card = showingCard.getCard();
         
         card.setLayoutX(354);
         card.setLayoutY(530);
         
         tableAnchor.getChildren().add(card);
-        testCard.faceDown();        
+        showingCard.faceDown();        
         double destinationX = 354,destinationY = 530;
         
         
@@ -730,8 +410,16 @@ public class TableControl extends AnchorPane implements Initializable {
         
         for(HBox playerCards: playerCardsList)
         {
+            KeyValue valuePosAdjustment = null;
+            if(playerCards == playerCards3 || playerCards == playerCards4){
+                valuePosAdjustment = new KeyValue(playerCards.layoutXProperty(),playerCards.getLayoutX()+50);
+            }
             KeyValue valueX = new KeyValue(playerCards.prefWidthProperty(),50,Interpolator.EASE_OUT);
-            KeyFrame keyFrame = new KeyFrame(Duration.millis(500), valueX);       
+            KeyFrame keyFrame = null; 
+            if(valuePosAdjustment != null)
+               keyFrame = new KeyFrame(Duration.millis(500), valueX,valuePosAdjustment); 
+            else
+                keyFrame =  new KeyFrame(Duration.millis(500), valueX); 
             Timeline timeline = new Timeline();
             timeline.getKeyFrames().add(keyFrame);          
             cardAjustTimeLines.add(timeline);
@@ -790,55 +478,10 @@ public class TableControl extends AnchorPane implements Initializable {
         playerChipsControlList.add(player2Chips);
         playerChipsControlList.add(player3Chips);
         playerChipsControlList.add(player4Chips);
-        /*
         for(int i=0;i<allPlayers.size();i++){
-            final int j = i;
             playerChipsControlList.get(i).textProperty().bind(allPlayers.get(i).getPlayerChipsProperty().asString());
-            
-            playerChipsControlList.get(i).textProperty().addListener( new ChangeListener<String>(){
-                @Override
-                public void changed(ObservableValue<? extends String> ov, String oldVal, String newVal) {
-                    Rectangle messageBox = null;
-                    Text messageText = null;
-                    switch(j){
-                        case 0:
-                            messageBox = singlePlayerMessageBox;
-                            messageText = singlePlayerMessageText;
-                            break;
-                        case 1:
-                            messageBox = player1MessageBox;
-                            messageText = player1MessageText;
-                            break;
-                        case 2:
-                            messageBox = player2MessageBox;
-                            messageText = player2MessageText;
-                            break;
-                        case 3:
-                            messageBox = player3MessageBox;
-                            messageText = player3MessageText;
-                            break;
-                        case 4:
-                            messageBox = player4MessageBox;
-                            messageText = player4MessageText;
-                            break;
-                    }
-                    
-                    Double changedValue = Double.parseDouble(newVal) - Double.parseDouble(oldVal);
-                    //messageText.setText("$"+changedValue);
-                    
-                    KeyValue valueBox = new KeyValue(messageBox.fillProperty(),Paint.valueOf("ffb476"),Interpolator.EASE_OUT);
-                    KeyValue valueText = new KeyValue(messageText.textProperty(),"$"+changedValue);
-                    KeyFrame keyFrame = new KeyFrame(Duration.millis(500), valueBox,valueText);       
-                    Timeline timeline = new Timeline();
-                    timeline.getKeyFrames().add(keyFrame);
-                    timeline.setCycleCount(5);
-                    timeline.setAutoReverse(true);
-                    //timeline.setDelay(Duration.millis(400));
-                    timeline.play();                         
-                }
-            });
-            
-        } */
+        }
+        
     }    
 
     private void bindPlayerPots(List<Player> allPlayers) {
@@ -887,4 +530,387 @@ public class TableControl extends AnchorPane implements Initializable {
             
         }
     }
+    
+    private void showStartBettingAnimation(String message) {
+        roundMessageText.setText(message);
+       KeyValue valueOpacity = new KeyValue(roundMessageText.opacityProperty(),1,Interpolator.EASE_OUT);       
+    //   KeyValue valueY = new KeyValue(card.layoutYProperty(),destinationY,Interpolator.EASE_OUT);       
+       KeyFrame keyFrame = new KeyFrame(Duration.millis(2000), valueOpacity);       
+       Timeline timeline = new Timeline();
+       timeline.getKeyFrames().add(keyFrame);
+       timeline.setAutoReverse(true);
+       timeline.setCycleCount(2);
+       timeline.play();
+    }
+    
+    private HBox getPlayerCardsHBox(int player){
+        HBox cardsList = null;       
+        switch(player){
+            case 0:
+                cardsList = singlePlayerCards;
+                break;
+            case 1:
+                cardsList = playerCards1;
+                break;
+            case 2:
+                cardsList = playerCards2;
+                break;
+            case 3:
+                cardsList = playerCards3;
+                break;
+            case 4:
+                cardsList = playerCards4;
+                break;
+        }       
+        
+        return cardsList;
+    }
+    
+    private void showPlayerCards(int player) {
+        //List<Pane> playerCards = getPlayerCardsPanes(player);
+        HBox playerCards = getPlayerCardsHBox(player); 
+        playerCards.getChildren().clear();
+        
+        
+        
+        List<Card> cards = table.getPlayers().get(player).getPlayerHand().getCards();
+        
+        List<Pane> playerCardPanes = new ArrayList<Pane>(cards.size());
+            
+        for(Card card: cards){
+            CardControl cardControl =new CardControl(card.getSuit().getSuitType().toString(),card.getValue().getCardValue());
+            
+            playerCardPanes.add(cardControl.getCard());
+            cardControl.getCard().setRotationAxis(Rotate.Y_AXIS);
+            cardControl.getCard().setRotate(180);
+            
+            RotateTransition rt = new RotateTransition(Duration.millis(1000), cardControl.getCard());
+            rt.setAxis(Rotate.Y_AXIS);
+            rt.setByAngle(180);
+            rt.play();
+            
+        }
+        
+       playerCards.getChildren().addAll(playerCardPanes);
+       
+       KeyValue valueSize = new KeyValue(playerCards.prefWidthProperty(),180,Interpolator.EASE_OUT);      
+       KeyFrame keyFrame = new KeyFrame(Duration.millis(1000), valueSize);       
+       Timeline timeline = new Timeline();
+       timeline.getKeyFrames().add(keyFrame);
+       timeline.play();
+       timeline.setOnFinished(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {               
+                startBettingRound();                 
+            }  
+
+            
+            
+        });
+       
+               
+    }
+    
+    private void startBettingRound() {
+        int betStartingPlayer = dealer.getDealingPlayerOrder()+2;
+        
+        dealer.incrementRoundCount();
+        
+        boolean playerPassed = false;
+        
+        List<Transition> bettingTransitionsBeforePlayerChoice = new ArrayList<>();
+        final List<Transition> bettingTransitionsAfterPlayerChoice = new ArrayList<>();
+        for(int i=betStartingPlayer;i<GAME_PLAYERS+betStartingPlayer;i++){
+            Player player = table.getPlayers().get(i % GAME_PLAYERS);
+            if(player.isFolded() || player.isAllIn()){
+                continue;
+            }
+            
+            //PlayerAction action = null;
+            
+            if(player instanceof HumanPlayer){
+                //action = player.getAction();
+                playerPassed = true;
+                continue;
+            }else if(player instanceof ComputerPlayer){
+                //action = ((ComputerPlayer)player).getAction(dealer.getPlayerPossibleActions(i%GAME_PLAYERS),dealer.getRound());
+                
+            }
+            if(!playerPassed)
+                bettingTransitionsBeforePlayerChoice.add(getPlayerBettingTransition(i%GAME_PLAYERS));
+            else
+                bettingTransitionsAfterPlayerChoice.add(getPlayerBettingTransition(i%GAME_PLAYERS));
+            
+        }
+        
+        SequentialTransition seqTransition = new SequentialTransition();
+        seqTransition.getChildren().addAll(bettingTransitionsBeforePlayerChoice);
+        seqTransition.setOnFinished(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+                showPlayerTurnAnimation(bettingTransitionsAfterPlayerChoice);
+                //application.getSinglePlayerChoice();              
+            }
+
+            
+
+            
+        });
+        seqTransition.play();       
+        
+        
+        
+        
+    }  
+    private void showPlayerTurnAnimation(final List<Transition> afterTransitions) {
+        roundMessageText.setText("Your Turn");
+        roundMessageText.setOpacity(0);
+       KeyValue valueOpacity = new KeyValue(roundMessageText.opacityProperty(),1,Interpolator.LINEAR);      
+       KeyFrame keyFrame = new KeyFrame(Duration.millis(500), valueOpacity);       
+       Timeline timeline = new Timeline();
+       timeline.getKeyFrames().add(keyFrame);
+       timeline.setCycleCount(2);
+       timeline.setAutoReverse(true);
+       timeline.setDelay(Duration.millis(1000));
+       timeline.setOnFinished(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) { 
+               showAndWaitPlayerControls(afterTransitions);
+            }
+        });
+       timeline.play();
+    }
+    
+    private void showAndWaitPlayerControls(final List<Transition> afterTransitions) {
+        
+        setPlayerControlsToDefault();
+        List<PlayerAction> possibleActions = dealer.getPlayerPossibleActions(0);
+        
+        for(PlayerAction action : possibleActions){
+            if(action == PlayerAction.CALL)
+                callButton.setDisable(false);
+            else if(action  == PlayerAction.RAISE)
+                raiseButton.setDisable(false);
+            else if(action == PlayerAction.CHECK)
+                checkButton.setDisable(false);
+            else if(action == PlayerAction.FOLD)
+                foldButton.setDisable(false);
+            else if(action == PlayerAction.ALL_IN)
+                allInButton.setDisable(false);            
+        }
+            playerActionsPane.setVisible(true);
+            playerActionsPane.setOpacity(0);
+            KeyValue valueOpacity = new KeyValue(playerActionsPane.opacityProperty(), 1, Interpolator.LINEAR);
+            KeyFrame keyFrame = new KeyFrame(Duration.millis(500), valueOpacity);
+            Timeline timeline = new Timeline();
+            timeline.getKeyFrames().add(keyFrame);
+            timeline.setDelay(Duration.millis(500));
+            timeline.setOnFinished(new EventHandler<ActionEvent>() {
+
+                @Override
+                public void handle(ActionEvent event) {
+                    showPlayerTimerAnimation(afterTransitions);
+                }
+
+            });
+            timeline.play();
+        
+        
+        
+    }
+    
+    private void showPlayerTimerAnimation(final List<Transition> afterTransitions) {
+        playerTimeIndicatior.setVisible(true);
+        playerTimeIndicatior.setProgress(0);
+        playerSelectedAction = PlayerAction.FOLD;
+        KeyValue valueProgress = new KeyValue(playerTimeIndicatior.progressProperty(), 1, Interpolator.LINEAR);
+        KeyFrame keyFrame = new KeyFrame(Duration.millis(PLAYER_TIME_OUT_SECONDS*1000), valueProgress);
+        timelinePlayerActionAnimation = new Timeline();
+        timelinePlayerActionAnimation.getKeyFrames().add(keyFrame);
+        timelinePlayerActionAnimation.setDelay(Duration.millis(500));
+        timelinePlayerActionAnimation.setOnFinished(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+                hidePlayerControls();
+                setPlayerActionText(playerSelectedAction);
+                //handle single player default actions
+                if(playerSelectedAction == PlayerAction.FOLD)
+                    dealer.setFlod(0);
+                showAfterPlayerTransitions(afterTransitions);
+            }
+
+            
+            
+        });
+        timelinePlayerActionAnimation.play();
+    }
+    private void showAfterPlayerTransitions(List<Transition> afterTransitions) {
+    
+        final SequentialTransition seqTransition = new SequentialTransition();
+        seqTransition.getChildren().addAll(afterTransitions);
+        
+        seqTransition.play(); 
+        seqTransition.setOnFinished(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {                
+                
+                if(!table.isSamePotValues()){     
+                    startBettingRound();                    
+                }else{
+                    if(dealer.getRound() == Round.PRE_FLOP)
+                        startFlopRound();
+                }
+            }           
+        });
+    }
+    
+    private void setPlayerControlsToDefault() {
+        raiseButton.setDisable(true);
+        callButton.setDisable(true);
+        checkButton.setDisable(true);
+        foldButton.setDisable(true);
+        allInButton.setDisable(true);
+    }
+    
+    private Transition getPlayerBettingTransition(final int playerPos) {
+        Rectangle messageBox = null;
+        Text messageText = null;
+        switch (playerPos) {
+            case 0:
+                messageBox = singlePlayerMessageBox;
+                messageText = singlePlayerMessageText;
+                break;
+            case 1:
+                messageBox = player1MessageBox;
+                messageText = player1MessageText;
+                break;
+            case 2:
+                messageBox = player2MessageBox;
+                messageText = player2MessageText;
+                break;
+            case 3:
+                messageBox = player3MessageBox;
+                messageText = player3MessageText;
+                break;
+            case 4:
+                messageBox = player4MessageBox;
+                messageText = player4MessageText;
+                break;
+        }
+        
+        final Text finalMessageText = messageText;
+        final Rectangle finalMessageBox = messageBox;
+        
+
+        KeyValue valueBox = new KeyValue(messageBox.fillProperty(), Paint.valueOf("3b72ff"), Interpolator.EASE_IN);        
+        KeyValue valueTextThinking = new KeyValue(messageText.textProperty(),"Hmmm..");
+        KeyFrame keyFrameBox = new KeyFrame(Duration.millis(300), valueBox,valueTextThinking);
+        Timeline timelineBox = new Timeline();
+        timelineBox.getKeyFrames().add(keyFrameBox);
+        timelineBox.setCycleCount(15);
+        timelineBox.setDelay(Duration.millis(2000));
+        timelineBox.setAutoReverse(true);
+        
+        
+        SequentialTransition seqTrans = new SequentialTransition();
+        seqTrans.getChildren().addAll(timelineBox);
+        seqTrans.setOnFinished(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) { 
+                showAndDoPlayerAction(finalMessageText,playerPos);
+                finalMessageBox.setFill(Paint.valueOf("e4e4e4"));
+                finalMessageText.setText("");
+            }           
+
+            
+        });
+        return seqTrans;
+    }
+    private void showAndDoPlayerAction(final Text finalMessageText,final int playerPos) {
+        Player player = table.getPlayers().get(playerPos);
+        final PlayerAction action = ((ComputerPlayer) player).getAction(dealer.getPlayerPossibleActions(playerPos), dealer.getRound(), dealer.getRoundCount()); //for now
+
+        //Random rand = new Random();
+        KeyValue valueText = new KeyValue(finalMessageText.textProperty(), action.toString());
+        KeyFrame keyFrameText = new KeyFrame(Duration.millis(1000), valueText);
+        Timeline timelineText = new Timeline();
+        timelineText.setDelay(Duration.millis(400));
+        timelineText.getKeyFrames().add(keyFrameText);
+        timelineText.play();
+        if (action == PlayerAction.CALL) {
+            dealer.getCallFrom(playerPos);
+        } else if (action == PlayerAction.FOLD) {
+            dealer.setFlod(playerPos);
+        }
+
+        timelineText.setOnFinished(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+
+            }
+        });
+                
+     }
+    
+    public void startFlopRound(){
+        dealer.dealFlop();
+        showDealingFlopAnimations();
+        
+    }
+    
+    public void showDealingFlopAnimations(){
+        List<Transition> flopDealingTransitions = new ArrayList<>();
+        for(int i=0;i<NUMBER_OF_FLOP_CARDS;i++)
+            flopDealingTransitions.add(getDealingFlopAnimations());
+        
+        SequentialTransition seqTrans = new SequentialTransition();
+        seqTrans.getChildren().addAll(flopDealingTransitions);
+        seqTrans.play();
+    }
+    
+    public Transition getDealingFlopAnimations(){
+        final CardControl showingCard = new CardControl("DIAMONDS",Value.CardValue.TWO);
+        final Pane card = showingCard.getCard();
+        
+        card.setLayoutX(354);
+        card.setLayoutY(530);
+        
+        tableAnchor.getChildren().add(card);
+        showingCard.faceDown();        
+        double destinationX = tableCards.getLayoutX(),destinationY = tableCards.getLayoutY();
+        
+        KeyValue valueX = new KeyValue(card.layoutXProperty(),destinationX,Interpolator.EASE_OUT);       
+       KeyValue valueY = new KeyValue(card.layoutYProperty(),destinationY,Interpolator.EASE_OUT);    
+       KeyValue valueScaleX = new KeyValue(card.scaleXProperty(),1.2,Interpolator.EASE_OUT);
+       KeyValue valueScaleY = new KeyValue(card.scaleYProperty(),1.2,Interpolator.EASE_OUT);
+       KeyFrame keyFrame = new KeyFrame(Duration.millis(500), valueX, valueY,valueScaleX,valueScaleY);       
+       Timeline timeline = new Timeline();
+       timeline.getKeyFrames().add(keyFrame);
+       
+       RotateTransition rotateTransition = new RotateTransition(Duration.millis(500), card);
+       rotateTransition.setByAngle(720f);        
+       ParallelTransition parallel =  new ParallelTransition();        
+       parallel.getChildren().addAll(timeline,rotateTransition);
+       
+       
+       parallel.setOnFinished(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+                tableCards.getChildren().add(card);
+            }
+
+            
+        });
+       return parallel;
+    }
+
+    
 }

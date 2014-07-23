@@ -1,6 +1,8 @@
 package com.xfinity.poker;
 
+import static com.xfinity.poker.GameRules.GAME_PLAYERS;
 import com.xfinity.poker.Player.PlayerAction;
+import static com.xfinity.poker.TableRules.NUMBER_OF_FLOP_CARDS;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,8 +11,13 @@ public class Dealer implements DealerRules {
     private CardDeck deck;
     private Table table;
 	//HighHandCardAnalyser highAnalyser;
+    private List<Card> communityCards;
 
     private Round currentRound;
+    
+    private int roundCount;
+
+    
 
     public enum Round {
 
@@ -21,10 +28,25 @@ public class Dealer implements DealerRules {
 
     public Dealer() {
         deck = new CardDeck();
+        communityCards = new ArrayList<>(5);
         dealingPlayerOrder = 1;
         currentRound = Round.PRE_FLOP;
+        roundCount = 0;
 		//highAnalyser = new HighHandCardAnalyser();
 
+    }
+    
+    public int incrementRoundCount(){
+        roundCount++;
+        return roundCount;
+    }
+    
+    public void setRoundCount(int count){
+        roundCount = count;
+    }
+    
+    public int getRoundCount(){
+        return roundCount;
     }
 
     public Round getRound() {
@@ -72,12 +94,9 @@ public class Dealer implements DealerRules {
         return null;
     }
 
-    public void dealPreFlop() {
-
-    }
-
     public void dealFlop() {
-
+        for(int i=0;i<NUMBER_OF_FLOP_CARDS;i++)
+            communityCards.add(deck.getTopCard());
     }
 
     public void dealTurn() {
@@ -178,6 +197,16 @@ public class Dealer implements DealerRules {
         double amount = player.takeChips(table.getRaiseAmount()- playerPotAmount);
         table.getTablePot().getPlayerPots().get(playerPosition).addToPot(amount);
         table.setHighestPotValue(table.getRaiseAmount());
+    }
+    
+    public boolean allOtherFolded(int playerPos) {
+        
+        for(int i=playerPos+1;i<playerPos+GAME_PLAYERS;i++){
+            if(!table.getPlayers().get(playerPos%GAME_PLAYERS).isFolded())
+                return false;
+        }
+        
+        return true;
     }
 
 }

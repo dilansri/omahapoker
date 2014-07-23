@@ -20,15 +20,17 @@ public class ComputerPlayer extends Player {
     }
     
     
-    public PlayerAction getAction(List<PlayerAction> possibleActions,Round currentRound){
+    public PlayerAction getAction(List<PlayerAction> possibleActions,Round currentRound,final int roundCount){
         
         PlayerAction action = PlayerAction.FOLD;
         
         int highValue = getHighHandValue();
         
+        int roundCountAdjustment = (roundCount-1)*2+1;
+        
         if(currentRound == Round.PRE_FLOP){
             action = PlayerAction.CALL;
-            if(highValue <= 32)
+            if(highValue <= (25 + roundCountAdjustment))
                 action = PlayerAction.FOLD;
             else if(highValue >= 53 && possibleActions.contains(PlayerAction.RAISE))
                 action = PlayerAction.RAISE;

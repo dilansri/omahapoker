@@ -10,10 +10,10 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<fx:root fx:id="tableAnchor" prefHeight="600" prefWidth="800" style="-fx-background-color: #c2850c; -fx-border-color: #FFFFFF;" type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root fx:id="tableAnchor" prefHeight="600" prefWidth="800" style="-fx-background-color: rgb(244,190,79); -fx-border-color: #FFFFFF;" type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-      <Ellipse fill="#046101" layoutX="396.0" layoutY="308.0" radiusX="359.0" radiusY="209.0" stroke="#063600" strokeType="INSIDE" />
-      <Circle fill="#c2850c" layoutX="400.0" layoutY="517.0" radius="79.0" stroke="#c2850c" strokeType="INSIDE" />
+      <Ellipse fill="#046101" layoutX="396.0" layoutY="308.0" radiusX="359.0" radiusY="209.0" stroke="#612a0e" strokeType="INSIDE" strokeWidth="10.0" />
+      <Circle fill="#f4be4f" layoutX="400.0" layoutY="517.0" radius="79.0" stroke="#f4be4f" strokeType="INSIDE" />
         <Label fx:id="label" layoutX="126.0" layoutY="129.0" minHeight="16" minWidth="69" />
         <Button fx:id="button" layoutX="4.0" layoutY="13.0" text="Click Me!" />
       <Circle fill="#3ba40e" layoutX="400.0" layoutY="102.0" radius="32.0" stroke="WHITE" strokeType="INSIDE" />
@@ -21,18 +21,7 @@
       <Circle fill="#3ba40e" layoutX="643.0" layoutY="159.0" radius="32.0" stroke="WHITE" strokeType="INSIDE" />
       <Circle fill="#3ba40e" layoutX="154.0" layoutY="459.0" radius="32.0" stroke="WHITE" strokeType="INSIDE" />
       <Circle fill="#3ba40e" layoutX="643.0" layoutY="459.0" radius="32.0" stroke="WHITE" strokeType="INSIDE" />
-      <Circle layoutX="400.0" layoutY="492.0" radius="32.0" stroke="#161749" strokeType="INSIDE">
-         <fill>
-            <LinearGradient endX="0.9238095238095239" endY="0.9333333333333333" startX="1.0" startY="0.16666666666666666">
-               <stops>
-                  <Stop color="#092a72" />
-                  <Stop color="#063ca8" offset="0.2903187581466999" />
-                  <Stop color="#0139b2" offset="0.5692222617213722" />
-                  <Stop color="#133c8d" offset="0.8454003238930355" />
-                  <Stop color="#0811b8" offset="1.0" />
-               </stops>
-            </LinearGradient>
-         </fill></Circle>
+      <Circle fill="#116db8" layoutX="400.0" layoutY="492.0" radius="32.0" stroke="#161749" strokeType="INSIDE" />
       <Ellipse fill="#e4e4e4" layoutX="127.0" layoutY="106.0" radiusX="5.0" radiusY="13.0" stroke="#ffffff00" strokeType="INSIDE" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e4e4e4" height="25.0" layoutX="46.0" layoutY="85.0" stroke="#ffffff00" strokeType="INSIDE" width="100.0" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e4e4e4" height="25.0" layoutX="46.0" layoutY="506.0" stroke="#ffffff00" strokeType="INSIDE" width="100.0" />
