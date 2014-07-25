@@ -16,7 +16,7 @@ import java.util.List;
  */
 class AIAnalyser {
 
-    
+    final static int LOW_HAND_MAX_VALUE = 30;
 
     PlayerAction getPreFlopAction(PlayerHand playerHand,List<PlayerAction> possibleActions, int roundCount) {
         
@@ -66,19 +66,20 @@ class AIAnalyser {
 
     PlayerAction getFlopAction(PlayerHand playerHand,List<Card> communityCards, List<PlayerAction> possibleActions, int roundCount) {
         
+               
+        int[] scores = getScores(playerHand, communityCards);
         
+        int highHandScore = scores[0];
         
-        int highHandScore = getScores(playerHand, communityCards);
-        
-        int lowHandScore = Integer.MAX_VALUE;
+        int lowHandScore = scores[1];
         
         int roundCountAdjustment = (roundCount-1)*3+1;
         System.out.println("FLOP :"+highHandScore);
         //System.out.println("round score:"+roundCountAdjustment);
         PlayerAction action = PlayerAction.FOLD;
-        if(highHandScore <= 0 +roundCountAdjustment && possibleActions.contains(PlayerAction.CHECK) )
+        if(highHandScore <= 0 +roundCountAdjustment && possibleActions.contains(PlayerAction.CHECK)  )
             action = PlayerAction.CHECK;
-        else if(highHandScore <= 0 +roundCountAdjustment )
+        else if(highHandScore <= 0 +roundCountAdjustment )    
             action = PlayerAction.FOLD;
         else if(highHandScore < (9+(roundCountAdjustment+((roundCount-1))*5*roundCount)) && possibleActions.contains(PlayerAction.CHECK)){
             action = PlayerAction.CHECK;
@@ -89,13 +90,29 @@ class AIAnalyser {
         }else if(highHandScore >= 100 && possibleActions.contains(PlayerAction.ALL_IN) ){
             action = PlayerAction.ALL_IN;
         }
+        
+        int lowHandAdjusted = LOW_HAND_MAX_VALUE - lowHandScore;
+        int lowRoundCountAdjustment = (roundCount-1)*2+1;
+        if(action == PlayerAction.FOLD)
+        {
+            if((lowHandAdjusted > 9 + lowRoundCountAdjustment) && possibleActions.contains(PlayerAction.RAISE))
+                action = PlayerAction.RAISE;
+            else if((lowHandAdjusted > 4 + lowRoundCountAdjustment) && possibleActions.contains(PlayerAction.CALL))
+                action = PlayerAction.CALL;
+            else if((lowHandAdjusted >= 0 ) && possibleActions.contains(PlayerAction.CHECK))
+                action = PlayerAction.CHECK;
+        }
+        
+        System.out.println("FLOP LOW"+lowHandAdjusted);
         return action;
     }
 
     PlayerAction getTurnAction(PlayerHand playerHand, List<Card> communityCards, List<PlayerAction> possibleActions, int roundCount) {
         int roundCountAdjustment = (roundCount-1)*5+1;
         
-        int highHandScore = getScores(playerHand,communityCards);
+        int[] scores  = getScores(playerHand,communityCards);
+        int highHandScore = scores[0];
+        int lowHandScore = scores[1];
         System.out.println("TURN :"+highHandScore);
         PlayerAction action = PlayerAction.FOLD;
         if(highHandScore <= 10 +roundCountAdjustment && possibleActions.contains(PlayerAction.CHECK) )
@@ -111,13 +128,28 @@ class AIAnalyser {
         }else if(highHandScore >= 170 && possibleActions.contains(PlayerAction.ALL_IN)){
             action = PlayerAction.ALL_IN;
         }
+        
+        int lowHandAdjusted = LOW_HAND_MAX_VALUE - lowHandScore;
+        int lowRoundCountAdjustment = (roundCount-1)*2+1;
+        if(action == PlayerAction.FOLD)
+        {
+            if((lowHandAdjusted > 9 + lowRoundCountAdjustment) && possibleActions.contains(PlayerAction.RAISE))
+                action = PlayerAction.RAISE;
+            else if((lowHandAdjusted > 4 + lowRoundCountAdjustment) && possibleActions.contains(PlayerAction.CALL))
+                action = PlayerAction.CALL;
+            else if((lowHandAdjusted >= 0 ) && possibleActions.contains(PlayerAction.CHECK))
+                action = PlayerAction.CHECK;
+        }
+        System.out.println("TURN LOW"+lowHandAdjusted);
         return action;
     }
     
     PlayerAction getRiverAction(PlayerHand playerHand, List<Card> communityCards, List<PlayerAction> possibleActions, int roundCount) {
         int roundCountAdjustment = (roundCount-1)*10+1;
         
-        int highHandScore = getScores(playerHand,communityCards);
+        int[] scores = getScores(playerHand,communityCards);
+        int highHandScore = scores[0];
+        int lowHandScore = scores[1];
         System.out.println("RIVER"+highHandScore);
         PlayerAction action = PlayerAction.FOLD;
         if(highHandScore <= 15 +roundCountAdjustment && possibleActions.contains(PlayerAction.CHECK) )
@@ -133,11 +165,26 @@ class AIAnalyser {
         }else if(highHandScore >= 180 && possibleActions.contains(PlayerAction.ALL_IN)){
             action = PlayerAction.ALL_IN;
         }
+        
+        int lowHandAdjusted = LOW_HAND_MAX_VALUE - lowHandScore;
+        int lowRoundCountAdjustment = (roundCount-1)*2+1;
+        if(action == PlayerAction.FOLD)
+        {
+            if((lowHandAdjusted > 9 + lowRoundCountAdjustment) && possibleActions.contains(PlayerAction.RAISE))
+                action = PlayerAction.RAISE;
+            else if((lowHandAdjusted > 4 + lowRoundCountAdjustment) && possibleActions.contains(PlayerAction.CALL))
+                action = PlayerAction.CALL;
+            else if((lowHandAdjusted >= 0 ) && possibleActions.contains(PlayerAction.CHECK))
+                action = PlayerAction.CHECK;
+        }
+        System.out.println("RIVER LOW"+lowHandAdjusted);
         return action;
     }
     
-    private int getScores(PlayerHand playerHand,List<Card> communityCards){
+    private int[] getScores(PlayerHand playerHand,List<Card> communityCards){
+        int[] scores = new int[2];
         int highHandScore = 0;
+        int lowHandScore = Integer.MAX_VALUE;
         List<Card> playerCards = playerHand.getCards();
         List<Card> analyseCards = new ArrayList<>();
         
@@ -199,6 +246,11 @@ class AIAnalyser {
                                 //System.out.println("ROYAL FLUSH");
                             }
                             
+                            int handLowScore = LowRankedHand.getLowHandScore(analyseCards);
+                            
+                            if(handLowScore < lowHandScore)
+                                lowHandScore = handLowScore;
+                            
                         }
                         
                         analyseCards.clear();
@@ -236,8 +288,10 @@ class AIAnalyser {
                 }
             }
         }
-        
-        return highHandScore;
+        scores[0] = highHandScore;
+        scores[1] = lowHandScore;
+        //System.out.println("LOWHAND SCORE :"+lowHandScore);
+        return scores;
     }
     
 }

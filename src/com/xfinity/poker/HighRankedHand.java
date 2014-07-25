@@ -101,14 +101,15 @@ public class HighRankedHand {
         int maxValue = 0;
         boolean found = false;
         
-        for(int i=Value.CardValue.TWO;i<cardsCount.length;i++){
+        for(int i=Value.CardValue.ACE;i>=Value.CardValue.TWO;i--){
             if(cardsCount[i] == 2){
                 twoPairs.add(new Card(null,Value.getValue(i)));
                 found  = true;
             }            
             if (!found && cardsCount[i] > 0) {
                 maxValue = i;
-            }            
+            }
+            
             found = false;
         }
 
@@ -139,20 +140,24 @@ public class HighRankedHand {
         if (cardList == null || cardList.size() != Dealer.EVALUATE_HAND_SIZE) {
             return null;
         }
-        List<Card> fullHouse = new ArrayList<Card>();
+        List<Card> fullHouse = new ArrayList<Card>(2);
+        Card temp = null;
+        boolean foundThree = false;
         int[] cardsCount = getCardsCounts(cardList);
         int twosCount = 0;
-        Arrays.sort(cardsCount);
         for (int i = Value.CardValue.TWO; i < cardsCount.length; i++) {
             if (cardsCount[i] == 3) {
-                fullHouse.add( new Card(null, Value.getValue(i)));
+                fullHouse.add(new Card(null, Value.getValue(i)));
+                foundThree = true;
             } else if (cardsCount[i] == 2 && twosCount < 1) {
                 twosCount++;
-                fullHouse.add(new Card(null, Value.getValue(i)));
+                temp = new Card(null, Value.getValue(i));
             }
         }
-        if(fullHouse.size() < 2)
-            return null;
+        if(foundThree && twosCount == 1){
+            fullHouse.add(temp);
+        }
+        
         return fullHouse;
     }
 
@@ -243,5 +248,19 @@ public class HighRankedHand {
         
         return false;
     }
+    
+    public static Card getPair(List<Card> cards){
+        Card returnCard = null;        
+        int[] cardsCount = getCardsCounts(cards);
+        
+        for(int i=CardValue.ACE;i>=CardValue.TWO;i--){
+            if(cardsCount[i] == 2){
+                returnCard = new Card(null,Value.getValue(i));
+                break;
+            }
+        }
+        
+        return returnCard;
+    } 
 
 }

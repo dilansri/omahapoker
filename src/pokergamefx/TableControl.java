@@ -16,6 +16,7 @@ import static com.xfinity.poker.GameRules.PLAYER_TIME_OUT_SECONDS;
 import com.xfinity.poker.HumanPlayer;
 import com.xfinity.poker.Player;
 import com.xfinity.poker.Player.PlayerAction;
+import com.xfinity.poker.PlayerBestHighHand;
 import com.xfinity.poker.Table;
 import static com.xfinity.poker.TableRules.NUMBER_OF_FLOP_CARDS;
 import static com.xfinity.poker.TableRules.NUMBER_OF_RIVER_CARDS;
@@ -1277,12 +1278,8 @@ public class TableControl extends AnchorPane implements Initializable {
             @Override
             public void handle(ActionEvent event) {
                 //showPlayerTurnAnimation(bettingTransitionsAfterPlayerChoice);
-                             
+                showFindingWinnersAnimation();             
             }
-
-            
-
-            
         });
         seqShowCards.play();         
         
@@ -1357,6 +1354,58 @@ public class TableControl extends AnchorPane implements Initializable {
         cardsRotating.getChildren().add(timelineBox);
        
        return cardsRotating;
+    }
+    
+    private void showFindingWinnersAnimation(){
+       roundMessageText.setText("We are finding winners!!!");
+       roundMessageBox.setOpacity(0);
+       KeyValue valueOpacity = new KeyValue(roundMessageText.opacityProperty(),1,Interpolator.EASE_OUT);       
+       KeyValue valueBoxOpacity = new KeyValue(roundMessageBox.opacityProperty(),1,Interpolator.EASE_OUT);       
+       KeyFrame keyFrame = new KeyFrame(Duration.millis(2000), valueOpacity,valueBoxOpacity);       
+       Timeline timeline = new Timeline();
+       timeline.getKeyFrames().add(keyFrame);
+       timeline.setAutoReverse(true);
+       timeline.setCycleCount(2);
+       timeline.setDelay(Duration.millis(2000));
+       timeline.setOnFinished(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+                //adjustShowDownCards();
+                
+                showHighHandWinner();
+            }
+
+           
+       });
+       timeline.play();
+    }
+    
+    private void showHighHandWinner() {
+        PlayerBestHighHand bestHand = dealer.getHighHandWinner();
+        
+       roundMessageText.setText("Winner is: "+table.getPlayers().get(bestHand.getPlayerPosition()).getName() + bestHand.getPlayerBestHand());
+       roundMessageBox.setOpacity(0);
+       KeyValue valueOpacity = new KeyValue(roundMessageText.opacityProperty(),1,Interpolator.EASE_OUT);       
+       KeyValue valueBoxOpacity = new KeyValue(roundMessageBox.opacityProperty(),1,Interpolator.EASE_OUT);       
+       KeyFrame keyFrame = new KeyFrame(Duration.millis(2000), valueOpacity,valueBoxOpacity);       
+       Timeline timeline = new Timeline();
+       timeline.getKeyFrames().add(keyFrame);
+       timeline.setAutoReverse(true);
+       timeline.setCycleCount(2);
+       timeline.setDelay(Duration.millis(2000));
+       timeline.setOnFinished(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+                //adjustShowDownCards();
+                
+                //showHighHandWinner();
+            }
+
+           
+       });
+       timeline.play();
     }
     
     

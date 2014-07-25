@@ -6,9 +6,11 @@ import java.util.List;
 
 public class LowRankedHand {
     
+    final static int LOW_HAND_MAX_VALUE = 30;
+    
     public static int getLowHandScore(List<Card> cards){ 
         if(!isLowRankHand(cards)){
-            return 0;
+            return LOW_HAND_MAX_VALUE+5;
         }
         
         int score = 0;

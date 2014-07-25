@@ -35,17 +35,17 @@ public class HighRankedHandTestsJUnitTest {
         public void GetTwoPairsShouldReturnTwoCardsAndMaxValueOtherwiseNull(){
             List<Card> cardList = new ArrayList<Card>();
 
-		cardList.add(new Card(Suit.getSuit("SPADES"),Value.getValue(CardValue.ACE)));
-		cardList.add( new Card(Suit.getSuit("SPADES"),Value.getValue(CardValue.KING)));
-		cardList.add( new Card(Suit.getSuit("HEARTS"),Value.getValue(CardValue.KING)));
-                cardList.add( new Card(Suit.getSuit("HEARTS"),Value.getValue(CardValue.ACE)));
-                cardList.add( new Card(Suit.getSuit("HEARTS"),Value.getValue(CardValue.TEN)));
+		cardList.add(new Card(Suit.getSuit("SPADES"),Value.getValue(CardValue.JACK)));
+		cardList.add( new Card(Suit.getSuit("SPADES"),Value.getValue(CardValue.QUEEN)));
+		cardList.add( new Card(Suit.getSuit("HEARTS"),Value.getValue(CardValue.FIVE)));
+                cardList.add( new Card(Suit.getSuit("HEARTS"),Value.getValue(CardValue.JACK)));
+                cardList.add( new Card(Suit.getSuit("HEARTS"),Value.getValue(CardValue.QUEEN)));
 		
 			
 		List<Card> returnList = HighRankedHand.twoPairs(cardList);
-		assertEquals(CardValue.KING,returnList.get(0).getValue().getCardValue());
-                assertEquals(CardValue.ACE,returnList.get(1).getValue().getCardValue());
-                assertEquals(CardValue.TEN, returnList.get(2).getValue().getCardValue());
+		assertEquals(CardValue.QUEEN,returnList.get(0).getValue().getCardValue());
+                assertEquals(CardValue.JACK,returnList.get(1).getValue().getCardValue());
+                assertEquals(CardValue.FIVE, returnList.get(2).getValue().getCardValue());
                 
                 cardList.clear();
                 
@@ -64,16 +64,16 @@ public class HighRankedHandTestsJUnitTest {
         public void GetFullHouseShouldReturnTwoCardsOtherwiseNull(){
             List<Card> cardList = new ArrayList<Card>();
 
+            cardList.add(new Card(Suit.getSuit("SPADES"), Value.getValue(CardValue.TEN)));
             cardList.add(new Card(Suit.getSuit("SPADES"), Value.getValue(CardValue.ACE)));
-            cardList.add(new Card(Suit.getSuit("SPADES"), Value.getValue(CardValue.KING)));
-            cardList.add(new Card(Suit.getSuit("HEARTS"), Value.getValue(CardValue.KING)));
             cardList.add(new Card(Suit.getSuit("HEARTS"), Value.getValue(CardValue.ACE)));
-            cardList.add(new Card(Suit.getSuit("HEARTS"), Value.getValue(CardValue.KING)));
+            cardList.add(new Card(Suit.getSuit("HEARTS"), Value.getValue(CardValue.ACE)));
+            cardList.add(new Card(Suit.getSuit("HEARTS"), Value.getValue(CardValue.TEN)));
             
             List<Card> returnList = HighRankedHand.fullHouse(cardList);
             
-            assertEquals(CardValue.KING, returnList.get(0).getValue().getCardValue());
-            assertEquals(CardValue.ACE, returnList.get(1).getValue().getCardValue());
+            assertEquals(CardValue.ACE, returnList.get(0).getValue().getCardValue());
+            assertEquals(CardValue.TEN, returnList.get(1).getValue().getCardValue());
         }
         
         
@@ -160,6 +160,35 @@ public class HighRankedHandTestsJUnitTest {
             highest = HighRankedHand.straightFlush(cardList);
             
             assertEquals(CardValue.SIX, highest.getValue().getCardValue());
+        }
+        
+        @Test
+        public void GetFourOftheKindShoulReturnHighestCardOrNull(){
+            List<Card> cardList = new ArrayList<Card>();
+
+            cardList.add(new Card(Suit.getSuit("SPADES"), Value.getValue(CardValue.TEN)));
+            cardList.add(new Card(Suit.getSuit("SPADES"), Value.getValue(CardValue.KING)));
+            cardList.add(new Card(Suit.getSuit("HEARTS"), Value.getValue(CardValue.QUEEN)));
+            cardList.add(new Card(Suit.getSuit("HEARTS"), Value.getValue(CardValue.ACE)));
+            cardList.add(new Card(Suit.getSuit("HEARTS"), Value.getValue(CardValue.JACK)));
+            
+            List<Card> highest = HighRankedHand.fourOfaKind(cardList);
+            
+            assertNull(highest);
+            cardList.clear();
+            cardList.add(new Card(Suit.getSuit("SPADES"), Value.getValue(CardValue.FOUR)));
+            cardList.add(new Card(Suit.getSuit("SPADES"), Value.getValue(CardValue.ACE)));
+            cardList.add(new Card(Suit.getSuit("SPADES"), Value.getValue(CardValue.FOUR)));
+            cardList.add(new Card(Suit.getSuit("SPADES"), Value.getValue(CardValue.KING)));
+            cardList.add(new Card(Suit.getSuit("SPADES"), Value.getValue(CardValue.SIX)));
+            cardList.add(new Card(Suit.getSuit("SPADES"), Value.getValue(CardValue.FOUR)));
+            cardList.add(new Card(Suit.getSuit("SPADES"), Value.getValue(CardValue.TEN)));
+            cardList.add(new Card(Suit.getSuit("SPADES"), Value.getValue(CardValue.FOUR)));
+            cardList.add(new Card(Suit.getSuit("SPADES"), Value.getValue(CardValue.NINE)));
+            
+            highest = HighRankedHand.fourOfaKind(cardList);
+            
+            assertEquals(CardValue.FOUR, highest.get(0).getValue().getCardValue());
         }
 
 }
