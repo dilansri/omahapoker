@@ -68,7 +68,9 @@ class AIAnalyser {
         
         
         
-        int highHandScore = getHighHandScore(playerHand, communityCards);
+        int highHandScore = getScores(playerHand, communityCards);
+        
+        int lowHandScore = Integer.MAX_VALUE;
         
         int roundCountAdjustment = (roundCount-1)*3+1;
         System.out.println("FLOP :"+highHandScore);
@@ -93,7 +95,7 @@ class AIAnalyser {
     PlayerAction getTurnAction(PlayerHand playerHand, List<Card> communityCards, List<PlayerAction> possibleActions, int roundCount) {
         int roundCountAdjustment = (roundCount-1)*5+1;
         
-        int highHandScore = getHighHandScore(playerHand,communityCards);
+        int highHandScore = getScores(playerHand,communityCards);
         System.out.println("TURN :"+highHandScore);
         PlayerAction action = PlayerAction.FOLD;
         if(highHandScore <= 10 +roundCountAdjustment && possibleActions.contains(PlayerAction.CHECK) )
@@ -115,7 +117,7 @@ class AIAnalyser {
     PlayerAction getRiverAction(PlayerHand playerHand, List<Card> communityCards, List<PlayerAction> possibleActions, int roundCount) {
         int roundCountAdjustment = (roundCount-1)*10+1;
         
-        int highHandScore = getHighHandScore(playerHand,communityCards);
+        int highHandScore = getScores(playerHand,communityCards);
         System.out.println("RIVER"+highHandScore);
         PlayerAction action = PlayerAction.FOLD;
         if(highHandScore <= 15 +roundCountAdjustment && possibleActions.contains(PlayerAction.CHECK) )
@@ -134,7 +136,7 @@ class AIAnalyser {
         return action;
     }
     
-    private int getHighHandScore(PlayerHand playerHand,List<Card> communityCards){
+    private int getScores(PlayerHand playerHand,List<Card> communityCards){
         int highHandScore = 0;
         List<Card> playerCards = playerHand.getCards();
         List<Card> analyseCards = new ArrayList<>();

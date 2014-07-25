@@ -1349,7 +1349,6 @@ public class TableControl extends AnchorPane implements Initializable {
                     rt.play();
 
                 }
-
                 playerCards.getChildren().addAll(playerCardPanes);
                              
             }  
