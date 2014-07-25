@@ -18,6 +18,8 @@ import com.xfinity.poker.Player;
 import com.xfinity.poker.Player.PlayerAction;
 import com.xfinity.poker.Table;
 import static com.xfinity.poker.TableRules.NUMBER_OF_FLOP_CARDS;
+import static com.xfinity.poker.TableRules.NUMBER_OF_TURN_CARDS;
+import static com.xfinity.poker.TableRules.TURN_CARD_POS;
 import com.xfinity.poker.Value;
 import java.io.IOException;
 import java.net.URL;
@@ -628,7 +630,7 @@ public class TableControl extends AnchorPane implements Initializable {
         
         for(int i=betStartingPlayer;i<GAME_PLAYERS+betStartingPlayer;i++){
             Player player = table.getPlayers().get(i % GAME_PLAYERS);
-            if(player.isFolded() || player.isAllIn()){
+            if(player.isFolded() || player.isAllIn() ){
                 continue;
             }
             
@@ -671,9 +673,17 @@ public class TableControl extends AnchorPane implements Initializable {
     }  
     private void showPlayerTurnAnimation(final List<Transition> afterTransitions) {
         
-        if(table.getPlayers().get(0).isFolded() ||table.getPlayers().get(0).isAllIn() ){
+        if(table.getPlayers().get(0).isFolded() ||table.getPlayers().get(0).isAllIn() 
+                || dealer.allOtherFolded(0)){
              showAfterPlayerTransitions(afterTransitions);
         }else{
+            /*
+            if(table.isSamePotValues() &&  dealer.getRoundCount() != 1)
+            {   
+                showPlayerTimerAnimation(afterTransitions,true);
+                setPlayerActionText(PlayerAction.CHECK);
+                return;
+            }*/
             roundMessageText.setText("Your Turn");
             roundMessageText.setOpacity(0);
             roundMessageBox.setOpacity(0);
@@ -724,7 +734,7 @@ public class TableControl extends AnchorPane implements Initializable {
 
                 @Override
                 public void handle(ActionEvent event) {
-                    showPlayerTimerAnimation(afterTransitions);
+                    showPlayerTimerAnimation(afterTransitions,false);
                 }
 
             });
@@ -734,7 +744,13 @@ public class TableControl extends AnchorPane implements Initializable {
         
     }
     
-    private void showPlayerTimerAnimation(final List<Transition> afterTransitions) {
+    private void showPlayerTimerAnimation(final List<Transition> afterTransitions,boolean skip) {
+        
+        if(skip)
+        {   
+            showAfterPlayerTransitions(afterTransitions);
+            return ;
+        }
         playerTimeIndicatior.setVisible(true);
         playerTimeIndicatior.setProgress(0);
         playerSelectedAction = PlayerAction.FOLD;
@@ -776,6 +792,8 @@ public class TableControl extends AnchorPane implements Initializable {
                 }else{
                     if(dealer.getRound() == Round.PRE_FLOP)
                         startFlopRound();
+                    else if(dealer.getRound() == Round.FLOP)
+                        startTurnRound();
                 }
             }           
         });
@@ -845,6 +863,17 @@ public class TableControl extends AnchorPane implements Initializable {
         return seqTrans;
     }
     private void showAndDoPlayerAction(final Text finalMessageText,final int playerPos) {
+        /*
+        if(table.isSamePotValues() &&  dealer.getRoundCount() != 1)
+        {
+            KeyValue valueText = new KeyValue(finalMessageText.textProperty(), PlayerAction.CHECK.toString());
+            KeyFrame keyFrameText = new KeyFrame(Duration.millis(1000), valueText);
+            Timeline timelineText = new Timeline();
+            timelineText.setDelay(Duration.millis(400));
+            timelineText.getKeyFrames().add(keyFrameText);
+            timelineText.play();
+            return;
+        } */
         Player player = table.getPlayers().get(playerPos);
         final PlayerAction action = ((ComputerPlayer) player).getAction(dealer.getPlayerPossibleActions(playerPos),table.getCommunityCards(), dealer.getRound(), dealer.getRoundCount()); //for now
 
@@ -855,6 +884,9 @@ public class TableControl extends AnchorPane implements Initializable {
         timelineText.setDelay(Duration.millis(400));
         timelineText.getKeyFrames().add(keyFrameText);
         timelineText.play();
+        
+        
+        
         if (action == PlayerAction.CALL) {
             dealer.getCallFrom(playerPos);
         } else if (action == PlayerAction.FOLD) {
@@ -873,7 +905,7 @@ public class TableControl extends AnchorPane implements Initializable {
                 
      }
     
-    public void startFlopRound(){
+    private void startFlopRound(){
         dealer.dealFlop();
         
         showFlopRoundMessage();
@@ -881,7 +913,7 @@ public class TableControl extends AnchorPane implements Initializable {
         
     }
     
-    public void showFlopRoundMessage(){
+    private void showFlopRoundMessage(){
          roundMessageText.setText("Dealing Flop");
          roundMessageBox.setOpacity(0);
        KeyValue valueOpacity = new KeyValue(roundMessageText.opacityProperty(),1,Interpolator.EASE_OUT);       
@@ -902,16 +934,10 @@ public class TableControl extends AnchorPane implements Initializable {
        timeline.play();
     }
     
-    public void showDealingFlopAnimations(){
-        List<Transition> flopDealingTransitions = new ArrayList<>();
-        for(int i=0;i<NUMBER_OF_FLOP_CARDS;i++)
-            flopDealingTransitions.add(getDealingFlopAnimations());
+    private void showDealingFlopAnimations(){
         
-        //tableCards.setPrefWidth(USE_COMPUTED_SIZE);
-        tableCards.setMinWidth(280);
-        tableCards.setSpacing(10);
-        SequentialTransition seqTrans = new SequentialTransition();
-        seqTrans.getChildren().addAll(flopDealingTransitions);
+        SequentialTransition seqTrans = getDealingTableCardsTransition(NUMBER_OF_FLOP_CARDS);
+        
         seqTrans.play();
         seqTrans.setOnFinished(new EventHandler<ActionEvent>() {
 
@@ -924,7 +950,20 @@ public class TableControl extends AnchorPane implements Initializable {
         });
     }
     
-    public Transition getDealingFlopAnimations(){
+    private SequentialTransition getDealingTableCardsTransition(int numberOfCards){
+        List<Transition> transitions = new ArrayList<>();
+        for(int i=0;i<numberOfCards;i++)
+            transitions.add(getDealingFlopAnimations());
+        
+        //tableCards.setPrefWidth(USE_COMPUTED_SIZE);
+        tableCards.setMinWidth(280);
+        tableCards.setSpacing(10);
+        SequentialTransition seqTrans = new SequentialTransition();
+        seqTrans.getChildren().addAll(transitions);
+        return seqTrans;
+    }
+    
+    private Transition getDealingFlopAnimations(){
         final CardControl showingCard = new CardControl("DIAMONDS",Value.CardValue.TWO);
         final Pane card = showingCard.getCard();
         
@@ -1003,12 +1042,91 @@ public class TableControl extends AnchorPane implements Initializable {
                 dealer.setRound(Round.FLOP);
                 dealer.setRoundCount(0);
                 startBettingRound();                 
-            }  
-
-            
+            }              
             
         });
     }
+    
+    private void startTurnRound(){
+        dealer.dealTurn();
+        
+        showTurnRoundMessage();
+    }
+    
+    private void showTurnRoundMessage(){
+        roundMessageText.setText("Dealing Turn");
+         roundMessageBox.setOpacity(0);
+       KeyValue valueOpacity = new KeyValue(roundMessageText.opacityProperty(),1,Interpolator.EASE_OUT);       
+       KeyValue valueBoxOpacity = new KeyValue(roundMessageBox.opacityProperty(),1,Interpolator.EASE_OUT);       
+       KeyFrame keyFrame = new KeyFrame(Duration.millis(2000), valueOpacity,valueBoxOpacity);       
+       Timeline timeline = new Timeline();
+       timeline.getKeyFrames().add(keyFrame);
+       timeline.setAutoReverse(true);
+       timeline.setCycleCount(2);
+       timeline.setDelay(Duration.millis(2000));
+       timeline.setOnFinished(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+                showDealingTurnAnimations();
+            }
+       });
+       timeline.play();
+    }
+    
+    private void showDealingTurnAnimations(){
+        SequentialTransition seqTrans =getDealingTableCardsTransition(NUMBER_OF_TURN_CARDS);
+        
+        seqTrans.play();
+        seqTrans.setOnFinished(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+                showTurnCard();
+            }
+        });
+    }
+    
+    private void showTurnCard() {
+        tableCards.getChildren().remove(TURN_CARD_POS);      
+        
+        
+        Card turnCard = table.getCommunityCards().get(TURN_CARD_POS);
+        
+        
+        
+        CardControl cardControl = new CardControl(turnCard.getSuit().getSuitType().toString(), turnCard.getValue().getCardValue());
+
+        cardControl.getCard().setScaleX(1.2);
+        cardControl.getCard().setScaleY(1.2);
+        cardControl.getCard().setRotationAxis(Rotate.Y_AXIS);
+        cardControl.getCard().setRotate(180);
+
+        RotateTransition rt = new RotateTransition(Duration.millis(1000), cardControl.getCard());
+        rt.setAxis(Rotate.Y_AXIS);
+        rt.setByAngle(180);
+        rt.play();
+        
+       tableCards.getChildren().add(cardControl.getCard());
+       
+       KeyValue valueSize = new KeyValue(tableCards.prefWidthProperty(),280,Interpolator.EASE_OUT);      
+       KeyFrame keyFrame = new KeyFrame(Duration.millis(1000), valueSize);       
+       Timeline timeline = new Timeline();
+       timeline.getKeyFrames().add(keyFrame);
+       timeline.play();
+       timeline.setOnFinished(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {    
+                dealer.setRound(Round.TURN);
+                dealer.setRoundCount(0);
+                startBettingRound();                 
+            }              
+            
+        });
+    }
+    
+    
 
     
 }

@@ -100,7 +100,7 @@ public class Dealer implements DealerRules {
     }
 
     public void dealTurn() {
-
+        table.getCommunityCards().add(deck.getTopCard());
     }
 
     public void dealRiver() {

@@ -141,12 +141,14 @@ public class HighRankedHand {
         }
         List<Card> fullHouse = new ArrayList<Card>();
         int[] cardsCount = getCardsCounts(cardList);
+        int twosCount = 0;
         Arrays.sort(cardsCount);
         for (int i = Value.CardValue.TWO; i < cardsCount.length; i++) {
             if (cardsCount[i] == 3) {
                 fullHouse.add( new Card(null, Value.getValue(i)));
-            } else if (cardsCount[i] == 2) {
-                fullHouse.add( new Card(null, Value.getValue(i)));
+            } else if (cardsCount[i] == 2 && twosCount < 1) {
+                twosCount++;
+                fullHouse.add(new Card(null, Value.getValue(i)));
             }
         }
         if(fullHouse.size() < 2)

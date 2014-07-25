@@ -11,12 +11,12 @@ public class ChipsTestsJUnitTest {
 
 	@Test
 	public void TakingSmallAndBigBlindShowReducePlayerChips() {
-		Player singlePlayer = new Player("Single Player",0);
+		Player singlePlayer = new HumanPlayer("Single Player",0);
 		singlePlayer.setDealer(true);
 		
 		List<Player> computerPlayers = new ArrayList<Player>();
 		for(int i=1;i<5;i++)
-			computerPlayers.add(new Player("CP"+i,i));
+			computerPlayers.add(new ComputerPlayer("CP"+i,i));
 		
 		List<Player> allPlayers = new ArrayList<Player>();
 		allPlayers.add(singlePlayer);

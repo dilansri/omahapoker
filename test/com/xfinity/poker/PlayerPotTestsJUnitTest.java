@@ -66,6 +66,8 @@ public class PlayerPotTestsJUnitTest {
 		assertEquals(20, table.getTablePot().getPlayerPots().get(2).getPlayerContribution(),DELTA);
     }
     
+    /*
+    
     @Test
     public void getValuesOfHighHands(){
         for(int j=0;j<500;j++){
@@ -85,7 +87,7 @@ public class PlayerPotTestsJUnitTest {
         }
         
         assertTrue(true);
-    }
+    } */
     
     @Test
     public void FlopRoundPlayerValues(){
@@ -101,13 +103,82 @@ public class PlayerPotTestsJUnitTest {
             
             dealer.setRound(Dealer.Round.FLOP);
             dealer.dealFlop();
+            
+            List<Player.PlayerAction> possibleActions = new ArrayList<>();
+            possibleActions.add(Player.PlayerAction.CALL);
+            possibleActions.add(Player.PlayerAction.ALL_IN);
+            possibleActions.add(Player.PlayerAction.RAISE);
+            possibleActions.add(Player.PlayerAction.CHECK);
             for(int i=0;i<5;i++)
             {
                 ComputerPlayer player = (ComputerPlayer)table.getPlayers().get(i);
-                player.getAction(null, table.getCommunityCards(), Dealer.Round.FLOP, i);
+                player.getAction(possibleActions, table.getCommunityCards(), Dealer.Round.FLOP, i);
+                //System.out.println(player.getPlayerHand().getCards());
             }
+            
+            //System.out.println("-----------------");
+            //System.out.println(table.getCommunityCards());
+            //System.out.println("-----------------");
+            /*
+            
+            for(Card card:table.getPlayers().get(0).getPlayerHand().getCards()){
+                System.out.println(card);
+            }
+            
+            System.out.println("-------------");
+            
+            for(Card card:table.getCommunityCards()){
+                System.out.println(card);
+            }
+            
+            */
         }
         
         assertTrue(true);
     }
+    
+    
+    
+    /*
+    @Test
+    public void FlopRoundPlayerValues(){
+        for(int j=0;j<1;j++){
+            List<Player> computerPlayers = new ArrayList<Player>();
+            for(int i=0;i<5;i++)
+                            computerPlayers.add(new ComputerPlayer("CP"+i,i));
+            Table table = new Table(computerPlayers);
+            Dealer dealer = new Dealer();
+            dealer.shuffleDeck();
+            dealer.setTable(table);
+            dealer.dealToPlayers();
+            
+            dealer.setRound(Dealer.Round.TURN);
+            dealer.dealFlop();
+            dealer.dealTurn();
+            
+            List<Player.PlayerAction> possibleActions = new ArrayList<>();
+            possibleActions.add(Player.PlayerAction.CALL);
+            possibleActions.add(Player.PlayerAction.ALL_IN);
+            possibleActions.add(Player.PlayerAction.RAISE);
+            possibleActions.add(Player.PlayerAction.CHECK);
+            for(int i=0;i<1;i++)
+            {
+                ComputerPlayer player = (ComputerPlayer)table.getPlayers().get(i);
+                player.getAction(possibleActions, table.getCommunityCards(), Dealer.Round.TURN, 1);                
+            }
+            for(Card card:table.getPlayers().get(0).getPlayerHand().getCards()){
+                System.out.println(card);
+            }
+            
+            System.out.println("-------------");
+            
+            for(Card card:table.getCommunityCards()){
+                System.out.println(card);
+            }
+        } 
+        
+        assertTrue(true);
+    }
+    
+    */
 }
