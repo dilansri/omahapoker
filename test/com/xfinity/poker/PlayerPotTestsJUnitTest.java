@@ -6,6 +6,7 @@
 
 package com.xfinity.poker;
 
+import com.xfinity.poker.Value.CardValue;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.After;
@@ -87,7 +88,7 @@ public class PlayerPotTestsJUnitTest {
         }
         
         assertTrue(true);
-    } */
+    } 
     
     @Test
     public void FlopRoundPlayerValues(){
@@ -119,30 +120,18 @@ public class PlayerPotTestsJUnitTest {
             //System.out.println("-----------------");
             //System.out.println(table.getCommunityCards());
             //System.out.println("-----------------");
-            /*
             
-            for(Card card:table.getPlayers().get(0).getPlayerHand().getCards()){
-                System.out.println(card);
-            }
-            
-            System.out.println("-------------");
-            
-            for(Card card:table.getCommunityCards()){
-                System.out.println(card);
-            }
-            
-            */
         }
         
         assertTrue(true);
     }
     
-    
+    */
     
     /*
     @Test
     public void FlopRoundPlayerValues(){
-        for(int j=0;j<1;j++){
+        for(int j=0;j<500;j++){
             List<Player> computerPlayers = new ArrayList<Player>();
             for(int i=0;i<5;i++)
                             computerPlayers.add(new ComputerPlayer("CP"+i,i));
@@ -161,11 +150,12 @@ public class PlayerPotTestsJUnitTest {
             possibleActions.add(Player.PlayerAction.ALL_IN);
             possibleActions.add(Player.PlayerAction.RAISE);
             possibleActions.add(Player.PlayerAction.CHECK);
-            for(int i=0;i<1;i++)
+            for(int i=0;i<5;i++)
             {
                 ComputerPlayer player = (ComputerPlayer)table.getPlayers().get(i);
                 player.getAction(possibleActions, table.getCommunityCards(), Dealer.Round.TURN, 1);                
             }
+            
             for(Card card:table.getPlayers().get(0).getPlayerHand().getCards()){
                 System.out.println(card);
             }
@@ -175,10 +165,52 @@ public class PlayerPotTestsJUnitTest {
             for(Card card:table.getCommunityCards()){
                 System.out.println(card);
             }
+                    
+                    
         } 
         
         assertTrue(true);
-    }
+    }   
     
     */
+    
+    @Test
+    public void customCardTest(){
+        List<Player> computerPlayers = new ArrayList<Player>();
+            for(int i=0;i<5;i++)
+                            computerPlayers.add(new ComputerPlayer("CP"+i,i));
+            Table table = new Table(computerPlayers);
+            Dealer dealer = new Dealer();
+            dealer.shuffleDeck();
+            dealer.setTable(table);
+            dealer.dealToPlayers();
+            
+            dealer.setRound(Dealer.Round.TURN);
+            dealer.dealFlop();
+            dealer.dealTurn();
+            
+            List<Player.PlayerAction> possibleActions = new ArrayList<>();
+            possibleActions.add(Player.PlayerAction.CALL);
+            possibleActions.add(Player.PlayerAction.ALL_IN);
+            possibleActions.add(Player.PlayerAction.RAISE);
+            possibleActions.add(Player.PlayerAction.CHECK);
+            
+            PlayerHand hand = new PlayerHand();
+            hand.add(new Card(Suit.getSuit("HEARTS"),Value.getValue(CardValue.EIGHT)));
+            hand.add(new Card(Suit.getSuit("DIAMONDS"),Value.getValue(CardValue.EIGHT)));
+            hand.add(new Card(Suit.getSuit("DIAMONDS"),Value.getValue(CardValue.SEVEN)));
+            hand.add(new Card(Suit.getSuit("DIAMONDS"),Value.getValue(CardValue.KING)));
+            
+            List<Card> communityCards = new ArrayList<>();
+            
+            communityCards.add(new Card(Suit.getSuit("HEARTS"),Value.getValue(CardValue.SIX)));
+            communityCards.add(new Card(Suit.getSuit("CLUBS"),Value.getValue(CardValue.SIX)));
+            communityCards.add(new Card(Suit.getSuit("CLUBS"),Value.getValue(CardValue.KING)));
+            
+            AIAnalyser aiAnalyser = new AIAnalyser();
+            aiAnalyser.getFlopAction(hand,communityCards,possibleActions,1);
+            
+            assertTrue(true);
+    }
+    
 }

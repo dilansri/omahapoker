@@ -18,7 +18,9 @@ import com.xfinity.poker.Player;
 import com.xfinity.poker.Player.PlayerAction;
 import com.xfinity.poker.Table;
 import static com.xfinity.poker.TableRules.NUMBER_OF_FLOP_CARDS;
+import static com.xfinity.poker.TableRules.NUMBER_OF_RIVER_CARDS;
 import static com.xfinity.poker.TableRules.NUMBER_OF_TURN_CARDS;
+import static com.xfinity.poker.TableRules.RIVER_CARD_POS;
 import static com.xfinity.poker.TableRules.TURN_CARD_POS;
 import com.xfinity.poker.Value;
 import java.io.IOException;
@@ -794,6 +796,8 @@ public class TableControl extends AnchorPane implements Initializable {
                         startFlopRound();
                     else if(dealer.getRound() == Round.FLOP)
                         startTurnRound();
+                    else if(dealer.getRound() == Round.TURN)
+                        startRiverRound();
                 }
             }           
         });
@@ -1119,6 +1123,85 @@ public class TableControl extends AnchorPane implements Initializable {
             @Override
             public void handle(ActionEvent event) {    
                 dealer.setRound(Round.TURN);
+                dealer.setRoundCount(0);
+                startBettingRound();                 
+            }              
+            
+        });
+    }
+    
+    private void startRiverRound(){
+        dealer.dealRiver();
+        
+        showRiverRoundMessage();
+    }
+    
+    private void showRiverRoundMessage(){
+        roundMessageText.setText("Dealing River");
+         roundMessageBox.setOpacity(0);
+       KeyValue valueOpacity = new KeyValue(roundMessageText.opacityProperty(),1,Interpolator.EASE_OUT);       
+       KeyValue valueBoxOpacity = new KeyValue(roundMessageBox.opacityProperty(),1,Interpolator.EASE_OUT);       
+       KeyFrame keyFrame = new KeyFrame(Duration.millis(2000), valueOpacity,valueBoxOpacity);       
+       Timeline timeline = new Timeline();
+       timeline.getKeyFrames().add(keyFrame);
+       timeline.setAutoReverse(true);
+       timeline.setCycleCount(2);
+       timeline.setDelay(Duration.millis(2000));
+       timeline.setOnFinished(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+                showDealingRiverAnimations();
+            }
+       });
+       timeline.play();
+    }
+    
+     private void showDealingRiverAnimations(){
+        SequentialTransition seqTrans =getDealingTableCardsTransition(NUMBER_OF_RIVER_CARDS);
+        
+        seqTrans.play();
+        seqTrans.setOnFinished(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+                showRiverCard();
+            }
+        });
+    }
+     
+     private void showRiverCard() {
+        tableCards.getChildren().remove(RIVER_CARD_POS);      
+        
+        
+        Card turnCard = table.getCommunityCards().get(RIVER_CARD_POS);
+        
+        
+        
+        CardControl cardControl = new CardControl(turnCard.getSuit().getSuitType().toString(), turnCard.getValue().getCardValue());
+
+        cardControl.getCard().setScaleX(1.2);
+        cardControl.getCard().setScaleY(1.2);
+        cardControl.getCard().setRotationAxis(Rotate.Y_AXIS);
+        cardControl.getCard().setRotate(180);
+
+        RotateTransition rt = new RotateTransition(Duration.millis(1000), cardControl.getCard());
+        rt.setAxis(Rotate.Y_AXIS);
+        rt.setByAngle(180);
+        rt.play();
+        
+       tableCards.getChildren().add(cardControl.getCard());
+       
+       KeyValue valueSize = new KeyValue(tableCards.prefWidthProperty(),280,Interpolator.EASE_OUT);      
+       KeyFrame keyFrame = new KeyFrame(Duration.millis(1000), valueSize);       
+       Timeline timeline = new Timeline();
+       timeline.getKeyFrames().add(keyFrame);
+       timeline.play();
+       timeline.setOnFinished(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {    
+                dealer.setRound(Round.RIVER);
                 dealer.setRoundCount(0);
                 startBettingRound();                 
             }              

@@ -39,8 +39,10 @@ public class ComputerPlayer extends Player {
             action = aiAnalyser.getFlopAction(playerHand,communityCards,possibleActions,roundCount);
         }else if(currentRound == Round.TURN){
             action = aiAnalyser.getTurnAction(playerHand,communityCards,possibleActions,roundCount);
+            //action = PlayerAction.FOLD;
+        }else if(currentRound == Round.RIVER) {
             action = PlayerAction.FOLD;
-        }            
+        }          
         return action;
     }
 
