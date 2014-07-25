@@ -33,15 +33,15 @@ public class ComputerPlayer extends Player {
         
         if(currentRound == Round.PRE_FLOP){            
             action = aiAnalyser.getPreFlopAction(playerHand,possibleActions,roundCount);        
-            //action = PlayerAction.RAISE;
-                
+            //action = PlayerAction.RAISE;                
         }else if(currentRound == Round.FLOP){           
             action = aiAnalyser.getFlopAction(playerHand,communityCards,possibleActions,roundCount);
         }else if(currentRound == Round.TURN){
             action = aiAnalyser.getTurnAction(playerHand,communityCards,possibleActions,roundCount);
             //action = PlayerAction.FOLD;
         }else if(currentRound == Round.RIVER) {
-            action = PlayerAction.FOLD;
+            action = aiAnalyser.getRiverAction(playerHand,communityCards,possibleActions,roundCount);
+            //action = PlayerAction.FOLD;
         }          
         return action;
     }

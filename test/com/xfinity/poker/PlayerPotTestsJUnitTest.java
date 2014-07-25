@@ -172,7 +172,7 @@ public class PlayerPotTestsJUnitTest {
         assertTrue(true);
     }   
     
-    */
+    
     
     @Test
     public void customCardTest(){
@@ -211,6 +211,54 @@ public class PlayerPotTestsJUnitTest {
             aiAnalyser.getFlopAction(hand,communityCards,possibleActions,1);
             
             assertTrue(true);
+    }
+    
+    */
+    
+    @Test
+    public void FlopRoundPlayerValues(){
+        for(int j=0;j<500;j++){
+            List<Player> computerPlayers = new ArrayList<Player>();
+            for(int i=0;i<5;i++)
+                            computerPlayers.add(new ComputerPlayer("CP"+i,i));
+            Table table = new Table(computerPlayers);
+            Dealer dealer = new Dealer();
+            dealer.shuffleDeck();
+            dealer.setTable(table);
+            dealer.dealToPlayers();
+            
+            dealer.setRound(Dealer.Round.RIVER);
+            dealer.dealFlop();
+            dealer.dealTurn();
+            dealer.dealRiver();
+            
+            List<Player.PlayerAction> possibleActions = new ArrayList<>();
+            possibleActions.add(Player.PlayerAction.CALL);
+            possibleActions.add(Player.PlayerAction.ALL_IN);
+            possibleActions.add(Player.PlayerAction.RAISE);
+            possibleActions.add(Player.PlayerAction.CHECK);
+            for(int i=0;i<5;i++)
+            {
+                ComputerPlayer player = (ComputerPlayer)table.getPlayers().get(i);
+                player.getAction(possibleActions, table.getCommunityCards(), Dealer.Round.RIVER, 1);                
+            }
+            /*
+            for(Card card:table.getPlayers().get(0).getPlayerHand().getCards()){
+                System.out.println(card);
+            }
+            
+            System.out.println("-------------");
+            
+            for(Card card:table.getCommunityCards()){
+                System.out.println(card);
+            }
+                    
+                    */
+                    
+                    
+        } 
+        
+        assertTrue(true);
     }
     
 }

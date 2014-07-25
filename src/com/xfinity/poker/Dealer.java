@@ -119,7 +119,7 @@ public class Dealer implements DealerRules {
                 System.out.print(table.getPlayers().get(i).getPlayerHand().getCards().get(j)+" , ");
             }
             System.out.println("------");
-        }
+        } 
     }
 
     public void dealToPlayers(List<Player> players) {

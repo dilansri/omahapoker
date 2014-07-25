@@ -255,44 +255,6 @@ public class TableControl extends AnchorPane implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
-    
-    
-    public void testAnimate(){
-        final CardControl testCard = new CardControl("DIAMONDS",Value.CardValue.TWO);
-        final Pane card = testCard.getCard();
-        
-        card.setLayoutX(354);
-        card.setLayoutY(530);
-        tableAnchor.getChildren().add(card);
-        testCard.faceDown();
-        
-        //testCard.faceUp();
-        
-       KeyValue valueX = new KeyValue(card.layoutXProperty(),106,Interpolator.EASE_OUT);       
-       KeyValue valueY = new KeyValue(card.layoutYProperty(),195,Interpolator.EASE_OUT);       
-       KeyFrame keyFrame = new KeyFrame(Duration.millis(1000), valueX, valueY);       
-       Timeline timeline = new Timeline();
-       timeline.getKeyFrames().add(keyFrame);
-       
-       RotateTransition rotateTransition = new RotateTransition(Duration.millis(1000), card);
-        rotateTransition.setByAngle(720f);
-        
-        ParallelTransition parallel =  new ParallelTransition();
-        
-        parallel.getChildren().addAll(timeline,rotateTransition);
-       parallel.play();
-       
-       parallel.setOnFinished(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent event) {
-                playerCards1.getChildren().add(card);
-                testCard.faceUp();
-            }
-        });
-       
-    }
 
     void showDealingToPlayerAnimation(int dealingOrder) {
         clearPlayerCards();
@@ -779,17 +741,9 @@ public class TableControl extends AnchorPane implements Initializable {
         timelinePlayerActionAnimation.play();
     }
     private void showAfterPlayerTransitions(List<Transition> afterTransitions) {
-    
-        final SequentialTransition seqTransition = new SequentialTransition();
-        seqTransition.getChildren().addAll(afterTransitions);
         
-        seqTransition.play(); 
-        seqTransition.setOnFinished(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent event) {                
-                
-                if(!table.isSamePotValues()){     
+        if(afterTransitions.isEmpty()){
+            if(!table.isSamePotValues()){     
                     startBettingRound();                    
                 }else{
                     if(dealer.getRound() == Round.PRE_FLOP)
@@ -798,9 +752,35 @@ public class TableControl extends AnchorPane implements Initializable {
                         startTurnRound();
                     else if(dealer.getRound() == Round.TURN)
                         startRiverRound();
+                    else if(dealer.getRound() == Round.RIVER)
+                        startShowDownRound();
                 }
-            }           
-        });
+        }else {
+    
+            final SequentialTransition seqTransition = new SequentialTransition();
+            seqTransition.getChildren().addAll(afterTransitions);
+
+            seqTransition.play(); 
+            seqTransition.setOnFinished(new EventHandler<ActionEvent>() {
+
+                @Override
+                public void handle(ActionEvent event) {                
+
+                    if(!table.isSamePotValues()){     
+                        startBettingRound();                    
+                    }else{
+                        if(dealer.getRound() == Round.PRE_FLOP)
+                            startFlopRound();
+                        else if(dealer.getRound() == Round.FLOP)
+                            startTurnRound();
+                        else if(dealer.getRound() == Round.TURN)
+                            startRiverRound();
+                        else if(dealer.getRound() == Round.RIVER)
+                            startShowDownRound();
+                    }
+                }           
+            });
+        }
     }
     
     private void setPlayerControlsToDefault() {
@@ -918,7 +898,7 @@ public class TableControl extends AnchorPane implements Initializable {
     }
     
     private void showFlopRoundMessage(){
-         roundMessageText.setText("Dealing Flop");
+         roundMessageText.setText("Flop Round");
          roundMessageBox.setOpacity(0);
        KeyValue valueOpacity = new KeyValue(roundMessageText.opacityProperty(),1,Interpolator.EASE_OUT);       
        KeyValue valueBoxOpacity = new KeyValue(roundMessageBox.opacityProperty(),1,Interpolator.EASE_OUT);       
@@ -1058,7 +1038,7 @@ public class TableControl extends AnchorPane implements Initializable {
     }
     
     private void showTurnRoundMessage(){
-        roundMessageText.setText("Dealing Turn");
+        roundMessageText.setText("Turn Round");
          roundMessageBox.setOpacity(0);
        KeyValue valueOpacity = new KeyValue(roundMessageText.opacityProperty(),1,Interpolator.EASE_OUT);       
        KeyValue valueBoxOpacity = new KeyValue(roundMessageBox.opacityProperty(),1,Interpolator.EASE_OUT);       
@@ -1137,7 +1117,7 @@ public class TableControl extends AnchorPane implements Initializable {
     }
     
     private void showRiverRoundMessage(){
-        roundMessageText.setText("Dealing River");
+        roundMessageText.setText("River Round");
          roundMessageBox.setOpacity(0);
        KeyValue valueOpacity = new KeyValue(roundMessageText.opacityProperty(),1,Interpolator.EASE_OUT);       
        KeyValue valueBoxOpacity = new KeyValue(roundMessageBox.opacityProperty(),1,Interpolator.EASE_OUT);       
@@ -1207,6 +1187,177 @@ public class TableControl extends AnchorPane implements Initializable {
             }              
             
         });
+    }
+     
+    private void startShowDownRound(){
+       roundMessageText.setText("Show Down");
+       roundMessageBox.setOpacity(0);
+       KeyValue valueOpacity = new KeyValue(roundMessageText.opacityProperty(),1,Interpolator.EASE_OUT);       
+       KeyValue valueBoxOpacity = new KeyValue(roundMessageBox.opacityProperty(),1,Interpolator.EASE_OUT);       
+       KeyFrame keyFrame = new KeyFrame(Duration.millis(2000), valueOpacity,valueBoxOpacity);       
+       Timeline timeline = new Timeline();
+       timeline.getKeyFrames().add(keyFrame);
+       timeline.setAutoReverse(true);
+       timeline.setCycleCount(2);
+       timeline.setDelay(Duration.millis(2000));
+       timeline.setOnFinished(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+                adjustShowDownCards();
+            }
+       });
+       timeline.play();
+    } 
+    
+    private void adjustShowDownCards(){
+        
+        List<Timeline> cardAjustTimeLines = new ArrayList<>();
+        
+        for(HBox playerCards: playerCardsList)
+        {
+            KeyValue valuePosAdjustment = null;
+            if(playerCards == playerCards3 || playerCards == playerCards4){
+                valuePosAdjustment = new KeyValue(playerCards.layoutXProperty(),playerCards.getLayoutX()-50);
+            }
+            KeyValue valueX = new KeyValue(playerCards.prefWidthProperty(),177,Interpolator.EASE_OUT);
+            KeyFrame keyFrame = null; 
+            if(valuePosAdjustment != null)
+               keyFrame = new KeyFrame(Duration.millis(500), valueX,valuePosAdjustment); 
+            else
+                keyFrame =  new KeyFrame(Duration.millis(500), valueX); 
+            Timeline timeline = new Timeline();
+            timeline.getKeyFrames().add(keyFrame);          
+            cardAjustTimeLines.add(timeline);
+            
+        }
+        
+        ParallelTransition transition = new ParallelTransition();
+        transition.getChildren().addAll(cardAjustTimeLines);
+        transition.setOnFinished(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    showPlayerCardsTransitions();
+                }
+
+            });
+        transition.play();
+        
+    }
+    
+    private void showPlayerCardsTransitions(){
+        int showDownStartingPlayer = dealer.getDealingPlayerOrder()+2;
+        
+        boolean playerPassed = false;
+        
+        List<Transition> showDownTransitions = new ArrayList<>();
+        
+        for(int i=showDownStartingPlayer;i<GAME_PLAYERS+showDownStartingPlayer;i++){
+            Player player = table.getPlayers().get(i % GAME_PLAYERS);            
+            
+            //PlayerAction action = null;
+            
+            if(player instanceof HumanPlayer){
+                //action = player.getAction();
+                playerPassed = true;
+                continue;
+            }else if(player instanceof ComputerPlayer){
+                //action = ((ComputerPlayer)player).getAction(dealer.getPlayerPossibleActions(i%GAME_PLAYERS),dealer.getRound());
+                
+            }
+            
+            showDownTransitions.add(getPlayerShowDownTransition(i%GAME_PLAYERS));            
+            
+        }
+        
+        SequentialTransition seqShowCards = new SequentialTransition();
+        seqShowCards.getChildren().addAll(showDownTransitions);
+        seqShowCards.setOnFinished(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+                //showPlayerTurnAnimation(bettingTransitionsAfterPlayerChoice);
+                             
+            }
+
+            
+
+            
+        });
+        seqShowCards.play();         
+        
+        
+    }
+    
+    private Transition getPlayerShowDownTransition(final int player){
+               
+        ParallelTransition cardsRotating = new ParallelTransition();
+        
+        
+        Rectangle messageBox = null;
+        Text messageText = null;
+        switch (player) {
+            case 0:
+                messageBox = singlePlayerMessageBox;
+                messageText = singlePlayerMessageText;
+                break;
+            case 1:
+                messageBox = player1MessageBox;
+                messageText = player1MessageText;
+                break;
+            case 2:
+                messageBox = player2MessageBox;
+                messageText = player2MessageText;
+                break;
+            case 3:
+                messageBox = player3MessageBox;
+                messageText = player3MessageText;
+                break;
+            case 4:
+                messageBox = player4MessageBox;
+                messageText = player4MessageText;
+                break;
+        }        
+
+        KeyValue valueBox = new KeyValue(messageBox.fillProperty(), Paint.valueOf("3ba40e"), Interpolator.EASE_IN);        
+        KeyValue valueTextThinking = new KeyValue(messageText.textProperty(),"");
+        KeyFrame keyFrameBox = new KeyFrame(Duration.millis(300), valueBox,valueTextThinking);
+        Timeline timelineBox = new Timeline();
+        timelineBox.getKeyFrames().add(keyFrameBox);
+        timelineBox.setCycleCount(5);
+        timelineBox.setDelay(Duration.millis(2000));
+        timelineBox.setAutoReverse(true);
+        
+        timelineBox.setOnFinished(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+                final HBox playerCards = getPlayerCardsHBox(player); 
+                playerCards.getChildren().clear();
+
+                final List<Card> cards = table.getPlayers().get(player).getPlayerHand().getCards();        
+                final List<Pane> playerCardPanes = new ArrayList<Pane>(cards.size()); 
+                for (Card card : cards) {
+                    CardControl cardControl = new CardControl(card.getSuit().getSuitType().toString(), card.getValue().getCardValue());
+
+                    playerCardPanes.add(cardControl.getCard());
+                    cardControl.getCard().setRotationAxis(Rotate.Y_AXIS);
+                    cardControl.getCard().setRotate(180);
+                    RotateTransition rt = new RotateTransition(Duration.millis(1000), cardControl.getCard());
+                    rt.setAxis(Rotate.Y_AXIS);
+                    rt.setByAngle(180);
+                    rt.play();
+
+                }
+
+                playerCards.getChildren().addAll(playerCardPanes);
+                             
+            }  
+        });
+        
+        cardsRotating.getChildren().add(timelineBox);
+       
+       return cardsRotating;
     }
     
     

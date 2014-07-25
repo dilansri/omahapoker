@@ -112,6 +112,28 @@ class AIAnalyser {
         return action;
     }
     
+    PlayerAction getRiverAction(PlayerHand playerHand, List<Card> communityCards, List<PlayerAction> possibleActions, int roundCount) {
+        int roundCountAdjustment = (roundCount-1)*10+1;
+        
+        int highHandScore = getHighHandScore(playerHand,communityCards);
+        System.out.println("RIVER"+highHandScore);
+        PlayerAction action = PlayerAction.FOLD;
+        if(highHandScore <= 15 +roundCountAdjustment && possibleActions.contains(PlayerAction.CHECK) )
+            action = PlayerAction.CHECK;        
+        else if(highHandScore <= 15 +roundCountAdjustment )
+            action = PlayerAction.FOLD;
+        else if(highHandScore < (65+(roundCountAdjustment+((roundCount-1))*12*roundCount)) && possibleActions.contains(PlayerAction.CHECK)){
+            action = PlayerAction.CHECK;
+        }else if(highHandScore < (110+(roundCountAdjustment+((roundCount-1))*22*roundCount)) && possibleActions.contains(PlayerAction.CALL)){
+            action = PlayerAction.CALL;
+        }else if(highHandScore < (180+roundCountAdjustment) && possibleActions.contains(PlayerAction.RAISE)){
+            action = PlayerAction.RAISE;
+        }else if(highHandScore >= 180 && possibleActions.contains(PlayerAction.ALL_IN)){
+            action = PlayerAction.ALL_IN;
+        }
+        return action;
+    }
+    
     private int getHighHandScore(PlayerHand playerHand,List<Card> communityCards){
         int highHandScore = 0;
         List<Card> playerCards = playerHand.getCards();
@@ -126,13 +148,14 @@ class AIAnalyser {
         
         // TWO PAIRS SCORE
         
+        
         for(int i=0;i<playerCards.size();i++){
             for(int j=i+1;j<playerCards.size();j++){
                 for(int p=0;p<communityCards.size();p++){
                     
                     analyseCards.clear();
                     analyseCards.add(playerCards.get(i));
-                    analyseCards.add(playerCards.get(p));
+                    analyseCards.add(communityCards.get(p));
                     
                     if(HighRankedHand.hasPair(analyseCards)){
                         highHandScore += 5;
