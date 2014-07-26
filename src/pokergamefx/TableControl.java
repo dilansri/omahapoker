@@ -25,6 +25,7 @@ import static com.xfinity.poker.TableRules.NUMBER_OF_TURN_CARDS;
 import static com.xfinity.poker.TableRules.RIVER_CARD_POS;
 import static com.xfinity.poker.TableRules.TURN_CARD_POS;
 import com.xfinity.poker.Value;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -52,6 +53,8 @@ import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
@@ -746,6 +749,11 @@ public class TableControl extends AnchorPane implements Initializable {
                 //handle single player default actions
                 if(playerSelectedAction == PlayerAction.FOLD)
                     dealer.setFlod(0);
+                
+                String source = new File("you_"+playerSelectedAction.toString().toLowerCase() + ".mp3").toURI().toString();
+                Media media = new Media(source);
+                MediaPlayer mediaPlayer = new MediaPlayer(media);
+                mediaPlayer.setAutoPlay(true);
                 showAfterPlayerTransitions(afterTransitions);
             }
 
@@ -877,18 +885,29 @@ public class TableControl extends AnchorPane implements Initializable {
         timelineText.setDelay(Duration.millis(400));
         timelineText.getKeyFrames().add(keyFrameText);
         timelineText.play();
-        
-        
+        String source = new File(action.toString().toLowerCase()+".mp3").toURI().toString();
+        Media media = new Media(source);
+        MediaPlayer mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.setAutoPlay(true);
         
         if (action == PlayerAction.CALL) {
             dealer.getCallFrom(playerPos);
+            
+            
         } else if (action == PlayerAction.FOLD) {
             dealer.setFlod(playerPos);
         } else if(action == PlayerAction.RAISE){
-            dealer.getRaiseFrom(playerPos);
+            dealer.getRaiseFrom(playerPos);            
+            
+                       
         } else if(action == PlayerAction.ALL_IN){
             dealer.getAllInFrom(playerPos);
+        }else if(action == PlayerAction.CHECK){
+            
+            
         }
+        
+        
 
         timelineText.setOnFinished(new EventHandler<ActionEvent>() {
 
@@ -1452,9 +1471,12 @@ public class TableControl extends AnchorPane implements Initializable {
     }
     
     private void showWinnersDetails() {
+        
+        List<Player> winners = new ArrayList<>(2);
         winnersAnchorPane.setVisible(true);
         winnersAnchorPane.setOpacity(0);
         Player highWinner = application.getHighHandWinner();
+        winners.add(highWinner);
         highWinnerName.setText(highWinner.getName());
         highHandType.setText(highWinner.getWinningHandType());
         
@@ -1476,6 +1498,7 @@ public class TableControl extends AnchorPane implements Initializable {
             lowWinnngCards.getChildren().clear();
         }else {
             Player lowWinner = application.getLowHandWinner();
+            winners.add(lowWinner);
             lowWinnerName.setText(lowWinner.getName());
             lowWinnngCards.getChildren().clear();
             List<Card> lowCards = lowWinner.getWinningLowCards();
@@ -1489,6 +1512,8 @@ public class TableControl extends AnchorPane implements Initializable {
             lowWinnngCards.getChildren().addAll(lowHandPanes);
             
         }
+        
+       // dealer.awardWinners(winners);
         
        KeyValue valueOpacity = new KeyValue(winnersAnchorPane.opacityProperty(),1,Interpolator.EASE_OUT);       
        KeyFrame keyFrame = new KeyFrame(Duration.millis(500), valueOpacity);       
