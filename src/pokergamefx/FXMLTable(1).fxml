@@ -529,7 +529,7 @@
                 </Pane>
             </children>
         </HBox>
-        <Group layoutX="345.0" layoutY="-70.0">
+        <Group fx:id="bigBlindChip" layoutX="345.0" layoutY="-70.0">
             <children>
                 <Circle layoutX="100.0" layoutY="200.0" radius="15.0" stroke="#5a4505" strokeType="INSIDE">
                     <fill>
@@ -549,7 +549,7 @@
                 </Text>
             </children>
         </Group>
-        <Group layoutX="106.0" layoutY="-38.0">
+        <Group fx:id="smallBlindChip" layoutX="106.0" layoutY="-40.0">
             <children>
                 <Circle layoutX="100.0" layoutY="200.0" radius="15.0" stroke="#5a4505" strokeType="INSIDE">
                     <fill>
@@ -569,7 +569,7 @@
                 </Text>
             </children>
         </Group>
-        <Group layoutX="106.0" layoutY="253.0">
+        <Group fx:id="dealerChip" layoutX="106.0" layoutY="253.0">
             <children>
                 <Circle layoutX="100.0" layoutY="200.0" radius="15.0" stroke="#5a4505" strokeType="INSIDE">
                     <fill>

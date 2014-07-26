@@ -50,6 +50,7 @@ public class PokerGameFX extends Application {
         createTable();
         createDealer();
         tableControl = new TableControl(dealer,this);
+        
         Scene scene = new Scene(tableControl);
         stage.setScene(scene);        
         //stage.initStyle(StageStyle.UNDECORATED);

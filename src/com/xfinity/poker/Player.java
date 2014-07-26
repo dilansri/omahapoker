@@ -22,8 +22,6 @@ public class Player implements PlayerRules {
         private List<Card> winningCards;
         
         private List<Card> winningLowCards;
-
-    
         
         public enum PlayerAction{CALL,RAISE,CHECK,FOLD,ALL_IN};	
 	
@@ -140,6 +138,14 @@ public class Player implements PlayerRules {
         
         public void awardChips(double d) {
             playerChips.set(playerChips.get()+d);
+        }
+        
+        public void clearWinningHands() {
+            winningCards.clear();
+            winningLowCards.clear();
+            
+            winningCards = new ArrayList<>();
+            winningLowCards = new ArrayList<>();
         }
         
 	

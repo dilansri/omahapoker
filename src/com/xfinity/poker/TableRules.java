@@ -8,4 +8,6 @@ public interface TableRules {
         public static final int NUMBER_OF_RIVER_CARDS = 1;
         public static final int TURN_CARD_POS = 3;
         public static final int RIVER_CARD_POS = 4;
+        
+        public static final int BIG_BLIND_INCREMENT = 20;
 }

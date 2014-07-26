@@ -25,6 +25,11 @@ public class PlayerHand {
 	public void setCards(List<Card> cards) {
 		this.cards = cards;
 	}
+
+        public void clear() {
+            cards.clear();
+            cards = new ArrayList<>();
+        }
 	
 	
 

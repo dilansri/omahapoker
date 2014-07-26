@@ -33,6 +33,10 @@ public class Dealer implements DealerRules {
 	cardAnalyser = new CardAnalyser();
     }
     
+    public void incrementDealingPlayerOrder(){
+        dealingPlayerOrder = (++dealingPlayerOrder) % GAME_PLAYERS;
+    }
+    
     public int incrementRoundCount(){
         roundCount++;
         return roundCount;

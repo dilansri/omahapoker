@@ -7,6 +7,7 @@
 package pokergamefx;
 
 import com.xfinity.poker.Card;
+import com.xfinity.poker.CardDeck;
 import com.xfinity.poker.ComputerPlayer;
 import com.xfinity.poker.Dealer;
 import com.xfinity.poker.Dealer.Round;
@@ -18,6 +19,7 @@ import com.xfinity.poker.Player;
 import com.xfinity.poker.Player.PlayerAction;
 import com.xfinity.poker.PlayerBestHighHand;
 import com.xfinity.poker.PlayerBestLowHand;
+import static com.xfinity.poker.PlayerRules.PLAYER_INITIAL_CHIPS;
 import com.xfinity.poker.Table;
 import static com.xfinity.poker.TableRules.NUMBER_OF_FLOP_CARDS;
 import static com.xfinity.poker.TableRules.NUMBER_OF_RIVER_CARDS;
@@ -48,6 +50,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.AnchorPane;
@@ -120,6 +123,9 @@ public class TableControl extends AnchorPane implements Initializable {
     @FXML
     private Button playAgainButton,exitGameButton;
     
+    @FXML
+    private Group dealerChip,smallBlindChip,bigBlindChip;
+    
     
     private List<HBox> playerCardsList;
     
@@ -133,9 +139,7 @@ public class TableControl extends AnchorPane implements Initializable {
     
     private Timeline timelinePlayerActionAnimation;
     
-    Task secondTask;
-    
-    public TableControl(Dealer dealerRef,PokerGameFX application){
+    public TableControl(Dealer dealerRef,final PokerGameFX application){
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXMLTable(1).fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
@@ -228,9 +232,96 @@ public class TableControl extends AnchorPane implements Initializable {
         
         playAgainButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                
+                winnersAnchorPane.setVisible(false);
+                resetWinners();
+                clearTable();
+                adjustDealer();
+                adjustTable();
+                adjustPlayers();
+                changeChipsPositionsAnimations();
+                startGame();
             }
         });
+    }
+    
+    private void resetWinners(){
+        application.setHighHandWinner(null);
+        application.setLowHandWinner(null);
+    }
+    
+    private void clearTable(){
+        for(HBox cardList : playerCardsList){
+            cardList.getChildren().clear();
+        }        
+        tableCards.getChildren().clear();
+    }
+    
+    private void adjustDealer(){
+        dealer.incrementDealingPlayerOrder();
+        CardDeck newDeck = new CardDeck();
+        newDeck.shuffle();
+        dealer.setDeck(newDeck);
+        dealer.setRound(Round.PRE_FLOP);
+        dealer.setRoundCount(0);
+    }
+    
+    public void adjustTable(){
+        table.clear();
+        table.incrementBlinds();
+        table.setHighestPotValue(0);
+    }
+    
+    private void adjustPlayers(){
+        
+        for(Player player : table.getPlayers()){
+            if(player.getPlayerChips() < table.getBigBlind())
+            {
+                if(player instanceof HumanPlayer){
+                    player.awardChips(PLAYER_INITIAL_CHIPS);
+                }else
+                    player.awardChips(PLAYER_INITIAL_CHIPS);
+            }
+            
+            player.getPlayerHand().clear();
+            player.clearWinningHands();
+            player.setAllIn(false);
+            player.setFolded(false);
+        }
+    }
+    
+    private void changeChipsPositionsAnimations(){
+        int[] xCordinates = {106,106,345,486,492};
+        int[] yCordinates = {253,-40,-70,-40,253};
+        
+        int dealingPlayerOrder = dealer.getDealingPlayerOrder();
+        
+        int dealingChipPosition = (dealingPlayerOrder+4) % GAME_PLAYERS;
+        int smallBlindChipPosition = dealingPlayerOrder;
+        int bigBlindChipPosition = (dealingPlayerOrder + 1) % GAME_PLAYERS;
+        
+        KeyValue valueDealerX = new KeyValue(dealerChip.layoutXProperty(), xCordinates[dealingChipPosition], Interpolator.EASE_OUT);
+        KeyValue valueDealerY = new KeyValue(dealerChip.layoutYProperty(), yCordinates[dealingChipPosition], Interpolator.EASE_OUT);
+        KeyValue valueSmallBlindX = new KeyValue(smallBlindChip.layoutXProperty(), xCordinates[smallBlindChipPosition], Interpolator.EASE_OUT);
+        KeyValue valueSmallBlindY = new KeyValue(smallBlindChip.layoutYProperty(), yCordinates[smallBlindChipPosition], Interpolator.EASE_OUT);
+        KeyValue valueBigBlindX = new KeyValue(bigBlindChip.layoutXProperty(), xCordinates[bigBlindChipPosition], Interpolator.EASE_OUT);
+        KeyValue valueBigBlindY = new KeyValue(bigBlindChip.layoutYProperty(), yCordinates[bigBlindChipPosition], Interpolator.EASE_OUT);
+        KeyFrame keyFrame = new KeyFrame(Duration.millis(1000), valueDealerX, valueDealerY,valueSmallBlindX,valueSmallBlindY,valueBigBlindX,valueBigBlindY);
+        Timeline timeline = new Timeline();
+        timeline.getKeyFrames().add(keyFrame);
+        
+        RotateTransition rotateDealer = new RotateTransition(Duration.millis(1000), dealerChip);
+        rotateDealer.setByAngle(720f); 
+        
+         RotateTransition rotateSmallBlind = new RotateTransition(Duration.millis(1000), smallBlindChip);
+        rotateSmallBlind.setByAngle(720f); 
+        
+        RotateTransition rotateBigBlind = new RotateTransition(Duration.millis(1000), bigBlindChip);
+        rotateBigBlind.setByAngle(720f); 
+        
+        ParallelTransition trans = new ParallelTransition();
+        trans.getChildren().addAll(timeline,rotateDealer,rotateSmallBlind,rotateBigBlind);
+        
+        trans.play();
     }
     
     private void hidePlayerControls() {
@@ -623,15 +714,15 @@ public class TableControl extends AnchorPane implements Initializable {
     }
     
     private void startBettingRound() {
-        int betStartingPlayer = dealer.getDealingPlayerOrder()+2;
+        int betStartingPlayer = (dealer.getDealingPlayerOrder()+2)%GAME_PLAYERS;
         
         dealer.incrementRoundCount();
         
         boolean playerPassed = false;
         
-        List<Transition> bettingTransitionsBeforePlayerChoice = new ArrayList<>();
+        final List<Transition> bettingTransitionsBeforePlayerChoice = new ArrayList<>();
         final List<Transition> bettingTransitionsAfterPlayerChoice = new ArrayList<>();
-        
+        System.out.println("HREHRE -- -- ");
         for(int i=betStartingPlayer;i<GAME_PLAYERS+betStartingPlayer;i++){
             Player player = table.getPlayers().get(i % GAME_PLAYERS);
             if(player.isFolded() || player.isAllIn() ){

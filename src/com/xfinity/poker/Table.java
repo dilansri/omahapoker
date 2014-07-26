@@ -27,6 +27,13 @@ public class Table implements TableRules {
                  communityCards = new ArrayList<>(5);
 	}
         
+        public void clear(){
+            communityCards.clear();
+            communityCards = new ArrayList<>();
+            tablePot = null;
+            tablePot = new TablePot(playerList);
+        }
+        
         public double getHighestPotValue(){
             return highestPotValue;
         }
@@ -56,17 +63,17 @@ public class Table implements TableRules {
 		return (playerList == null)? 0 : playerList.size();
 	}
 
-	synchronized public void takeBigBlindFromPlayer(int i) {
+	public void takeBigBlindFromPlayer(int i) {
 		
 		playerList.get(i%numberOfPlayers()).takeChips(bigBlind);
-                getTablePot().getPlayerPots().get(i).addToPot(bigBlind);
+                getTablePot().getPlayerPots().get(i%numberOfPlayers()).addToPot(bigBlind);
                 
                 highestPotValue = bigBlind;
 	}
 
-	synchronized public void takeSmallBlindFromPlayer(int i) {
+	public void takeSmallBlindFromPlayer(int i) {
 		playerList.get(i%numberOfPlayers()).takeChips(smallBlind);
-                getTablePot().getPlayerPots().get(i).addToPot(smallBlind);
+                getTablePot().getPlayerPots().get(i%numberOfPlayers()).addToPot(smallBlind);
 	}
 
     public boolean isSamePotValues() {
@@ -98,6 +105,27 @@ public class Table implements TableRules {
 
     public void clearTablePot() {
         tablePot.clear();
+    }
+    
+    public void setBligBlind(int value){
+        bigBlind = value;
+    }
+    
+    public void setSmallBlind(int value){
+        smallBlind = value;
+    }
+    
+    public int getBigBlind(){
+        return bigBlind;
+    }
+    
+    public int getSmallBlind(){
+        return smallBlind;
+    }
+    
+    public void incrementBlinds(){
+        bigBlind += BIG_BLIND_INCREMENT;
+        smallBlind = bigBlind / 2;
     }
 
 }
