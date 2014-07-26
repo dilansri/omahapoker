@@ -186,6 +186,60 @@ public class HighHandCardAnalyser implements RankHandsRules {
             if(currentBest < playersBestHands.get(i).getPlayerBestHand()){
                 currentBest=playersBestHands.get(i).getPlayerBestHand();
                 currentBestPlayer = i;
+            }else if(currentBest == playersBestHands.get(i).getPlayerBestHand()){
+                if(currentBest == STRAIGHT_FLUSH){
+                    Card tieCard = playersBestHands.get(currentBestPlayer).getWinningCards().get(0);
+                    if (tieCard.getValue().getCardValue() < playersBestHands.get(i).getWinningCards().get(0).getValue().getCardValue()) {
+                        currentBestPlayer = i;
+                    }
+                }else if(currentBest == FOUR_OF_KIND){
+                    Card tieCard = playersBestHands.get(currentBestPlayer).getWinningCards().get(0);
+                    if (tieCard.getValue().getCardValue() < playersBestHands.get(i).getWinningCards().get(0).getValue().getCardValue()) {
+                        currentBestPlayer = i;
+                    }
+                }else if(currentBest == FULL_HOUSE){
+                    Card tieCard = playersBestHands.get(currentBestPlayer).getWinningCards().get(0);
+                    if (tieCard.getValue().getCardValue() < playersBestHands.get(i).getWinningCards().get(0).getValue().getCardValue()) {
+                        currentBestPlayer = i;
+                    }
+                }else if(currentBest == FLUSH){
+                    Card tieCard = playersBestHands.get(currentBestPlayer).getWinningCards().get(0);
+                    if (tieCard.getValue().getCardValue() < playersBestHands.get(i).getWinningCards().get(0).getValue().getCardValue()) {
+                        currentBestPlayer = i;
+                    }
+                }else if(currentBest == STRAIGHT){
+                    Card tieCard = playersBestHands.get(currentBestPlayer).getWinningCards().get(0);
+                    if (tieCard.getValue().getCardValue() < playersBestHands.get(i).getWinningCards().get(0).getValue().getCardValue()) {
+                        currentBestPlayer = i;
+                    }
+                }else if(currentBest == THREE_OF_KIND){
+                    Card tieCard = playersBestHands.get(currentBestPlayer).getWinningCards().get(0);
+                    if (tieCard.getValue().getCardValue() < playersBestHands.get(i).getWinningCards().get(0).getValue().getCardValue()) {
+                        currentBestPlayer = i;
+                    }
+                }else if(currentBest == TWO_PAIRS){
+                    Card tieCard = playersBestHands.get(currentBestPlayer).getWinningCards().get(0);
+                    if (tieCard.getValue().getCardValue() < playersBestHands.get(i).getWinningCards().get(0).getValue().getCardValue()) {
+                        currentBestPlayer = i;
+                    } else if (tieCard.getValue().getCardValue() == playersBestHands.get(i).getWinningCards().get(0).getValue().getCardValue()) {
+                        tieCard = playersBestHands.get(currentBestPlayer).getWinningCards().get(1);
+                        if (tieCard.getValue().getCardValue() < playersBestHands.get(i).getWinningCards().get(1).getValue().getCardValue()) {
+                            currentBestPlayer = i;
+                        } else if (tieCard.getValue().getCardValue() == playersBestHands.get(i).getWinningCards().get(1).getValue().getCardValue()) {
+                            tieCard = playersBestHands.get(currentBestPlayer).getWinningCards().get(2);
+                            if (tieCard.getValue().getCardValue() < playersBestHands.get(i).getWinningCards().get(2).getValue().getCardValue()) {
+                                currentBestPlayer = i;
+                            }
+                        }
+                    }
+                }else if(currentBest == PAIR){
+                    Card tieCard = playersBestHands.get(currentBestPlayer).getWinningCards().get(0);
+                    if (tieCard.getValue().getCardValue() <playersBestHands.get(i).getWinningCards().get(0).getValue().getCardValue()) {
+                        currentBestPlayer = i;
+                    }
+                }else if(currentBest == HIGH_CARD){
+                    
+                }
             }
         }
         

@@ -1382,9 +1382,12 @@ public class TableControl extends AnchorPane implements Initializable {
     }
     
     private void showHighHandWinner() {
-        PlayerBestHighHand bestHand = dealer.getHighHandWinner();
+       PlayerBestHighHand bestHand = dealer.getHighHandWinner();
+       
+       String[] handText = {"","HIGH CARD","PAIR","TWO PAIRS","THREE OF KIND","STRAIGHT","FLUSH","FULL HOUSE",
+                            "FOUR OF KIND","STRAIGHT FLUSH","ROYAL FLUSH"};
         
-       roundMessageText.setText("Winner is: "+table.getPlayers().get(bestHand.getPlayerPosition()).getName() + bestHand.getPlayerBestHand());
+       roundMessageText.setText(table.getPlayers().get(bestHand.getPlayerPosition()).getName()+" Wins. " + handText[bestHand.getPlayerBestHand()].toUpperCase());
        roundMessageBox.setOpacity(0);
        KeyValue valueOpacity = new KeyValue(roundMessageText.opacityProperty(),1,Interpolator.EASE_OUT);       
        KeyValue valueBoxOpacity = new KeyValue(roundMessageBox.opacityProperty(),1,Interpolator.EASE_OUT);       
