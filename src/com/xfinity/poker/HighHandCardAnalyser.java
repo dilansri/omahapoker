@@ -33,9 +33,9 @@ public class HighHandCardAnalyser implements RankHandsRules {
                                 analyseCards.clear();
                                 analyseCards.add(playerCards.get(i));
                                 analyseCards.add(playerCards.get(j));
-                                analyseCards.add(communityCards.get(i));
-                                analyseCards.add(communityCards.get(i));
-                                analyseCards.add(communityCards.get(i));
+                                analyseCards.add(communityCards.get(p));
+                                analyseCards.add(communityCards.get(q));
+                                analyseCards.add(communityCards.get(r));
                                 
                                 List<Card> fourOfKind = HighRankedHand.fourOfaKind(analyseCards);
                                 List<Card> fullHouse = HighRankedHand.fullHouse(analyseCards);
@@ -46,19 +46,17 @@ public class HighHandCardAnalyser implements RankHandsRules {
                                 Card straight = HighRankedHand.straight(analyseCards);
                                 Card pair = HighRankedHand.getPair(analyseCards);
                                 
-                                int currentBestHand = bestHand.getPlayerBestHand();
-                                
                                 if (HighRankedHand.isRoyalFlush(analyseCards)) {
                                     bestHand.setPlayerBestHand(ROYAL_FLUSH);
                                 }                            
                                 else if (straightFlush != null) {
                                     List<Card> winningCards = new ArrayList<>();
                                     winningCards.add(straightFlush);
-                                    if(currentBestHand < STRAIGHT_FLUSH){
+                                    if(bestHand.getPlayerBestHand() < STRAIGHT_FLUSH){
                                         bestHand.setPlayerBestHand(STRAIGHT_FLUSH);                                        
                                         bestHand.setWinningCards(winningCards);
                                     }                                    
-                                    else if(currentBestHand == STRAIGHT_FLUSH){
+                                    else if(bestHand.getPlayerBestHand() == STRAIGHT_FLUSH){
                                         Card tieCard = bestHand.getWinningCards().get(0);
                                         if(tieCard.getValue().getCardValue() < straightFlush.getValue().getCardValue()){
                                              bestHand.setWinningCards(winningCards);
@@ -66,10 +64,10 @@ public class HighHandCardAnalyser implements RankHandsRules {
                                     }
                                 }
                                 else if (fourOfKind != null && !fourOfKind.isEmpty()) {
-                                   if(currentBestHand < FOUR_OF_KIND){
+                                   if(bestHand.getPlayerBestHand() < FOUR_OF_KIND){
                                        bestHand.setPlayerBestHand(FOUR_OF_KIND);
                                        bestHand.setWinningCards(fourOfKind);
-                                   }else if(currentBestHand == FOUR_OF_KIND){
+                                   }else if(bestHand.getPlayerBestHand() == FOUR_OF_KIND){
                                        Card tieCard = bestHand.getWinningCards().get(0);                                       
                                        if(tieCard.getValue().getCardValue() < fourOfKind.get(0).getValue().getCardValue()){
                                            bestHand.setWinningCards(fourOfKind);
@@ -77,10 +75,10 @@ public class HighHandCardAnalyser implements RankHandsRules {
                                    }
                                 }
                                 else if (fullHouse != null && fullHouse.size() == 2) {
-                                    if(currentBestHand < FULL_HOUSE){
+                                    if(bestHand.getPlayerBestHand() < FULL_HOUSE){
                                        bestHand.setPlayerBestHand(FULL_HOUSE);
                                        bestHand.setWinningCards(fullHouse);
-                                    }else if(currentBestHand == FULL_HOUSE){
+                                    }else if(bestHand.getPlayerBestHand() == FULL_HOUSE){
                                         Card tieCard = bestHand.getWinningCards().get(0);
                                         if(tieCard.getValue().getCardValue() < fullHouse.get(0).getValue().getCardValue()){
                                             bestHand.setWinningCards(fullHouse);
@@ -90,10 +88,10 @@ public class HighHandCardAnalyser implements RankHandsRules {
                                 else if (flush != null) {
                                     List<Card> winningCards = new ArrayList<>();
                                     winningCards.add(flush);
-                                    if(currentBestHand < FLUSH){
+                                    if(bestHand.getPlayerBestHand() < FLUSH){
                                         bestHand.setPlayerBestHand(FLUSH);
                                        bestHand.setWinningCards(winningCards);
-                                    }else if(currentBestHand == FLUSH){
+                                    }else if(bestHand.getPlayerBestHand() == FLUSH){
                                         Card tieCard = bestHand.getWinningCards().get(0);
                                         if(tieCard.getValue().getCardValue() < flush.getValue().getCardValue()){
                                              bestHand.setWinningCards(winningCards);
@@ -103,10 +101,10 @@ public class HighHandCardAnalyser implements RankHandsRules {
                                 else if (straight != null) {
                                     List<Card> winningCards = new ArrayList<>();
                                     winningCards.add(straight);
-                                    if(currentBestHand < STRAIGHT){
+                                    if(bestHand.getPlayerBestHand() < STRAIGHT){
                                         bestHand.setPlayerBestHand(STRAIGHT);
                                        bestHand.setWinningCards(winningCards);
-                                    }else if(currentBestHand == STRAIGHT){
+                                    }else if(bestHand.getPlayerBestHand() == STRAIGHT){
                                         Card tieCard = bestHand.getWinningCards().get(0);
                                         if(tieCard.getValue().getCardValue() < straight.getValue().getCardValue()){
                                              bestHand.setWinningCards(winningCards);
@@ -114,10 +112,10 @@ public class HighHandCardAnalyser implements RankHandsRules {
                                     }
                                 }
                                 else if (threeOfKind != null && !threeOfKind.isEmpty()) {
-                                    if(currentBestHand < THREE_OF_KIND){
+                                    if(bestHand.getPlayerBestHand() < THREE_OF_KIND){
                                        bestHand.setPlayerBestHand(THREE_OF_KIND);
                                        bestHand.setWinningCards(threeOfKind);
-                                    }else if(currentBestHand == THREE_OF_KIND){
+                                    }else if(bestHand.getPlayerBestHand() == THREE_OF_KIND){
                                         Card tieCard = bestHand.getWinningCards().get(0);
                                         if(tieCard.getValue().getCardValue() < threeOfKind.get(0).getValue().getCardValue()){
                                             bestHand.setWinningCards(threeOfKind);
@@ -125,20 +123,20 @@ public class HighHandCardAnalyser implements RankHandsRules {
                                     }
                                 }
                                 else if (twoPairs != null && !twoPairs.isEmpty()) {
-                                    if(currentBestHand < TWO_PAIRS){
+                                    if(bestHand.getPlayerBestHand() < TWO_PAIRS){
                                        bestHand.setPlayerBestHand(TWO_PAIRS);
                                        bestHand.setWinningCards(twoPairs);
-                                    }else if(currentBestHand == TWO_PAIRS){
+                                    }else if(bestHand.getPlayerBestHand() == TWO_PAIRS){
                                         Card tieCard = bestHand.getWinningCards().get(0);
-                                        if(tieCard.getValue().getCardValue() < threeOfKind.get(0).getValue().getCardValue()){
+                                        if(tieCard.getValue().getCardValue() < twoPairs.get(0).getValue().getCardValue()){
                                             bestHand.setWinningCards(twoPairs);
-                                        }else if(tieCard.getValue().getCardValue() == threeOfKind.get(0).getValue().getCardValue()){
+                                        }else if(tieCard.getValue().getCardValue() == twoPairs.get(0).getValue().getCardValue()){
                                             tieCard = bestHand.getWinningCards().get(1);
-                                            if(tieCard.getValue().getCardValue() < threeOfKind.get(1).getValue().getCardValue()){
+                                            if(tieCard.getValue().getCardValue() < twoPairs.get(1).getValue().getCardValue()){
                                                 bestHand.setWinningCards(twoPairs);
-                                            }else if(tieCard.getValue().getCardValue() == threeOfKind.get(1).getValue().getCardValue()){
+                                            }else if(tieCard.getValue().getCardValue() == twoPairs.get(1).getValue().getCardValue()){
                                                 tieCard = bestHand.getWinningCards().get(2);
-                                                if(tieCard.getValue().getCardValue() < threeOfKind.get(2).getValue().getCardValue()){
+                                                if(tieCard.getValue().getCardValue() < twoPairs.get(2).getValue().getCardValue()){
                                                     bestHand.setWinningCards(twoPairs);
                                                 }
                                             }
@@ -148,10 +146,10 @@ public class HighHandCardAnalyser implements RankHandsRules {
                                 else if(pair != null){
                                     List<Card> winningCards = new ArrayList<>();
                                     winningCards.add(pair);
-                                    if(currentBestHand < PAIR){
+                                    if(bestHand.getPlayerBestHand() < PAIR){
                                         bestHand.setPlayerBestHand(PAIR);
                                        bestHand.setWinningCards(winningCards);
-                                    }else if(currentBestHand == PAIR){
+                                    }else if(bestHand.getPlayerBestHand() == PAIR){
                                         Card tieCard = bestHand.getWinningCards().get(0);
                                         if(tieCard.getValue().getCardValue() < pair.getValue().getCardValue()){
                                              bestHand.setWinningCards(winningCards);
