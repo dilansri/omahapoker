@@ -81,15 +81,19 @@ public class HighRankedHandTestsJUnitTest {
         public void threeOfKindShouldReturnACardAndHighestValue(){
             List<Card> cardList = new ArrayList<Card>();
 
-            cardList.add(new Card(Suit.getSuit("SPADES"), Value.getValue(CardValue.EIGHT)));
-            cardList.add(new Card(Suit.getSuit("SPADES"), Value.getValue(CardValue.KING)));
-            cardList.add(new Card(Suit.getSuit("HEARTS"), Value.getValue(CardValue.KING)));
+            cardList.add(new Card(Suit.getSuit("DIAMONDS"), Value.getValue(CardValue.KING)));
+            cardList.add(new Card(Suit.getSuit("CLUBS"), Value.getValue(CardValue.SIX)));
+            cardList.add(new Card(Suit.getSuit("CLUBS"), Value.getValue(CardValue.TWO)));
+            cardList.add(new Card(Suit.getSuit("CLUBS"), Value.getValue(CardValue.FIVE)));
             cardList.add(new Card(Suit.getSuit("HEARTS"), Value.getValue(CardValue.ACE)));
-            cardList.add(new Card(Suit.getSuit("HEARTS"), Value.getValue(CardValue.KING)));
+            cardList.add(new Card(Suit.getSuit("SPADES"), Value.getValue(CardValue.SIX)));
+            cardList.add(new Card(Suit.getSuit("CLUBS"), Value.getValue(CardValue.KING)));
+            cardList.add(new Card(Suit.getSuit("HEARTS"), Value.getValue(CardValue.QUEEN)));
+            cardList.add(new Card(Suit.getSuit("DIAMONDS"), Value.getValue(CardValue.SIX)));
             
             List<Card> returnList = HighRankedHand.threeOfKind(cardList);
             
-            assertEquals(CardValue.KING, returnList.get(0).getValue().getCardValue());
+            assertEquals(CardValue.SIX, returnList.get(0).getValue().getCardValue());
             assertEquals(CardValue.ACE, returnList.get(1).getValue().getCardValue());
         }
         

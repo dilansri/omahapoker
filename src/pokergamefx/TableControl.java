@@ -188,6 +188,7 @@ public class TableControl extends AnchorPane implements Initializable {
                 }
                 
                 setPlayerActionText(playerSelectedAction);
+                dealer.setFlod(0);
             }
         });
         
@@ -200,6 +201,7 @@ public class TableControl extends AnchorPane implements Initializable {
                 }
                 
                 setPlayerActionText(playerSelectedAction);
+                dealer.getAllInFrom(0);
             }
         });
     }
@@ -642,13 +644,12 @@ public class TableControl extends AnchorPane implements Initializable {
                 || dealer.allOtherFolded(0)){
              showAfterPlayerTransitions(afterTransitions);
         }else{
-            /*
-            if(table.isSamePotValues() &&  dealer.getRoundCount() != 1)
+            
+            if(dealer.allOtherFolded(0))
             {   
-                showPlayerTimerAnimation(afterTransitions,true);
-                setPlayerActionText(PlayerAction.CHECK);
+                //startShowDownRound();
                 return;
-            }*/
+            }
             roundMessageText.setText("Your Turn");
             roundMessageText.setOpacity(0);
             roundMessageBox.setOpacity(0);
@@ -848,20 +849,15 @@ public class TableControl extends AnchorPane implements Initializable {
         return seqTrans;
     }
     private void showAndDoPlayerAction(final Text finalMessageText,final int playerPos) {
-        /*
-        if(table.isSamePotValues() &&  dealer.getRoundCount() != 1)
+        
+        if(dealer.allOtherFolded(playerPos))
         {
-            KeyValue valueText = new KeyValue(finalMessageText.textProperty(), PlayerAction.CHECK.toString());
-            KeyFrame keyFrameText = new KeyFrame(Duration.millis(1000), valueText);
-            Timeline timelineText = new Timeline();
-            timelineText.setDelay(Duration.millis(400));
-            timelineText.getKeyFrames().add(keyFrameText);
-            timelineText.play();
+            //startShowDownRound();
             return;
-        } */
+        } 
         Player player = table.getPlayers().get(playerPos);
-        final PlayerAction action = ((ComputerPlayer) player).getAction(dealer.getPlayerPossibleActions(playerPos),table.getCommunityCards(), dealer.getRound(), dealer.getRoundCount()); //for now
-
+        PlayerAction action = ((ComputerPlayer) player).getAction(dealer.getPlayerPossibleActions(playerPos),table.getCommunityCards(), dealer.getRound(), dealer.getRoundCount()); //for now
+        
         //Random rand = new Random();
         KeyValue valueText = new KeyValue(finalMessageText.textProperty(), action.toString());
         KeyFrame keyFrameText = new KeyFrame(Duration.millis(1000), valueText);
@@ -878,6 +874,8 @@ public class TableControl extends AnchorPane implements Initializable {
             dealer.setFlod(playerPos);
         } else if(action == PlayerAction.RAISE){
             dealer.getRaiseFrom(playerPos);
+        } else if(action == PlayerAction.ALL_IN){
+            dealer.getAllInFrom(playerPos);
         }
 
         timelineText.setOnFinished(new EventHandler<ActionEvent>() {

@@ -166,7 +166,7 @@ public class Dealer implements DealerRules {
         }
 
         //CALL
-        if (table.getPlayers().get(i).getPlayerChips() > HIGHEST_POT_VALUE - (table.getTablePot().getPlayerPots().get(i).getPlayerContribution())
+        if (table.getPlayers().get(i).getPlayerChips() >= HIGHEST_POT_VALUE - (table.getTablePot().getPlayerPots().get(i).getPlayerContribution())
                 && table.getTablePot().getPlayerPots().get(i).getPlayerContribution() < HIGHEST_POT_VALUE) {
             possibleActions.add(PlayerAction.CALL);
         }
@@ -191,6 +191,10 @@ public class Dealer implements DealerRules {
         double playerPotAmount = playerPot.getPlayerContribution();
         double amount = player.takeChips(table.getHighestPotValue() - playerPotAmount);
         table.getTablePot().getPlayerPots().get(playerPosition).addToPot(amount);
+        
+        if(player.getPlayerChips() == 0){
+            player.setAllIn(true);
+        }
     }
 
     synchronized public void setFlod(int position) {
@@ -204,8 +208,20 @@ public class Dealer implements DealerRules {
         PlayerPot playerPot = table.getTablePot().getPlayerPots().get(playerPosition);
         double playerPotAmount = playerPot.getPlayerContribution();
         double amount = player.takeChips(table.getRaiseAmount()- playerPotAmount);
-        table.getTablePot().getPlayerPots().get(playerPosition).addToPot(amount);
-        table.setHighestPotValue(table.getRaiseAmount());
+        playerPot.addToPot(amount);
+        table.setHighestPotValue(playerPot.getPlayerContribution());    
+        if(player.getPlayerChips() == 0){
+            player.setAllIn(true);
+        }
+    }
+    
+    synchronized public void getAllInFrom(int playerPosition){
+        Player player = table.getPlayers().get(playerPosition);
+        PlayerPot playerPot = table.getTablePot().getPlayerPots().get(playerPosition);
+        double amount = player.takeChips(player.getPlayerChips());
+        playerPot.addToPot(amount);
+        table.setHighestPotValue(playerPot.getPlayerContribution());
+        player.setAllIn(true);
     }
     
     public boolean allOtherFolded(int playerPos) {

@@ -23,7 +23,7 @@ public class HighHandCardAnalyser implements RankHandsRules {
             
             PlayerBestHighHand bestHand = new PlayerBestHighHand(player);
             
-            List<Card> analyseCards = new ArrayList<>();
+            
             
             List<Card> playerCards = players.get(player).getPlayerHand().getCards();
             
@@ -32,7 +32,7 @@ public class HighHandCardAnalyser implements RankHandsRules {
                     for(int p=0;p<communityCards.size();p++){
                         for(int q=p+1;q<communityCards.size();q++){
                             for(int r=q+1;r<communityCards.size();r++){
-                                analyseCards.clear();
+                                List<Card> analyseCards = new ArrayList<>();
                                 analyseCards.add(playerCards.get(i));
                                 analyseCards.add(playerCards.get(j));
                                 analyseCards.add(communityCards.get(p));
@@ -178,12 +178,22 @@ public class HighHandCardAnalyser implements RankHandsRules {
                                         }
                                     }
                                 }else {
-                                    Card highCard = HighRankedHand.getHighRankCard(analyseCards);
-                                    bestHand.setPlayerBestHand(HIGH_CARD);
-                                    List<Card> winningCards = new ArrayList<>();
-                                    winningCards.add(highCard);
-                                    bestHand.setWinningCards(winningCards);
-                                    currentPlayer.setWinningCards(analyseCards);
+                                    if(bestHand.getPlayerBestHand() < HIGH_CARD){
+                                        Card highCard = HighRankedHand.getHighRankCard(analyseCards);
+                                        bestHand.setPlayerBestHand(HIGH_CARD);
+                                        List<Card> winningCards = new ArrayList<>();
+                                        winningCards.add(highCard);
+                                        bestHand.setWinningCards(winningCards);
+                                        currentPlayer.setWinningCards(analyseCards);
+                                    }else if(bestHand.getPlayerBestHand() == HIGH_CARD){
+                                        Card highCard = HighRankedHand.getHighRankCard(analyseCards);
+                                        if(bestHand.getWinningCards().get(0).getValue().getCardValue() < highCard.getValue().getCardValue()){
+                                            List<Card> winningCards = new ArrayList<>();
+                                            winningCards.add(highCard);
+                                            bestHand.setWinningCards(winningCards);
+                                            currentPlayer.setWinningCards(analyseCards);
+                                        }
+                                    }
                                 }
                                 
                             }
