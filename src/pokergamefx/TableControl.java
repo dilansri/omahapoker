@@ -114,6 +114,12 @@ public class TableControl extends AnchorPane implements Initializable {
     @FXML
     private HBox highWinningCards,lowWinnngCards;
     
+    @FXML 
+    private Text highWinnings,lowWinnings;
+    
+    @FXML
+    private Button playAgainButton,exitGameButton;
+    
     
     private List<HBox> playerCardsList;
     
@@ -529,6 +535,16 @@ public class TableControl extends AnchorPane implements Initializable {
        timeline.setAutoReverse(true);
        timeline.setCycleCount(2);
        timeline.play();
+       
+        //playAudio("pre_flop_start.mp3");
+       
+    }
+    
+    private void playAudio(String sourceFile){
+        String source = new File(sourceFile).toURI().toString();
+        Media media = new Media(source);
+        MediaPlayer mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.setAutoPlay(true);
     }
     
     private HBox getPlayerCardsHBox(int player){
@@ -750,10 +766,7 @@ public class TableControl extends AnchorPane implements Initializable {
                 if(playerSelectedAction == PlayerAction.FOLD)
                     dealer.setFlod(0);
                 
-                String source = new File("you_"+playerSelectedAction.toString().toLowerCase() + ".mp3").toURI().toString();
-                Media media = new Media(source);
-                MediaPlayer mediaPlayer = new MediaPlayer(media);
-                mediaPlayer.setAutoPlay(true);
+                playAudio("you_"+playerSelectedAction.toString().toLowerCase() + ".mp3");
                 showAfterPlayerTransitions(afterTransitions);
             }
 
@@ -885,11 +898,8 @@ public class TableControl extends AnchorPane implements Initializable {
         timelineText.setDelay(Duration.millis(400));
         timelineText.getKeyFrames().add(keyFrameText);
         timelineText.play();
-        String source = new File(action.toString().toLowerCase()+".mp3").toURI().toString();
-        Media media = new Media(source);
-        MediaPlayer mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.setAutoPlay(true);
         
+        playAudio(action.toString().toLowerCase()+".mp3");        
         if (action == PlayerAction.CALL) {
             dealer.getCallFrom(playerPos);
             
@@ -930,6 +940,7 @@ public class TableControl extends AnchorPane implements Initializable {
     private void showFlopRoundMessage(){
          roundMessageText.setText("Flop Round");
          roundMessageBox.setOpacity(0);
+         //playAudio("flop_start.mp3");
        KeyValue valueOpacity = new KeyValue(roundMessageText.opacityProperty(),1,Interpolator.EASE_OUT);       
        KeyValue valueBoxOpacity = new KeyValue(roundMessageBox.opacityProperty(),1,Interpolator.EASE_OUT);       
        KeyFrame keyFrame = new KeyFrame(Duration.millis(2000), valueOpacity,valueBoxOpacity);       
@@ -1070,6 +1081,7 @@ public class TableControl extends AnchorPane implements Initializable {
     private void showTurnRoundMessage(){
         roundMessageText.setText("Turn Round");
          roundMessageBox.setOpacity(0);
+         //playAudio("turn_start.mp3");
        KeyValue valueOpacity = new KeyValue(roundMessageText.opacityProperty(),1,Interpolator.EASE_OUT);       
        KeyValue valueBoxOpacity = new KeyValue(roundMessageBox.opacityProperty(),1,Interpolator.EASE_OUT);       
        KeyFrame keyFrame = new KeyFrame(Duration.millis(2000), valueOpacity,valueBoxOpacity);       
@@ -1149,6 +1161,7 @@ public class TableControl extends AnchorPane implements Initializable {
     private void showRiverRoundMessage(){
         roundMessageText.setText("River Round");
          roundMessageBox.setOpacity(0);
+         //playAudio("river_start.mp3");
        KeyValue valueOpacity = new KeyValue(roundMessageText.opacityProperty(),1,Interpolator.EASE_OUT);       
        KeyValue valueBoxOpacity = new KeyValue(roundMessageBox.opacityProperty(),1,Interpolator.EASE_OUT);       
        KeyFrame keyFrame = new KeyFrame(Duration.millis(2000), valueOpacity,valueBoxOpacity);       
@@ -1222,6 +1235,7 @@ public class TableControl extends AnchorPane implements Initializable {
     private void startShowDownRound(){
        roundMessageText.setText("Show Down");
        roundMessageBox.setOpacity(0);
+       //playAudio("showdown_start.mp3");
        KeyValue valueOpacity = new KeyValue(roundMessageText.opacityProperty(),1,Interpolator.EASE_OUT);       
        KeyValue valueBoxOpacity = new KeyValue(roundMessageBox.opacityProperty(),1,Interpolator.EASE_OUT);       
        KeyFrame keyFrame = new KeyFrame(Duration.millis(2000), valueOpacity,valueBoxOpacity);       
@@ -1474,6 +1488,9 @@ public class TableControl extends AnchorPane implements Initializable {
         
         List<Player> winners = new ArrayList<>(2);
         winnersAnchorPane.setVisible(true);
+        winnersAnchorPane.setScaleX(0.635);
+        winnersAnchorPane.setScaleY(0.635);
+        winnersAnchorPane.setLayoutY(winnersAnchorPane.getLayoutY()+10);
         winnersAnchorPane.setOpacity(0);
         Player highWinner = application.getHighHandWinner();
         winners.add(highWinner);
@@ -1487,20 +1504,23 @@ public class TableControl extends AnchorPane implements Initializable {
             
         for(Card card: cards){
             CardControl cardControl =new CardControl(card.getSuit().getSuitType().toString(),card.getValue().getCardValue());
-            
             playerCardPanes.add(cardControl.getCard());
         }
         
        highWinningCards.getChildren().addAll(playerCardPanes);
+       highWinningCards.setScaleX(1.5);
+       highWinningCards.setScaleY(1.5);
         
+       lowWinnngCards.getChildren().clear();
         if(application.getLowHandWinner() == null){
-            lowWinnerName.setText("NO WINNER :(");
-            lowWinnngCards.getChildren().clear();
+            lowWinnerName.setText("NO WINNER :(");            
         }else {
             Player lowWinner = application.getLowHandWinner();
             winners.add(lowWinner);
-            lowWinnerName.setText(lowWinner.getName());
-            lowWinnngCards.getChildren().clear();
+            lowWinnerName.setText(lowWinner.getName());            
+            lowWinnngCards.setScaleX(1.5);
+            lowWinnngCards.setScaleY(1.5);
+            lowWinnings.setText("$ "+table.getTablePot().getTablePotChips()/winners.size());
             List<Card> lowCards = lowWinner.getWinningLowCards();
             Collections.sort(lowCards);
             List<Pane> lowHandPanes = new ArrayList<Pane>(lowCards.size());
@@ -1512,8 +1532,9 @@ public class TableControl extends AnchorPane implements Initializable {
             lowWinnngCards.getChildren().addAll(lowHandPanes);
             
         }
+        highWinnings.setText("$ "+table.getTablePot().getTablePotChips()/winners.size());
         
-       // dealer.awardWinners(winners);
+       dealer.awardWinners(winners);
         
        KeyValue valueOpacity = new KeyValue(winnersAnchorPane.opacityProperty(),1,Interpolator.EASE_OUT);       
        KeyFrame keyFrame = new KeyFrame(Duration.millis(500), valueOpacity);       

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.effect.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.paint.*?>
@@ -704,7 +705,7 @@
                         <Font name="Lucida Handwriting Italic" size="18.0" />
                     </font>
                 </Button>
-                <Button fx:id="callButton" disable="true" layoutY="1.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="111.0" style="-fx-background-color:                                 linear-gradient(#ffd65b, #e68400),                                 linear-gradient(#ffef84, #f2ba44),                                 linear-gradient(#ffea6a, #efaa22),                                 linear-gradient(#7f0219 0%, #7f0219 50%, #440013 100%),                                 linear-gradient(from 0% 0% to 15% 50%, rgba(255,255,255,0.9), rgba(255,255,255,0));                             -fx-background-radius: 30;                             -fx-background-insets: 0,1,2,3,0;                             -fx-text-fill: #654b00;                             -fx-font-weight: bold;                             -fx-font-size: 14px;                             -fx-padding: 10 20 10 20;" text="CALL">
+                <Button fx:id="callButton" disable="true" layoutY="1.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="111.0" style="-fx-background-color:                                 linear-gradient(#ffd65b, #e68400),                                 linear-gradient(#ffef84, #f2ba44),                                 linear-gradient(#ffea6a, #efaa22),                                 linear-gradient(#ffe657 0%, #f8c202 50%, #eea10b 100%),                                 linear-gradient(from 0% 0% to 15% 50%, rgba(255,255,255,0.9), rgba(255,255,255,0));                             -fx-background-radius: 30;                             -fx-background-insets: 0,1,2,3,0;                             -fx-text-fill: #654b00;                             -fx-font-weight: bold;                             -fx-font-size: 14px;                             -fx-padding: 10 20 10 20;" text="CALL">
                     <font>
                         <Font name="Lucida Handwriting Italic" size="18.0" />
                     </font>
@@ -742,7 +743,7 @@
         <SVGPath content="M10 6c0-3.314 2.686-6 6-6s6 2.686 6 6c0 3.314-2.686 6-6 6s-6-2.686-6-6zM24.002 14h-1.107l-6.222 12.633 2.327-11.633-3-3-3 3 2.327 11.633-6.222-12.633h-1.107c-3.998 0-3.998 2.687-3.998 6v10h24v-10c0-3.313 0-6-3.998-6z" layoutX="627.0" layoutY="145.0" scaleX="1.6" scaleY="1.6" />
         <SVGPath content="M10 6c0-3.314 2.686-6 6-6s6 2.686 6 6c0 3.314-2.686 6-6 6s-6-2.686-6-6zM24.002 14h-1.107l-6.222 12.633 2.327-11.633-3-3-3 3 2.327 11.633-6.222-12.633h-1.107c-3.998 0-3.998 2.687-3.998 6v10h24v-10c0-3.313 0-6-3.998-6z" layoutX="628.0" layoutY="444.0" scaleX="1.6" scaleY="1.6" />
         <SVGPath content="M10 6c0-3.314 2.686-6 6-6s6 2.686 6 6c0 3.314-2.686 6-6 6s-6-2.686-6-6zM24.002 14h-1.107l-6.222 12.633 2.327-11.633-3-3-3 3 2.327 11.633-6.222-12.633h-1.107c-3.998 0-3.998 2.687-3.998 6v10h24v-10c0-3.313 0-6-3.998-6z" layoutX="138.0" layoutY="443.0" scaleX="1.6" scaleY="1.6" />
-      <AnchorPane id="AnchorPane" fx:id="winnersAnchorPane" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #be8534; -fx-border-color: #be8534;" visible="false">
+      <AnchorPane id="AnchorPane" fx:id="winnersAnchorPane" minHeight="600.0" minWidth="800.0" prefHeight="600.0" prefWidth="800.0" style="-fx-border-color: white;" visible="false">
          <children>
             <ImageView fitHeight="600.0" fitWidth="800.0">
                <image>
@@ -751,12 +752,12 @@
             </ImageView>
             <Group fx:id="high_hand_display">
                <children>
-                  <Text layoutX="246.0" layoutY="188.0" strokeType="OUTSIDE" strokeWidth="0.0" text="High Hand Winner" textAlignment="CENTER" wrappingWidth="310.50244140625">
+                  <Text layoutX="245.0" layoutY="160.0" strokeType="OUTSIDE" strokeWidth="0.0" text="High Hand Winner" textAlignment="CENTER" wrappingWidth="310.50244140625">
                      <font>
                         <Font name="Segoe UI Light" size="27.0" />
                      </font>
                   </Text>
-                  <HBox fx:id="highWinningCards" layoutX="290.0" layoutY="203.0" prefHeight="78.0" prefWidth="220.0">
+                  <HBox fx:id="highWinningCards" layoutX="290.0" layoutY="203.0" prefHeight="78.0" prefWidth="220.0" scaleX="1.2" scaleY="1.2">
                      <children>
                         <Pane prefHeight="100.0" prefWidth="57.0">
                            <children>
@@ -820,23 +821,23 @@
                         </Pane>
                      </children>
                   </HBox>
-                  <VBox layoutX="20.0" layoutY="205.0" prefHeight="78.0" prefWidth="232.0">
+                  <VBox layoutX="33.0" layoutY="203.0" prefHeight="78.0" prefWidth="135.0">
                      <children>
-                        <Text fx:id="highWinnerName" strokeType="OUTSIDE" strokeWidth="0.0" text="player name" textAlignment="RIGHT" wrappingWidth="231.81494140625">
+                        <Text fx:id="highWinnerName" strokeType="OUTSIDE" strokeWidth="0.0" text="player name" textAlignment="RIGHT" wrappingWidth="176.81494140625">
                            <font>
                               <Font name="Segoe UI Semibold" size="23.0" />
                            </font>
                         </Text>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\$ 0" textAlignment="RIGHT" wrappingWidth="231.81494140625">
+                        <Text fx:id="highWinnings" strokeType="OUTSIDE" strokeWidth="0.0" text="\$ 0" textAlignment="RIGHT" wrappingWidth="175.81494140625">
                            <font>
                               <Font name="Segoe UI Semibold" size="32.0" />
                            </font>
                         </Text>
                      </children>
                   </VBox>
-                  <VBox layoutX="557.0" layoutY="203.0" prefHeight="78.0" prefWidth="232.0">
+                  <VBox layoutX="625.0" layoutY="215.0" prefHeight="38.0" prefWidth="175.0">
                      <children>
-                        <Text fx:id="highHandType" strokeType="OUTSIDE" strokeWidth="0.0" text="hand type" wrappingWidth="231.81494140625">
+                        <Text fx:id="highHandType" strokeType="OUTSIDE" strokeWidth="0.0" text="hand type" wrappingWidth="152.81494140625">
                            <font>
                               <Font name="Segoe UI Semibold" size="23.0" />
                            </font>
@@ -852,7 +853,7 @@
                         <Font name="Segoe UI Light" size="27.0" />
                      </font>
                   </Text>
-                  <HBox fx:id="lowWinnngCards" layoutX="290.0" layoutY="203.0" prefHeight="78.0" prefWidth="220.0">
+                  <HBox fx:id="lowWinnngCards" layoutX="291.0" layoutY="229.0" prefHeight="78.0" prefWidth="220.0">
                      <children>
                         <Pane prefHeight="100.0" prefWidth="57.0">
                            <children>
@@ -916,14 +917,14 @@
                         </Pane>
                      </children>
                   </HBox>
-                  <VBox layoutX="20.0" layoutY="205.0" prefHeight="78.0" prefWidth="232.0">
+                  <VBox layoutX="20.0" layoutY="233.0" prefHeight="78.0" prefWidth="196.0">
                      <children>
-                        <Text fx:id="lowWinnerName" strokeType="OUTSIDE" strokeWidth="0.0" text="player name" textAlignment="RIGHT" wrappingWidth="231.81494140625">
+                        <Text fx:id="lowWinnerName" strokeType="OUTSIDE" strokeWidth="0.0" text="player name" textAlignment="RIGHT" wrappingWidth="190.81494140625">
                            <font>
                               <Font name="Segoe UI Semibold" size="23.0" />
                            </font>
                         </Text>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\$ 0" textAlignment="RIGHT" wrappingWidth="231.81494140625">
+                        <Text fx:id="lowWinnings" strokeType="OUTSIDE" strokeWidth="0.0" text="\$ 0" textAlignment="RIGHT" wrappingWidth="189.81494140625">
                            <font>
                               <Font name="Segoe UI Semibold" size="32.0" />
                            </font>
@@ -933,6 +934,8 @@
                   <VBox layoutX="557.0" layoutY="203.0" prefHeight="78.0" prefWidth="232.0" />
                </children>
             </Group>
+            <Button fx:id="playAgainButton" layoutX="51.0" layoutY="514.0" mnemonicParsing="false" style="-fx-background-color: linear-gradient(#f0ff35, #a9ff00),                             radial-gradient(center 50% -40%, radius 200%, #b8ee36 45%, #80c800 50%); -fx-background-insets: 0,1,2,3; -fx-background-radius: 3,2,2,2; -fx-padding: 12 30 12 30; -fx-text-fill: black; -fx-font-size: 22px;" text="Play Again" />
+            <Button fx:id="exitGameButton" layoutX="606.0" layoutY="514.0" mnemonicParsing="false" style="-fx-background-color: linear-gradient(#ff5400, #be1d00); -fx-background-insets: 0,1,2,3; -fx-background-radius: 3,2,2,2; -fx-padding: 12 30 12 30; -fx-text-fill: white; -fx-font-size: 22px;" text="Exit Game" />
          </children>
       </AnchorPane>
     </children>

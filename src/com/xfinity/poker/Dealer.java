@@ -17,8 +17,6 @@ public class Dealer implements DealerRules {
     
     private int roundCount;
 
-    
-
     public enum Round {
 
         PRE_FLOP, FLOP, TURN, RIVER
@@ -145,11 +143,6 @@ public class Dealer implements DealerRules {
         return cardAnalyser.getLowHandWinner();
     }
 
-    public List<Player> getWinners() {
-
-        return null;
-    }
-
     public Table getTable() {
         return table;
     }
@@ -237,5 +230,19 @@ public class Dealer implements DealerRules {
         
         return true;
     }
+    
+    public void awardWinners(List<Player> winners) {
+        if(winners == null || winners.size() == 0 )
+            return;
+        
+        double tablePotValue = table.getTablePot().getTablePotChips();
+        
+        for(Player winner:winners){
+            double givingAmount = tablePotValue/winners.size();
+            winner.awardChips(givingAmount);
+        }        
+        table.clearTablePot();
+    }
+    
 
 }

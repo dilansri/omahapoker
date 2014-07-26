@@ -32,4 +32,10 @@ public class TablePot {
 		
 	}
 
+    public void clear() {
+        for(PlayerPot pot:playerPots){
+            pot.clearPot();
+        }
+    }
+
 }

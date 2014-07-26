@@ -22,6 +22,8 @@ public class Player implements PlayerRules {
         private List<Card> winningCards;
         
         private List<Card> winningLowCards;
+
+    
         
         public enum PlayerAction{CALL,RAISE,CHECK,FOLD,ALL_IN};	
 	
@@ -134,6 +136,10 @@ public class Player implements PlayerRules {
         
         public List<Card> getWinningLowCards(){
             return winningLowCards;
+        }
+        
+        public void awardChips(double d) {
+            playerChips.set(playerChips.get()+d);
         }
         
 	

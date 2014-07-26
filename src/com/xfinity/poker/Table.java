@@ -96,4 +96,8 @@ public class Table implements TableRules {
         highestPotValue = value;
     }
 
+    public void clearTablePot() {
+        tablePot.clear();
+    }
+
 }
