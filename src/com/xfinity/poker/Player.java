@@ -17,7 +17,11 @@ public class Player implements PlayerRules {
 	private boolean allIn;	
         private boolean folded;
         
+        private String winningHandType;
+        
         private List<Card> winningCards;
+        
+        private List<Card> winningLowCards;
         
         public enum PlayerAction{CALL,RAISE,CHECK,FOLD,ALL_IN};	
 	
@@ -30,12 +34,21 @@ public class Player implements PlayerRules {
 		this.order = order;
                 folded = false;
                 winningCards = new ArrayList<>();
+                winningLowCards = new ArrayList<>();
 	}
 	/*
 	private List<Chip> createChipsFromMoney(int playerMoney) {
 		List<Chip> chips = new ArrayList<Chip>();		
 		return chips;
 	} */
+        
+        public void setWinningHandType(String type){
+            winningHandType = type;
+        }
+        
+        public String getWinningHandType(){
+            return winningHandType;
+        }
         
         public ReadOnlyStringProperty nameProperty() {
             return name.getReadOnlyProperty();
@@ -113,6 +126,14 @@ public class Player implements PlayerRules {
         
         public List<Card> getWinningCards(){
             return winningCards;
+        }
+        
+        public void setWinningLowCards(List<Card> cards){
+            winningLowCards = cards;
+        }
+        
+        public List<Card> getWinningLowCards(){
+            return winningLowCards;
         }
         
 	

@@ -10,7 +10,7 @@ public class Dealer implements DealerRules {
 
     private CardDeck deck;
     private Table table;
-    HighHandCardAnalyser highAnalyser;
+    CardAnalyser cardAnalyser;
     
 
     private Round currentRound;
@@ -32,7 +32,7 @@ public class Dealer implements DealerRules {
         dealingPlayerOrder = 1;
         currentRound = Round.PRE_FLOP;
         roundCount = 0;
-	highAnalyser = new HighHandCardAnalyser();
+	cardAnalyser = new CardAnalyser();
     }
     
     public int incrementRoundCount(){
@@ -138,7 +138,11 @@ public class Dealer implements DealerRules {
     }
     
     public PlayerBestHighHand getHighHandWinner(){
-        return highAnalyser.getHighHandWinner(table.getPlayers(), table.getCommunityCards());
+        return cardAnalyser.getHighHandWinner(table.getPlayers(), table.getCommunityCards());
+    }
+    
+    public PlayerBestLowHand getLowHandWinner(){
+        return cardAnalyser.getLowHandWinner();
     }
 
     public List<Player> getWinners() {

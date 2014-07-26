@@ -83,7 +83,7 @@ class AIAnalyser {
             action = PlayerAction.FOLD;
         else if(highHandScore < (9+(roundCountAdjustment+((roundCount-1))*5*roundCount)) && possibleActions.contains(PlayerAction.CHECK)){
             action = PlayerAction.CHECK;
-        }else if(highHandScore < (39+(roundCountAdjustment+((roundCount-1))*10*roundCount)) && possibleActions.contains(PlayerAction.CALL)){
+        }else if(highHandScore < (39+(roundCountAdjustment+((roundCount-1))*15*roundCount)) && possibleActions.contains(PlayerAction.CALL)){
             action = PlayerAction.CALL;
         }else if(highHandScore < (99+roundCountAdjustment) && possibleActions.contains(PlayerAction.RAISE)){
             action = PlayerAction.RAISE;
@@ -145,7 +145,7 @@ class AIAnalyser {
     }
     
     PlayerAction getRiverAction(PlayerHand playerHand, List<Card> communityCards, List<PlayerAction> possibleActions, int roundCount) {
-        int roundCountAdjustment = (roundCount-1)*10+1;
+        int roundCountAdjustment = (roundCount-1)*5+1;
         
         int[] scores = getScores(playerHand,communityCards);
         int highHandScore = scores[0];

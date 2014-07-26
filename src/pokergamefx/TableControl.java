@@ -17,6 +17,7 @@ import com.xfinity.poker.HumanPlayer;
 import com.xfinity.poker.Player;
 import com.xfinity.poker.Player.PlayerAction;
 import com.xfinity.poker.PlayerBestHighHand;
+import com.xfinity.poker.PlayerBestLowHand;
 import com.xfinity.poker.Table;
 import static com.xfinity.poker.TableRules.NUMBER_OF_FLOP_CARDS;
 import static com.xfinity.poker.TableRules.NUMBER_OF_RIVER_CARDS;
@@ -27,6 +28,7 @@ import com.xfinity.poker.Value;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.animation.Interpolator;
@@ -99,6 +101,16 @@ public class TableControl extends AnchorPane implements Initializable {
     
     @FXML
     private Button callButton,raiseButton,checkButton,foldButton,allInButton;
+    
+    @FXML
+    private AnchorPane winnersAnchorPane;
+    
+    @FXML
+    private Text highWinnerName,lowWinnerName,highHandType;
+    
+    @FXML
+    private HBox highWinningCards,lowWinnngCards;
+    
     
     private List<HBox> playerCardsList;
     
@@ -660,7 +672,7 @@ public class TableControl extends AnchorPane implements Initializable {
            timeline.getKeyFrames().add(keyFrame);
            timeline.setCycleCount(2);
            timeline.setAutoReverse(true);
-           timeline.setDelay(Duration.millis(1000));
+           timeline.setDelay(Duration.millis(1500));
            timeline.setOnFinished(new EventHandler<ActionEvent>() {
 
                 @Override
@@ -1380,7 +1392,8 @@ public class TableControl extends AnchorPane implements Initializable {
     }
     
     private void showHighHandWinner() {
-       PlayerBestHighHand bestHand = dealer.getHighHandWinner();
+       PlayerBestHighHand bestHand = dealer.getHighHandWinner();       
+       application.setHighHandWinner(table.getPlayers().get(bestHand.getPlayerPosition()));
        
        String[] handText = {"","HIGH CARD","PAIR","TWO PAIRS","THREE OF KIND","STRAIGHT","FLUSH","FULL HOUSE",
                             "FOUR OF KIND","STRAIGHT FLUSH","ROYAL FLUSH"};
@@ -1403,13 +1416,85 @@ public class TableControl extends AnchorPane implements Initializable {
 
             @Override
             public void handle(ActionEvent event) {
-                //adjustShowDownCards();
-                //roundMessageText.setStyle("-fx-font-size:46;");
-                //showHighHandWinner();
+                showLowHandWinner();
             }
-
-           
        });
+       timeline.play();
+    }
+    
+    private void showLowHandWinner() {
+        PlayerBestLowHand lowHand = dealer.getLowHandWinner();
+        if(lowHand == null)
+            roundMessageText.setText("Nobody wins Low Hand");
+        else{
+            application.setLowHandWinner(table.getPlayers().get(lowHand.getPlayerPosition()));
+            roundMessageText.setText(table.getPlayers().get(lowHand.getPlayerPosition()).getName()+" Wins Low Hand. ");
+            System.out.println("WINNING LOW HAND: "+table.getPlayers().get(lowHand.getPlayerPosition()).getWinningLowCards());
+        }
+       roundMessageText.setStyle("-fx-font-size:32;");
+       roundMessageBox.setOpacity(0);       
+       
+       KeyValue valueOpacity = new KeyValue(roundMessageText.opacityProperty(),1,Interpolator.EASE_OUT);       
+       KeyValue valueBoxOpacity = new KeyValue(roundMessageBox.opacityProperty(),1,Interpolator.EASE_OUT);       
+       KeyFrame keyFrame = new KeyFrame(Duration.millis(2000), valueOpacity,valueBoxOpacity);       
+       Timeline timeline = new Timeline();
+       timeline.getKeyFrames().add(keyFrame);
+       timeline.setAutoReverse(true);
+       timeline.setCycleCount(2);
+       timeline.setDelay(Duration.millis(2000));
+       timeline.setOnFinished(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                showWinnersDetails();
+            }
+       });
+       timeline.play();
+    }
+    
+    private void showWinnersDetails() {
+        winnersAnchorPane.setVisible(true);
+        winnersAnchorPane.setOpacity(0);
+        Player highWinner = application.getHighHandWinner();
+        highWinnerName.setText(highWinner.getName());
+        highHandType.setText(highWinner.getWinningHandType());
+        
+        highWinningCards.getChildren().clear();
+        List<Card> cards = highWinner.getWinningCards();
+        Collections.sort(cards);
+        List<Pane> playerCardPanes = new ArrayList<Pane>(cards.size());
+            
+        for(Card card: cards){
+            CardControl cardControl =new CardControl(card.getSuit().getSuitType().toString(),card.getValue().getCardValue());
+            
+            playerCardPanes.add(cardControl.getCard());
+        }
+        
+       highWinningCards.getChildren().addAll(playerCardPanes);
+        
+        if(application.getLowHandWinner() == null){
+            lowWinnerName.setText("NO WINNER :(");
+            lowWinnngCards.getChildren().clear();
+        }else {
+            Player lowWinner = application.getLowHandWinner();
+            lowWinnerName.setText(lowWinner.getName());
+            lowWinnngCards.getChildren().clear();
+            List<Card> lowCards = lowWinner.getWinningLowCards();
+            Collections.sort(lowCards);
+            List<Pane> lowHandPanes = new ArrayList<Pane>(lowCards.size());
+            
+            for(Card card: lowCards){
+                CardControl cardControl =new CardControl(card.getSuit().getSuitType().toString(),card.getValue().getCardValue());
+                lowHandPanes.add(cardControl.getCard());
+            }            
+            lowWinnngCards.getChildren().addAll(lowHandPanes);
+            
+        }
+        
+       KeyValue valueOpacity = new KeyValue(winnersAnchorPane.opacityProperty(),1,Interpolator.EASE_OUT);       
+       KeyFrame keyFrame = new KeyFrame(Duration.millis(500), valueOpacity);       
+       Timeline timeline = new Timeline();
+       timeline.getKeyFrames().add(keyFrame);
+       timeline.setDelay(Duration.millis(3000));
        timeline.play();
     }
     

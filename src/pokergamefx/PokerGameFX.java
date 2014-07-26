@@ -36,6 +36,9 @@ public class PokerGameFX extends Application {
     Table table;
     TableControl tableControl;
     
+    private Player highHandWinner;
+    private Player lowHandWinner;
+    
     Stage primaryOwner;
     
     @Override
@@ -55,6 +58,22 @@ public class PokerGameFX extends Application {
         stage.show();
         tableControl.startGame(); 
         
+    }
+    
+    public void setHighHandWinner(Player player){
+        highHandWinner = player;
+    }
+    
+    public Player getHighHandWinner(){
+        return highHandWinner;
+    }
+    
+    public void setLowHandWinner(Player player){
+        lowHandWinner = player;
+    }
+    
+    public Player getLowHandWinner(){
+        return lowHandWinner;
     }
     
     //WindowShow Dialog
