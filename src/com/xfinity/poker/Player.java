@@ -1,5 +1,7 @@
 package com.xfinity.poker;
 
+import java.util.ArrayList;
+import java.util.List;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
@@ -15,6 +17,8 @@ public class Player implements PlayerRules {
 	private boolean allIn;	
         private boolean folded;
         
+        private List<Card> winningCards;
+        
         public enum PlayerAction{CALL,RAISE,CHECK,FOLD,ALL_IN};	
 	
 	public Player(String name,int order){
@@ -25,6 +29,7 @@ public class Player implements PlayerRules {
 		isDealer = false;
 		this.order = order;
                 folded = false;
+                winningCards = new ArrayList<>();
 	}
 	/*
 	private List<Chip> createChipsFromMoney(int playerMoney) {
@@ -101,6 +106,14 @@ public class Player implements PlayerRules {
         public DoubleProperty getPlayerChipsProperty(){
             return playerChips;
         }      
+        
+        public void setWinningCards(List<Card> cards){
+            winningCards = cards;
+        }
+        
+        public List<Card> getWinningCards(){
+            return winningCards;
+        }
         
 	
 }

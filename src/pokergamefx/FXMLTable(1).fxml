@@ -725,7 +725,7 @@
             </Button>
          </children>
       </Pane>
-      <Group layoutX="-1.0" layoutY="7.0">
+      <Group layoutX="-1.0" layoutY="12.0">
          <children>
             <Rectangle fx:id="roundMessageBox" arcHeight="90.0" arcWidth="90.0" fill="#000000e0" height="71.0" layoutX="47.0" layoutY="258.0" opacity="0.0" stroke="#aeaeae" strokeLineCap="ROUND" strokeType="OUTSIDE" width="701.0" />
 

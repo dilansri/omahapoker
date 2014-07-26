@@ -1387,8 +1387,12 @@ public class TableControl extends AnchorPane implements Initializable {
        String[] handText = {"","HIGH CARD","PAIR","TWO PAIRS","THREE OF KIND","STRAIGHT","FLUSH","FULL HOUSE",
                             "FOUR OF KIND","STRAIGHT FLUSH","ROYAL FLUSH"};
         
-       roundMessageText.setText(table.getPlayers().get(bestHand.getPlayerPosition()).getName()+" Wins. " + handText[bestHand.getPlayerBestHand()].toUpperCase());
+       roundMessageText.setText(table.getPlayers().get(bestHand.getPlayerPosition()).getName()+" Wins HighHand. " + handText[bestHand.getPlayerBestHand()].toUpperCase());
+       roundMessageText.setStyle("-fx-font-size:32;");
        roundMessageBox.setOpacity(0);
+       
+       System.out.println("WINNING HAND: " + table.getPlayers().get(bestHand.getPlayerPosition()).getWinningCards());
+       
        KeyValue valueOpacity = new KeyValue(roundMessageText.opacityProperty(),1,Interpolator.EASE_OUT);       
        KeyValue valueBoxOpacity = new KeyValue(roundMessageBox.opacityProperty(),1,Interpolator.EASE_OUT);       
        KeyFrame keyFrame = new KeyFrame(Duration.millis(2000), valueOpacity,valueBoxOpacity);       
@@ -1402,7 +1406,7 @@ public class TableControl extends AnchorPane implements Initializable {
             @Override
             public void handle(ActionEvent event) {
                 //adjustShowDownCards();
-                
+                //roundMessageText.setStyle("-fx-font-size:46;");
                 //showHighHandWinner();
             }
 
