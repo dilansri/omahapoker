@@ -698,27 +698,87 @@
       <ProgressIndicator fx:id="playerTimeIndicatior" layoutX="40.0" layoutY="159.0" progress="0.0" scaleX="2.5" scaleY="2.5" visible="false" />
       <Pane fx:id="playerActionsPane" layoutX="81.0" layoutY="190.0" opacity="0.0">
          <children>
-            <Button fx:id="raiseButton" disable="true" layoutX="132.0" layoutY="1.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="111.0" style="-fx-background-color: rgb(149,153,152);" text="RAISE">
+            <Button fx:id="raiseButton" disable="true" layoutX="132.0" layoutY="1.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="111.0" 
+                    style="-fx-background-color:
+                                linear-gradient(#ffd65b, #e68400),
+                                linear-gradient(#ffef84, #f2ba44),
+                                linear-gradient(#ffea6a, #efaa22),
+                                linear-gradient(#ffe657 0%, #f8c202 50%, #eea10b 100%),
+                                linear-gradient(from 0% 0% to 15% 50%, rgba(255,255,255,0.9), rgba(255,255,255,0));
+                            -fx-background-radius: 30;
+                            -fx-background-insets: 0,1,2,3,0;
+                            -fx-text-fill: #654b00;
+                            -fx-font-weight: bold;
+                            -fx-font-size: 14px;
+                            -fx-padding: 10 20 10 20;" text="RAISE">
                <font>
                   <Font name="Lucida Handwriting Italic" size="18.0" />
                </font>
             </Button>
-            <Button fx:id="callButton" disable="true" layoutY="1.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="111.0" style="-fx-background-color: rgb(149,153,152);" text="CALL">
+            <Button fx:id="callButton" disable="true" layoutY="1.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="111.0" 
+                    style="-fx-background-color:
+                                linear-gradient(#ffd65b, #e68400),
+                                linear-gradient(#ffef84, #f2ba44),
+                                linear-gradient(#ffea6a, #efaa22),
+                                linear-gradient(#ffe657 0%, #f8c202 50%, #eea10b 100%),
+                                linear-gradient(from 0% 0% to 15% 50%, rgba(255,255,255,0.9), rgba(255,255,255,0));
+                            -fx-background-radius: 30;
+                            -fx-background-insets: 0,1,2,3,0;
+                            -fx-text-fill: #654b00;
+                            -fx-font-weight: bold;
+                            -fx-font-size: 14px;
+                            -fx-padding: 10 20 10 20;" text="CALL">
                <font>
                   <Font name="Lucida Handwriting Italic" size="18.0" />
                </font>
             </Button>
-            <Button fx:id="foldButton" disable="true" layoutX="394.0" layoutY="1.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="111.0" style="-fx-background-color: rgb(149,153,152);" text="FOLD">
+            <Button fx:id="foldButton" disable="true" layoutX="394.0" layoutY="1.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="111.0" 
+                    style="-fx-background-color:
+                                linear-gradient(#ffd65b, #e68400),
+                                linear-gradient(#ffef84, #f2ba44),
+                                linear-gradient(#ffea6a, #efaa22),
+                                linear-gradient(#ffe657 0%, #f8c202 50%, #eea10b 100%),
+                                linear-gradient(from 0% 0% to 15% 50%, rgba(255,255,255,0.9), rgba(255,255,255,0));
+                            -fx-background-radius: 30;
+                            -fx-background-insets: 0,1,2,3,0;
+                            -fx-text-fill: #654b00;
+                            -fx-font-weight: bold;
+                            -fx-font-size: 14px;
+                            -fx-padding: 10 20 10 20;" text="FOLD">
                <font>
                   <Font name="Lucida Handwriting Italic" size="18.0" />
                </font>
             </Button>
-            <Button fx:id="allInButton" disable="true" layoutX="525.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="111.0" style="-fx-background-color: rgb(149,153,152);" text="ALL IN">
+            <Button fx:id="allInButton" disable="true" layoutX="525.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="111.0" 
+                    style="-fx-background-color:
+                                linear-gradient(#ffd65b, #e68400),
+                                linear-gradient(#ffef84, #f2ba44),
+                                linear-gradient(#ffea6a, #efaa22),
+                                linear-gradient(#ffe657 0%, #f8c202 50%, #eea10b 100%),
+                                linear-gradient(from 0% 0% to 15% 50%, rgba(255,255,255,0.9), rgba(255,255,255,0));
+                            -fx-background-radius: 30;
+                            -fx-background-insets: 0,1,2,3,0;
+                            -fx-text-fill: #654b00;
+                            -fx-font-weight: bold;
+                            -fx-font-size: 14px;
+                            -fx-padding: 10 20 10 20;" text="ALL IN">
                <font>
                   <Font name="Lucida Handwriting Italic" size="18.0" />
                </font>
             </Button>
-            <Button fx:id="checkButton" disable="true" layoutX="254.0" layoutY="1.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="111.0" text="CHECK">
+            <Button fx:id="checkButton" disable="true" layoutX="254.0" layoutY="1.0" mnemonicParsing="false" prefHeight="40.0" 
+                    style="-fx-background-color:
+                                linear-gradient(#ffd65b, #e68400),
+                                linear-gradient(#ffef84, #f2ba44),
+                                linear-gradient(#ffea6a, #efaa22),
+                                linear-gradient(#ffe657 0%, #f8c202 50%, #eea10b 100%),
+                                linear-gradient(from 0% 0% to 15% 50%, rgba(255,255,255,0.9), rgba(255,255,255,0));
+                            -fx-background-radius: 30;
+                            -fx-background-insets: 0,1,2,3,0;
+                            -fx-text-fill: #654b00;
+                            -fx-font-weight: bold;
+                            -fx-font-size: 14px;
+                            -fx-padding: 10 20 10 20;" prefWidth="111.0" text="CHECK">
                <font>
                   <Font name="Lucida Handwriting Italic" size="18.0" />
                </font>
