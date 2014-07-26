@@ -934,7 +934,7 @@
                   <VBox layoutX="557.0" layoutY="203.0" prefHeight="78.0" prefWidth="232.0" />
                </children>
             </Group>
-            <Button fx:id="playAgainButton" layoutX="51.0" layoutY="514.0" mnemonicParsing="false" style="-fx-background-color: linear-gradient(#f0ff35, #a9ff00),                             radial-gradient(center 50% -40%, radius 200%, #b8ee36 45%, #80c800 50%); -fx-background-insets: 0,1,2,3; -fx-background-radius: 3,2,2,2; -fx-padding: 12 30 12 30; -fx-text-fill: black; -fx-font-size: 22px;" text="Play Again" />
+            <Button fx:id="playAgainButton" layoutX="51.0" layoutY="514.0" mnemonicParsing="false" style="-fx-background-color: linear-gradient(#f0ff35, #a9ff00),                             radial-gradient(center 50% -40%, radius 200%, #b8ee36 45%, #80c800 50%); -fx-background-insets: 0,1,2,3; -fx-background-radius: 3,2,2,2; -fx-padding: 12 30 12 30; -fx-text-fill: black; -fx-font-size: 22px;" text="Continue" />
             <Button fx:id="exitGameButton" layoutX="606.0" layoutY="514.0" mnemonicParsing="false" style="-fx-background-color: linear-gradient(#ff5400, #be1d00); -fx-background-insets: 0,1,2,3; -fx-background-radius: 3,2,2,2; -fx-padding: 12 30 12 30; -fx-text-fill: white; -fx-font-size: 22px;" text="Exit Game" />
          </children>
       </AnchorPane>

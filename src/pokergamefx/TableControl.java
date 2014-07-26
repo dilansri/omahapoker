@@ -225,6 +225,12 @@ public class TableControl extends AnchorPane implements Initializable {
                 dealer.getAllInFrom(0);
             }
         });
+        
+        playAgainButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+                
+            }
+        });
     }
     
     private void hidePlayerControls() {
