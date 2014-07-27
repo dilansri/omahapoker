@@ -139,6 +139,8 @@ public class TableControl extends AnchorPane implements Initializable {
     
     private Timeline timelinePlayerActionAnimation;
     
+    private int roundsCount = 0;
+    
     public TableControl(Dealer dealerRef,final PokerGameFX application){
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXMLTable(1).fxml"));
         fxmlLoader.setRoot(this);
@@ -237,9 +239,10 @@ public class TableControl extends AnchorPane implements Initializable {
                 clearTable();
                 adjustDealer();
                 adjustTable();
-                adjustPlayers();
-                changeChipsPositionsAnimations();
-                startGame();
+                if(adjustPlayers()){
+                    changeChipsPositionsAnimations();
+                    startGame();
+                }
             }
         });
     }
@@ -271,22 +274,34 @@ public class TableControl extends AnchorPane implements Initializable {
         table.setHighestPotValue(0);
     }
     
-    private void adjustPlayers(){
-        
+    private boolean adjustPlayers(){
+        int foldCount = 0;
         for(Player player : table.getPlayers()){
+            player.setFolded(false);
             if(player.getPlayerChips() < table.getBigBlind())
             {
                 if(player instanceof HumanPlayer){
-                    player.awardChips(PLAYER_INITIAL_CHIPS);
-                }else
-                    player.awardChips(PLAYER_INITIAL_CHIPS);
-            }
-            
+                    //player.awardChips(PLAYER_INITIAL_CHIPS/2);
+                    return false;
+                }else{
+                    double awardingChips = PLAYER_INITIAL_CHIPS / (2*(roundsCount-1)+2);
+                    if(awardingChips < table.getBigBlind()){
+                        awardingChips = table.getBigBlind();
+                    }
+                    player.awardChips(awardingChips);
+                    
+                    foldCount++;
+                }
+            }            
             player.getPlayerHand().clear();
             player.clearWinningHands();
-            player.setAllIn(false);
-            player.setFolded(false);
+            player.setAllIn(false);            
         }
+        if(foldCount > 4){
+            return false;
+        }
+        
+        return true;
     }
     
     private void changeChipsPositionsAnimations(){
@@ -350,6 +365,7 @@ public class TableControl extends AnchorPane implements Initializable {
         
         task.run();
                 */
+        roundsCount++;
         bindPlayers(table.getPlayers());
         dealer.collectBlinds();
         showPreFlopRoundAnimation();
