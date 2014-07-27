@@ -15,11 +15,11 @@ import com.xfinity.poker.Table;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -50,14 +50,22 @@ public class PokerGameFX extends Application {
         createTable();
         createDealer();
         tableControl = new TableControl(dealer,this);
+        tableControl.setMaxWidth(800);
+        tableControl.setMaxHeight(600);
+        StackPane stackPane = new StackPane();
+        stackPane.getChildren().add(tableControl);
+        StackPane.setAlignment(tableControl, Pos.CENTER);
+        stackPane.setStyle("-fx-background-color:  rgb(244,190,79);");
         
-        Scene scene = new Scene(tableControl);
+        Scene scene = new Scene(stackPane);
         stage.setScene(scene);        
-        //stage.initStyle(StageStyle.UNDECORATED);
+        //stage.initStyle(StageStyle.UTILITY);
         //stage.setFullScreen(true);
+        stage.setResizable(false);
+        stage.setTitle("Omaha Hi/Lo 8 or Better - xFinity");
         //stage.
         stage.show();
-        tableControl.startGame(); 
+        //tableControl.startGame(); 
         
     }
     

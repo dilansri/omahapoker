@@ -17,6 +17,8 @@ public class Dealer implements DealerRules {
     
     private int roundCount;
 
+    
+
     public enum Round {
 
         PRE_FLOP, FLOP, TURN, RIVER
@@ -31,6 +33,10 @@ public class Dealer implements DealerRules {
         currentRound = Round.PRE_FLOP;
         roundCount = 0;
 	cardAnalyser = new CardAnalyser();
+    }
+    
+    public void clear() {
+        cardAnalyser = new CardAnalyser();
     }
     
     public void incrementDealingPlayerOrder(){
@@ -186,7 +192,7 @@ public class Dealer implements DealerRules {
         return possibleActions;
     }
 
-    synchronized public void getCallFrom(int playerPosition) {
+    public void getCallFrom(int playerPosition) {
         Player player = table.getPlayers().get(playerPosition);
         PlayerPot playerPot = table.getTablePot().getPlayerPots().get(playerPosition);
         double playerPotAmount = playerPot.getPlayerContribution();
@@ -198,13 +204,13 @@ public class Dealer implements DealerRules {
         }
     }
 
-    synchronized public void setFlod(int position) {
+    public void setFlod(int position) {
         Player player = table.getPlayers().get(position);
         player.setFolded(true);
 
     }
 
-    synchronized public void getRaiseFrom(int playerPosition) {
+    public void getRaiseFrom(int playerPosition) {
         Player player = table.getPlayers().get(playerPosition);
         PlayerPot playerPot = table.getTablePot().getPlayerPots().get(playerPosition);
         double playerPotAmount = playerPot.getPlayerContribution();
@@ -216,7 +222,7 @@ public class Dealer implements DealerRules {
         }
     }
     
-    synchronized public void getAllInFrom(int playerPosition){
+    public void getAllInFrom(int playerPosition){
         Player player = table.getPlayers().get(playerPosition);
         PlayerPot playerPot = table.getTablePot().getPlayerPots().get(playerPosition);
         double amount = player.takeChips(player.getPlayerChips());
@@ -225,18 +231,46 @@ public class Dealer implements DealerRules {
         player.setAllIn(true);
     }
     
-    public boolean allOtherFolded(int playerPos) {
+    public boolean allOtherFoldedOrAllIn(int playerPos) {
         
         for(int i=playerPos+1;i<playerPos+GAME_PLAYERS;i++){
-            if(!table.getPlayers().get(playerPos%GAME_PLAYERS).isFolded())
+            if(table.getPlayers().get(i%GAME_PLAYERS).isFolded()
+                    || table.getPlayers().get(i%GAME_PLAYERS).isAllIn())
+                continue;
+            else 
                 return false;
         }
         
         return true;
     }
     
+    public boolean allFoldedOrAllIn() {
+        for(int i=0;i<GAME_PLAYERS;i++){
+            if(table.getPlayers().get(i).isFolded()
+                    || table.getPlayers().get(i).isAllIn())
+                continue;
+            else 
+                return false;
+        }
+        
+        return true;
+    }
+    
+    public boolean allFoldedOrAllInExceptOne() {
+        int count = 0;
+        for(int i=0;i<GAME_PLAYERS;i++){
+            if(table.getPlayers().get(i).isFolded()
+                    || table.getPlayers().get(i).isAllIn())
+                continue;
+            else{ 
+                count++;
+            }
+        }
+        return count == 1;
+    }
+    
     public void awardWinners(List<Player> winners) {
-        if(winners == null || winners.size() == 0 )
+        if(winners == null || winners.isEmpty() )
             return;
         
         double tablePotValue = table.getTablePot().getTablePotChips();
@@ -247,6 +281,4 @@ public class Dealer implements DealerRules {
         }        
         table.clearTablePot();
     }
-    
-
 }

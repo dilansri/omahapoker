@@ -33,8 +33,8 @@ public class Player implements PlayerRules {
 		isDealer = false;
 		this.order = order;
                 folded = false;
-                winningCards = new ArrayList<>();
-                winningLowCards = new ArrayList<>();
+                winningCards = null;
+                winningLowCards = null;
 	}
 	/*
 	private List<Chip> createChipsFromMoney(int playerMoney) {
@@ -141,11 +141,13 @@ public class Player implements PlayerRules {
         }
         
         public void clearWinningHands() {
-            winningCards.clear();
-            winningLowCards.clear();
+            if(winningCards != null)
+                winningCards.clear();
+            if(winningLowCards != null)
+                winningLowCards.clear();
             
-            winningCards = new ArrayList<>();
-            winningLowCards = new ArrayList<>();
+            winningCards = null;
+            winningLowCards = null;
         }
         
 	

@@ -43,10 +43,21 @@ class AIAnalyser {
             action = PlayerAction.FOLD;                
         }else if(highValue + rankHandScore < 59 + (roundCountAdjustment*(roundCount-1)*10) && possibleActions.contains(PlayerAction.CALL)){
             action = PlayerAction.CALL;
+        }else if(highValue + rankHandScore < 59 + (roundCountAdjustment*(roundCount-1)*10) && possibleActions.contains(PlayerAction.CHECK)){
+            action = PlayerAction.CHECK;
+        }else if(highValue + rankHandScore < 59 + (roundCountAdjustment*(roundCount-1)*10) && possibleActions.contains(PlayerAction.ALL_IN)){
+            action = PlayerAction.ALL_IN;
         }
         else if (highValue + rankHandScore >= 59 && possibleActions.contains(PlayerAction.RAISE)) {
             action = PlayerAction.RAISE;
-        } else if (possibleActions.contains(PlayerAction.CHECK)) {
+        }else if (highValue + rankHandScore >= 59 && possibleActions.contains(PlayerAction.CALL)) {
+            action = PlayerAction.CALL;
+        }else if (highValue + rankHandScore >= 59 && possibleActions.contains(PlayerAction.CHECK)) {
+            action = PlayerAction.CHECK;
+        }else if (highValue + rankHandScore >= 59 && possibleActions.contains(PlayerAction.ALL_IN)) {
+            action = PlayerAction.ALL_IN;
+        }
+        else if (possibleActions.contains(PlayerAction.CHECK)) {
             action = PlayerAction.CHECK;
         }
             
@@ -85,9 +96,21 @@ class AIAnalyser {
             action = PlayerAction.CHECK;
         }else if(highHandScore < (39+(roundCountAdjustment+((roundCount-1))*15*roundCount)) && possibleActions.contains(PlayerAction.CALL)){
             action = PlayerAction.CALL;
-        }else if(highHandScore < (99+roundCountAdjustment) && possibleActions.contains(PlayerAction.RAISE)){
+        }else if(highHandScore < (39+(roundCountAdjustment+((roundCount-1))*15*roundCount)) && possibleActions.contains(PlayerAction.CHECK)){
+            action = PlayerAction.CHECK;
+        }else if(highHandScore < (39+(roundCountAdjustment+((roundCount-1))*15*roundCount)) && possibleActions.contains(PlayerAction.ALL_IN)){
+            action = PlayerAction.ALL_IN;
+        }
+        else if(highHandScore < (99+roundCountAdjustment) && possibleActions.contains(PlayerAction.RAISE)){
             action = PlayerAction.RAISE;
-        }else if(highHandScore >= 100 && possibleActions.contains(PlayerAction.ALL_IN) ){
+        }else if(highHandScore < (99+roundCountAdjustment) && possibleActions.contains(PlayerAction.CALL)){
+            action = PlayerAction.CALL;
+        }else if(highHandScore < (99+roundCountAdjustment) && possibleActions.contains(PlayerAction.CHECK)){
+            action = PlayerAction.CHECK;
+        }else if(highHandScore < (99+roundCountAdjustment) && possibleActions.contains(PlayerAction.ALL_IN)){
+            action = PlayerAction.ALL_IN;
+        }
+        else if(highHandScore > 99 && possibleActions.contains(PlayerAction.ALL_IN) ){
             action = PlayerAction.ALL_IN;
         }
         
@@ -100,6 +123,11 @@ class AIAnalyser {
             else if((lowHandAdjusted > 4 + lowRoundCountAdjustment) && possibleActions.contains(PlayerAction.CALL))
                 action = PlayerAction.CALL;
             else if((lowHandAdjusted >= 0 ) && possibleActions.contains(PlayerAction.CHECK))
+                action = PlayerAction.CHECK;
+        }
+        
+        if(action == PlayerAction.FOLD){
+            if(possibleActions.contains(PlayerAction.CHECK))
                 action = PlayerAction.CHECK;
         }
         
@@ -123,9 +151,20 @@ class AIAnalyser {
             action = PlayerAction.CHECK;
         }else if(highHandScore < (80+(roundCountAdjustment+((roundCount-1))*20*roundCount)) && possibleActions.contains(PlayerAction.CALL)){
             action = PlayerAction.CALL;
-        }else if(highHandScore < (170+roundCountAdjustment) && possibleActions.contains(PlayerAction.RAISE)){
+        }else if(highHandScore < (80+(roundCountAdjustment+((roundCount-1))*20*roundCount)) && possibleActions.contains(PlayerAction.CHECK)){
+            action = PlayerAction.CHECK;
+        }else if(highHandScore < (80+(roundCountAdjustment+((roundCount-1))*20*roundCount)) && possibleActions.contains(PlayerAction.ALL_IN)){
+            action = PlayerAction.ALL_IN;
+        }
+        else if(highHandScore < (170+roundCountAdjustment) && possibleActions.contains(PlayerAction.RAISE)){
             action = PlayerAction.RAISE;
-        }else if(highHandScore >= 170 && possibleActions.contains(PlayerAction.ALL_IN)){
+        }else if(highHandScore < (170+roundCountAdjustment) && possibleActions.contains(PlayerAction.CALL)){
+            action = PlayerAction.CALL;
+        }else if(highHandScore < (170+roundCountAdjustment) && possibleActions.contains(PlayerAction.CHECK)){
+            action = PlayerAction.CHECK;
+        }else if(highHandScore < (170+roundCountAdjustment) && possibleActions.contains(PlayerAction.ALL_IN)){
+            action = PlayerAction.ALL_IN;
+        }else if(highHandScore > 170 && possibleActions.contains(PlayerAction.ALL_IN)){
             action = PlayerAction.ALL_IN;
         }
         
@@ -140,6 +179,12 @@ class AIAnalyser {
             else if((lowHandAdjusted >= 0 ) && possibleActions.contains(PlayerAction.CHECK))
                 action = PlayerAction.CHECK;
         }
+        
+        if(action == PlayerAction.FOLD){
+            if(possibleActions.contains(PlayerAction.CHECK))
+                action = PlayerAction.CHECK;
+        }
+        
         System.out.println("TURN LOW"+lowHandAdjusted);
         return action;
     }
@@ -154,15 +199,26 @@ class AIAnalyser {
         PlayerAction action = PlayerAction.FOLD;
         if(highHandScore <= 15 +roundCountAdjustment && possibleActions.contains(PlayerAction.CHECK) )
             action = PlayerAction.CHECK;        
-        else if(highHandScore <= 15 +roundCountAdjustment )
+        else if(highHandScore <= 25 +roundCountAdjustment )
             action = PlayerAction.FOLD;
         else if(highHandScore < (65+(roundCountAdjustment+((roundCount-1))*12*roundCount)) && possibleActions.contains(PlayerAction.CHECK)){
             action = PlayerAction.CHECK;
         }else if(highHandScore < (110+(roundCountAdjustment+((roundCount-1))*22*roundCount)) && possibleActions.contains(PlayerAction.CALL)){
             action = PlayerAction.CALL;
-        }else if(highHandScore < (200+roundCountAdjustment) && possibleActions.contains(PlayerAction.RAISE)){
+        }else if(highHandScore < (110+(roundCountAdjustment+((roundCount-1))*22*roundCount)) && possibleActions.contains(PlayerAction.CHECK)){
+            action = PlayerAction.CHECK;
+        }else if(highHandScore < (110+(roundCountAdjustment+((roundCount-1))*22*roundCount)) && possibleActions.contains(PlayerAction.ALL_IN)){
+            action = PlayerAction.ALL_IN;
+        }
+        else if(highHandScore < (200+roundCountAdjustment) && possibleActions.contains(PlayerAction.RAISE)){
             action = PlayerAction.RAISE;
-        }else if(highHandScore >= 201 && possibleActions.contains(PlayerAction.ALL_IN)){
+        }else if(highHandScore < (200+roundCountAdjustment) && possibleActions.contains(PlayerAction.CALL)){
+            action = PlayerAction.CALL;
+        }else if(highHandScore < (200+roundCountAdjustment) && possibleActions.contains(PlayerAction.CHECK)){
+            action = PlayerAction.CHECK;
+        }else if(highHandScore < (200+roundCountAdjustment) && possibleActions.contains(PlayerAction.ALL_IN)){
+            action = PlayerAction.ALL_IN;
+        }else if(highHandScore > 200 && possibleActions.contains(PlayerAction.ALL_IN)){
             action = PlayerAction.ALL_IN;
         }
         
@@ -177,6 +233,12 @@ class AIAnalyser {
             else if((lowHandAdjusted >= 0 ) && possibleActions.contains(PlayerAction.CHECK))
                 action = PlayerAction.CHECK;
         }
+        
+        if(action == PlayerAction.FOLD){
+            if(possibleActions.contains(PlayerAction.CHECK))
+                action = PlayerAction.CHECK;
+        }
+        
         System.out.println("RIVER LOW"+lowHandAdjusted);
         return action;
     }

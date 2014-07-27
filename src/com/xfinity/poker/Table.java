@@ -128,4 +128,16 @@ public class Table implements TableRules {
         smallBlind = bigBlind / 2;
     }
 
+    public boolean isEveryoneAllIn() {
+        
+        for(Player player:playerList){
+            if(player.isAllIn() )
+                continue;
+            else
+                return false;
+        }
+        
+        return true;
+    }
+
 }
