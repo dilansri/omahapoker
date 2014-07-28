@@ -116,7 +116,7 @@ class AIAnalyser {
         
         int lowHandAdjusted = LOW_HAND_MAX_VALUE - lowHandScore;
         int lowRoundCountAdjustment = (roundCount-1)*2+1;
-        if(action == PlayerAction.FOLD)
+        if(action == PlayerAction.FOLD || action == PlayerAction.CHECK)
         {
             if((lowHandAdjusted > 9 + lowRoundCountAdjustment) && possibleActions.contains(PlayerAction.RAISE))
                 action = PlayerAction.RAISE;
@@ -147,30 +147,30 @@ class AIAnalyser {
             action = PlayerAction.CHECK;        
         else if(highHandScore <= 10 +roundCountAdjustment )
             action = PlayerAction.FOLD;
-        else if(highHandScore < (40+(roundCountAdjustment+((roundCount-1))*10*roundCount)) && possibleActions.contains(PlayerAction.CHECK)){
+        else if(highHandScore < (25+(roundCountAdjustment+((roundCount-1))*10*roundCount)) && possibleActions.contains(PlayerAction.CHECK)){
             action = PlayerAction.CHECK;
-        }else if(highHandScore < (80+(roundCountAdjustment+((roundCount-1))*20*roundCount)) && possibleActions.contains(PlayerAction.CALL)){
+        }else if(highHandScore < (50+(roundCountAdjustment+((roundCount-1))*20*roundCount)) && possibleActions.contains(PlayerAction.CALL)){
             action = PlayerAction.CALL;
-        }else if(highHandScore < (80+(roundCountAdjustment+((roundCount-1))*20*roundCount)) && possibleActions.contains(PlayerAction.CHECK)){
+        }else if(highHandScore < (50+(roundCountAdjustment+((roundCount-1))*20*roundCount)) && possibleActions.contains(PlayerAction.CHECK)){
             action = PlayerAction.CHECK;
-        }else if(highHandScore < (80+(roundCountAdjustment+((roundCount-1))*20*roundCount)) && possibleActions.contains(PlayerAction.ALL_IN)){
+        }else if(highHandScore < (50+(roundCountAdjustment+((roundCount-1))*20*roundCount)) && possibleActions.contains(PlayerAction.ALL_IN)){
             action = PlayerAction.ALL_IN;
         }
-        else if(highHandScore < (170+roundCountAdjustment) && possibleActions.contains(PlayerAction.RAISE)){
+        else if(highHandScore < (150+roundCountAdjustment) && possibleActions.contains(PlayerAction.RAISE)){
             action = PlayerAction.RAISE;
-        }else if(highHandScore < (170+roundCountAdjustment) && possibleActions.contains(PlayerAction.CALL)){
+        }else if(highHandScore < (150+roundCountAdjustment) && possibleActions.contains(PlayerAction.CALL)){
             action = PlayerAction.CALL;
-        }else if(highHandScore < (170+roundCountAdjustment) && possibleActions.contains(PlayerAction.CHECK)){
+        }else if(highHandScore < (150+roundCountAdjustment) && possibleActions.contains(PlayerAction.CHECK)){
             action = PlayerAction.CHECK;
-        }else if(highHandScore < (170+roundCountAdjustment) && possibleActions.contains(PlayerAction.ALL_IN)){
+        }else if(highHandScore < (150+roundCountAdjustment) && possibleActions.contains(PlayerAction.ALL_IN)){
             action = PlayerAction.ALL_IN;
-        }else if(highHandScore > 170 && possibleActions.contains(PlayerAction.ALL_IN)){
+        }else if(highHandScore > 150 && possibleActions.contains(PlayerAction.ALL_IN)){
             action = PlayerAction.ALL_IN;
         }
         
         int lowHandAdjusted = LOW_HAND_MAX_VALUE - lowHandScore;
         int lowRoundCountAdjustment = (roundCount-1)*2+1;
-        if(action == PlayerAction.FOLD)
+        if(action == PlayerAction.FOLD || action == PlayerAction.CHECK)
         {
             if((lowHandAdjusted > 9 + lowRoundCountAdjustment) && possibleActions.contains(PlayerAction.RAISE))
                 action = PlayerAction.RAISE;
@@ -201,13 +201,13 @@ class AIAnalyser {
             action = PlayerAction.CHECK;        
         else if(highHandScore <= 25 +roundCountAdjustment )
             action = PlayerAction.FOLD;
-        else if(highHandScore < (65+(roundCountAdjustment+((roundCount-1))*12*roundCount)) && possibleActions.contains(PlayerAction.CHECK)){
+        else if(highHandScore < (35+(roundCountAdjustment+((roundCount-1))*12*roundCount)) && possibleActions.contains(PlayerAction.CHECK)){
             action = PlayerAction.CHECK;
-        }else if(highHandScore < (110+(roundCountAdjustment+((roundCount-1))*22*roundCount)) && possibleActions.contains(PlayerAction.CALL)){
+        }else if(highHandScore < (80+(roundCountAdjustment+((roundCount-1))*22*roundCount)) && possibleActions.contains(PlayerAction.CALL)){
             action = PlayerAction.CALL;
-        }else if(highHandScore < (110+(roundCountAdjustment+((roundCount-1))*22*roundCount)) && possibleActions.contains(PlayerAction.CHECK)){
+        }else if(highHandScore < (80+(roundCountAdjustment+((roundCount-1))*22*roundCount)) && possibleActions.contains(PlayerAction.CHECK)){
             action = PlayerAction.CHECK;
-        }else if(highHandScore < (110+(roundCountAdjustment+((roundCount-1))*22*roundCount)) && possibleActions.contains(PlayerAction.ALL_IN)){
+        }else if(highHandScore < (80+(roundCountAdjustment+((roundCount-1))*22*roundCount)) && possibleActions.contains(PlayerAction.ALL_IN)){
             action = PlayerAction.ALL_IN;
         }
         else if(highHandScore < (200+roundCountAdjustment) && possibleActions.contains(PlayerAction.RAISE)){
@@ -224,7 +224,7 @@ class AIAnalyser {
         
         int lowHandAdjusted = LOW_HAND_MAX_VALUE - lowHandScore;
         int lowRoundCountAdjustment = (roundCount-1)*2+1;
-        if(action == PlayerAction.FOLD)
+        if(action == PlayerAction.FOLD || action == PlayerAction.CHECK)
         {
             if((lowHandAdjusted > 9 + lowRoundCountAdjustment) && possibleActions.contains(PlayerAction.RAISE))
                 action = PlayerAction.RAISE;

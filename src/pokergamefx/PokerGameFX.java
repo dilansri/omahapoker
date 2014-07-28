@@ -18,6 +18,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
+import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
@@ -58,9 +59,10 @@ public class PokerGameFX extends Application {
         stackPane.setStyle("-fx-background-color:  rgb(244,190,79);");
         
         Scene scene = new Scene(stackPane);
+        scene.setCamera(new PerspectiveCamera());
         stage.setScene(scene);        
         //stage.initStyle(StageStyle.UTILITY);
-        //stage.setFullScreen(true);
+        stage.setFullScreen(true);
         stage.setResizable(false);
         stage.setTitle("Omaha Hi/Lo 8 or Better - xFinity");
         //stage.

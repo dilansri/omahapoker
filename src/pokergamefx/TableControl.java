@@ -42,6 +42,7 @@ import javafx.animation.RotateTransition;
 import javafx.animation.SequentialTransition;
 import javafx.animation.Timeline;
 import javafx.animation.Transition;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -252,7 +253,15 @@ public class TableControl extends AnchorPane implements Initializable {
                 if(adjustPlayers()){
                     changeChipsPositionsAnimations();
                     startGame();
+                }else{
+                    //showGameOver();
                 }
+            }
+        });
+        
+        exitGameButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+                Platform.exit();
             }
         });
     }

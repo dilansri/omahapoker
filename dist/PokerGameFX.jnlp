@@ -3,7 +3,7 @@
   <information>
     <title>PokerGameFX</title>
     <vendor>Administrator</vendor>
-    <description>null</description>
+    <description>Sample JavaFX 2.0 application.</description>
     <offline-allowed/>
   </information>
   <resources>
@@ -11,14 +11,11 @@
   </resources>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="PokerGameFX.jar" size="398066" download="eager" />
+    <jar href="PokerGameFX.jar" size="398902" download="eager" />
   </resources>
-<security>
-  <all-permissions/>
-</security>
   <applet-desc  width="800" height="600" main-class="com.javafx.main.NoJavaFXFallback"  name="PokerGameFX" >
     <param name="requiredFXVersion" value="2.2+"/>
   </applet-desc>
   <jfx:javafx-desc  width="800" height="600" main-class="pokergamefx.PokerGameFX"  name="PokerGameFX" />
-  <update check="always"/>
+  <update check="background"/>
 </jnlp>
