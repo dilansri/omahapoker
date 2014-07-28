@@ -12,16 +12,16 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<fx:root fx:id="tableAnchor" prefHeight="600" prefWidth="800" style="-fx-background-color: rgb(244,190,79);" type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root fx:id="tableAnchor" prefHeight="600" prefWidth="800" style="-fx-background-color: #eaa915;" type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <Ellipse fill="#046101" layoutX="396.0" layoutY="308.0" radiusX="359.0" radiusY="209.0" stroke="#612a0e" strokeType="INSIDE" strokeWidth="10.0" />
-        <Circle fill="#f4be4f" layoutX="400.0" layoutY="517.0" radius="79.0" stroke="#f4be4f" strokeType="INSIDE" />
+        <Circle fill="#e8a515" layoutX="400.0" layoutY="517.0" radius="79.0" stroke="#e8a515" strokeType="INSIDE" />
         <Circle fill="#3ba40e" layoutX="400.0" layoutY="102.0" radius="32.0" stroke="WHITE" strokeType="INSIDE" />
         <Circle fill="#3ba40e" layoutX="154.0" layoutY="159.0" radius="32.0" stroke="WHITE" strokeType="INSIDE" />
         <Circle fill="#3ba40e" layoutX="643.0" layoutY="159.0" radius="32.0" stroke="WHITE" strokeType="INSIDE" />
         <Circle fill="#3ba40e" layoutX="154.0" layoutY="459.0" radius="32.0" stroke="WHITE" strokeType="INSIDE" />
         <Circle fill="#3ba40e" layoutX="643.0" layoutY="459.0" radius="32.0" stroke="WHITE" strokeType="INSIDE" />
-        <Circle fill="#116db8" layoutX="400.0" layoutY="492.0" radius="32.0" stroke="#161749" strokeType="INSIDE" />
+        <Circle fill="#1d2985" layoutX="400.0" layoutY="492.0" radius="32.0" stroke="#161749" strokeType="INSIDE" />
         <Ellipse fill="#e4e4e4" layoutX="127.0" layoutY="106.0" radiusX="5.0" radiusY="13.0" stroke="#ffffff00" strokeType="INSIDE" />
         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e4e4e4" height="25.0" layoutX="46.0" layoutY="85.0" stroke="#ffffff00" strokeType="INSIDE" width="100.0" />
         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e4e4e4" height="25.0" layoutX="46.0" layoutY="506.0" stroke="#ffffff00" strokeType="INSIDE" width="100.0" />
@@ -70,7 +70,7 @@
         <HBox fx:id="playerCards2" layoutX="312.0" layoutY="150.0" prefHeight="58.0" prefWidth="177.0" />
         <HBox fx:id="playerCards3" layoutX="503.0" layoutY="194.0" prefHeight="58.0" prefWidth="177.0" />
         <HBox fx:id="playerCards4" layoutX="503.0" layoutY="365.0" prefHeight="58.0" prefWidth="177.0" />
-        <HBox fx:id="cardDeck" layoutX="354.0" layoutY="530.0" prefHeight="58.0" prefWidth="69.0" />
+        <HBox fx:id="cardDeck" layoutX="325.0" layoutY="506.0" prefHeight="58.0" prefWidth="69.0" />
         <Group fx:id="bigBlindChip" layoutX="345.0" layoutY="-70.0">
             <children>
                 <Circle layoutX="100.0" layoutY="200.0" radius="15.0" stroke="#5a4505" strokeType="INSIDE">
@@ -482,7 +482,7 @@
       </AnchorPane>
       <AnchorPane fx:id="startScreen" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0">
          <children>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f4be46" height="600.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="800.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#eaa915" height="600.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="800.0" />
             <ImageView fx:id="playNowChip" fitHeight="144.0" fitWidth="149.0" layoutX="562.0" layoutY="269.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@playnow_chip.png" />

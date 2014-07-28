@@ -13,13 +13,13 @@ import com.xfinity.poker.Dealer;
 import com.xfinity.poker.Dealer.Round;
 import static com.xfinity.poker.DealerRules.PLAYER_HAND_SIZE;
 import static com.xfinity.poker.GameRules.GAME_PLAYERS;
+import static com.xfinity.poker.GameRules.PLAYER_REAWARD_FACTOR;
 import static com.xfinity.poker.GameRules.PLAYER_TIME_OUT_SECONDS;
 import com.xfinity.poker.HumanPlayer;
 import com.xfinity.poker.Player;
 import com.xfinity.poker.Player.PlayerAction;
 import com.xfinity.poker.PlayerBestHighHand;
 import com.xfinity.poker.PlayerBestLowHand;
-import static com.xfinity.poker.PlayerRules.PLAYER_INITIAL_CHIPS;
 import com.xfinity.poker.Table;
 import static com.xfinity.poker.TableRules.NUMBER_OF_FLOP_CARDS;
 import static com.xfinity.poker.TableRules.NUMBER_OF_RIVER_CARDS;
@@ -338,10 +338,7 @@ public class TableControl extends AnchorPane implements Initializable {
                     //player.awardChips(PLAYER_INITIAL_CHIPS/2);
                     return false;
                 }else{
-                    double awardingChips = PLAYER_INITIAL_CHIPS / (2*(roundsCount-1)+2);
-                    if(awardingChips < table.getBigBlind()){
-                        awardingChips = table.getBigBlind();
-                    }
+                    double awardingChips = table.getBigBlind() * PLAYER_REAWARD_FACTOR;                    
                     player.awardChips(awardingChips);
                     
                     foldCount++;

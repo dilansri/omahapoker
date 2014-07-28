@@ -56,7 +56,7 @@ public class PokerGameFX extends Application {
         StackPane stackPane = new StackPane();
         stackPane.getChildren().add(tableControl);
         StackPane.setAlignment(tableControl, Pos.CENTER);
-        stackPane.setStyle("-fx-background-color:  rgb(244,190,79);");
+        stackPane.setStyle("-fx-background-color: #eaa915;");
         
         Scene scene = new Scene(stackPane);
         scene.setCamera(new PerspectiveCamera());
