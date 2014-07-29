@@ -53,6 +53,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -132,7 +133,16 @@ public class TableControl extends AnchorPane implements Initializable {
     private ImageView playNowChip;
     
     @FXML
+    private Text gameNameMain,howToPlayText;
+    
+    @FXML
     private AnchorPane startScreen;
+    
+    @FXML
+    private AnchorPane tutorialAnchorPane;
+    
+    @FXML
+    private Button tutorialBackButton;
     
     
     private List<HBox> playerCardsList;
@@ -162,17 +172,46 @@ public class TableControl extends AnchorPane implements Initializable {
             throw new RuntimeException(exception);
         }
         
-        setUpPlayNowChipAnimation();
+        setUpWelcomeScreen();
         
+        setUpPlayerActions();
         
+        setUpWinnerScreenActions();
         
+        initializeTableControls();      
+
+    }
+    
+    private void setUpWelcomeScreen(){
+        setUpPlayNowChipAnimation();        
+        welcomeScreenTextAnimations();
+        
+        howToPlayText.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override public void handle(MouseEvent e) {
+                tutorialAnchorPane.setVisible(true);
+                startScreen.setVisible(false);
+            }   
+        });
+        
+        tutorialBackButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+                tutorialAnchorPane.setVisible(false);
+                startScreen.setVisible(true);
+            }
+        });
+    }
+    
+    private void initializeTableControls(){
         playerCardsList = new ArrayList<HBox>();        
         playerCardsList.add(singlePlayerCards);
         playerCardsList.add(playerCards1);
         playerCardsList.add(playerCards2);
         playerCardsList.add(playerCards3);
         playerCardsList.add(playerCards4);
-        playerSelectedAction = PlayerAction.FOLD;        
+        playerSelectedAction = PlayerAction.FOLD;  
+    }
+    
+    private void setUpPlayerActions(){
         callButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
                 hidePlayerControls();
@@ -241,11 +280,14 @@ public class TableControl extends AnchorPane implements Initializable {
                 dealer.getAllInFrom(0);
             }
         });
-        
+    }
+    
+    private void setUpWinnerScreenActions(){
         playAgainButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
                 winnersAnchorPane.setVisible(false);
                 winnersAnchorPane.setLayoutY(winnersAnchorPane.getLayoutY()-10);
+                lowWinnings.setText("$ 0");
                 resetWinners();
                 clearTable();
                 adjustDealer();
@@ -266,10 +308,34 @@ public class TableControl extends AnchorPane implements Initializable {
         });
     }
     
+    private void welcomeScreenTextAnimations(){
+        KeyValue valueFill = new KeyValue(gameNameMain.fillProperty(), Paint.valueOf("86060f"), Interpolator.EASE_OUT);
+        KeyFrame keyFrame = new KeyFrame(Duration.millis(800), valueFill);
+        final Timeline timeline = new Timeline();
+        timeline.setDelay(Duration.millis(300));
+        timeline.setAutoReverse(true);
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.getKeyFrames().add(keyFrame);
+        timeline.play();
+        
+        final RotateTransition rotateChip = new RotateTransition(Duration.millis(1000), playNowChip);
+        rotateChip.setByAngle(720f);
+        rotateChip.setDelay(Duration.millis(2500));
+        rotateChip.setAxis(Rotate.Y_AXIS);
+        rotateChip.setCycleCount(2);
+        rotateChip.play();
+        rotateChip.setOnFinished(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                rotateChip.play();
+            }    
+        });
+    }
+    
     private void setUpPlayNowChipAnimation(){
         final RotateTransition rotateChip = new RotateTransition(Duration.millis(1000), playNowChip);
         rotateChip.setByAngle(720f);
-        rotateChip.setDelay(Duration.millis(300));
+        rotateChip.setDelay(Duration.millis(3500));
         rotateChip.setAxis(Rotate.Y_AXIS);
         rotateChip.setCycleCount(2);
         
@@ -285,13 +351,7 @@ public class TableControl extends AnchorPane implements Initializable {
                 startScreen.setVisible(false);
                 startGame();
             }    
-        });
-        
-        playNowChip.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override public void handle(MouseEvent e) {
-                rotateChip.play();
-            }   
-        });
+        });        
         
         playNowChip.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override public void handle(MouseEvent e) {
@@ -346,7 +406,8 @@ public class TableControl extends AnchorPane implements Initializable {
             }            
             player.getPlayerHand().clear();
             player.clearWinningHands();
-            player.setAllIn(false);            
+            player.setAllIn(false); 
+            player.setCalledForAllIn(false);
         }
         if(foldCount > 4){
             return false;
@@ -399,43 +460,14 @@ public class TableControl extends AnchorPane implements Initializable {
         singlePlayerMessageText.setText(playerSelectedAction.toString());
     }
     
-    public void startGame(){
-        /*
-        final Task task = new Task() {
-            @Override
-            protected Object call() {
-                bindPlayers(table.getPlayers());
-                dealer.collectBlinds();
-                showPreFlopRoundAnimation();
-                int dealingOrder = dealer.getDealingPlayerOrder();
-                dealer.dealToPlayers();
-                showDealingToPlayerAnimation(dealingOrder);
-                return true;
-            }
-        };
-        
-        task.run();
-                */
+    public void startGame(){        
         roundsCount++;
         bindPlayers(table.getPlayers());
         dealer.collectBlinds();
         showPreFlopRoundAnimation();
         int dealingOrder = dealer.getDealingPlayerOrder();
         dealer.dealToPlayers();
-        showDealingToPlayerAnimation(dealingOrder);
-        
-        /*
-        playerTimeIndicatior.progressProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> ov, Number oldVal, Number newVal) {
-                    if (newVal.doubleValue() >= 1.0) {
-                        Text doneText = (Text) playerTimeIndicatior.lookup(".percentage");
-                        doneText.setText("Time Out");
-                    }
-            }
-        });
-        */        
-                
+        showDealingToPlayerAnimation(dealingOrder);    
         
     }
 
@@ -711,7 +743,7 @@ public class TableControl extends AnchorPane implements Initializable {
     }
     
     private void playAudio(String sourceFile){
-        String source = new File(sourceFile).toURI().toString();
+        String source = new File("audio/"+sourceFile).toURI().toString();
         Media media = new Media(source);
         MediaPlayer mediaPlayer = new MediaPlayer(media);
         mediaPlayer.setAutoPlay(true);
@@ -819,18 +851,23 @@ public class TableControl extends AnchorPane implements Initializable {
             
         }
         
-        SequentialTransition seqTransition = new SequentialTransition();
-        seqTransition.getChildren().addAll(bettingTransitionsBeforePlayerChoice);
-        seqTransition.setOnFinished(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent event) {
-                showPlayerTurnAnimation(bettingTransitionsAfterPlayerChoice);
-                //application.getSinglePlayerChoice();              
-            }
+        if(bettingTransitionsBeforePlayerChoice.isEmpty()){
+            showPlayerTurnAnimation(bettingTransitionsAfterPlayerChoice);
             
-        });
-        seqTransition.play();       
+        }else{        
+            SequentialTransition seqTransition = new SequentialTransition();
+            seqTransition.getChildren().addAll(bettingTransitionsBeforePlayerChoice);
+            seqTransition.setOnFinished(new EventHandler<ActionEvent>() {
+
+                @Override
+                public void handle(ActionEvent event) {
+                    showPlayerTurnAnimation(bettingTransitionsAfterPlayerChoice);
+                    //application.getSinglePlayerChoice();              
+                }
+
+            });
+            seqTransition.play();    
+        }
         
         
         
@@ -840,13 +877,8 @@ public class TableControl extends AnchorPane implements Initializable {
         
         if(table.getPlayers().get(0).isFolded() ||table.getPlayers().get(0).isAllIn()){
              showAfterPlayerTransitions(afterTransitions);
-        }else{
+        }else{            
             
-            if(dealer.allOtherFoldedOrAllIn(0))
-            {   
-                //startShowDownRound();
-                return;
-            }
             roundMessageText.setText("Your Turn");
             roundMessageText.setOpacity(0);
             roundMessageBox.setOpacity(0);
@@ -945,7 +977,7 @@ public class TableControl extends AnchorPane implements Initializable {
         
         if(afterTransitions.isEmpty()){
                 
-                if(table.isSamePotValues() || dealer.allFoldedOrAllInExceptOne() || dealer.allFoldedOrAllIn()){
+                if(table.isSamePotValues() || dealer.allFoldedOrAllIn() || dealer.allFoldedOrAllInExceptOne()){
                     if(dealer.getRound() == Round.PRE_FLOP)
                         startFlopRound();
                     else if(dealer.getRound() == Round.FLOP)
@@ -969,7 +1001,7 @@ public class TableControl extends AnchorPane implements Initializable {
 
                 @Override
                 public void handle(ActionEvent event) {                
-                    if (table.isSamePotValues() || dealer.allFoldedOrAllInExceptOne() || dealer.allFoldedOrAllIn()) {
+                    if (table.isSamePotValues() || dealer.allFoldedOrAllIn() || dealer.allFoldedOrAllInExceptOne()) {
                         if (dealer.getRound() == Round.PRE_FLOP) {
                             startFlopRound();
                         } else if (dealer.getRound() == Round.FLOP) {
@@ -1058,6 +1090,24 @@ public class TableControl extends AnchorPane implements Initializable {
         Player player = table.getPlayers().get(playerPos);
         PlayerAction action = ((ComputerPlayer) player).getAction(dealer.getPlayerPossibleActions(playerPos),table.getCommunityCards(), dealer.getRound(), dealer.getRoundCount()); //for now
         
+        if(player.isCalledForAllIn() && dealer.allFoldedOrAllInExceptOne())
+            return;
+        
+                
+        if (action == PlayerAction.CALL) {
+            dealer.getCallFrom(playerPos);
+        } else if (action == PlayerAction.FOLD) {
+            dealer.setFlod(playerPos);
+        } else if(action == PlayerAction.RAISE){
+            dealer.getRaiseFrom(playerPos); 
+        } else if(action == PlayerAction.ALL_IN){
+            dealer.getAllInFrom(playerPos);
+        }else if(action == PlayerAction.CHECK){            
+            
+        }
+        if(action == PlayerAction.CALL && player.isAllIn())
+            action = PlayerAction.ALL_IN;
+        
         
         //Random rand = new Random();
         KeyValue valueText = new KeyValue(finalMessageText.textProperty(), action.toString());
@@ -1068,20 +1118,7 @@ public class TableControl extends AnchorPane implements Initializable {
         timelineText.play();
         
         playAudio(action.toString().toLowerCase()+".mp3");        
-        if (action == PlayerAction.CALL) {
-            dealer.getCallFrom(playerPos);
-        } else if (action == PlayerAction.FOLD) {
-            dealer.setFlod(playerPos);
-        } else if(action == PlayerAction.RAISE){
-            dealer.getRaiseFrom(playerPos);            
-            
-                       
-        } else if(action == PlayerAction.ALL_IN){
-            dealer.getAllInFrom(playerPos);
-        }else if(action == PlayerAction.CHECK){
-            
-            
-        }
+        
         
         
 
@@ -1232,7 +1269,14 @@ public class TableControl extends AnchorPane implements Initializable {
             public void handle(ActionEvent event) {    
                 dealer.setRound(Round.FLOP);
                 dealer.setRoundCount(0);
-                startBettingRound();                 
+                if(dealer.allFoldedOrAllIn() || dealer.allFoldedOrAllInExceptOne())
+                {
+                    dealer.setRound(Round.TURN);
+                    dealer.setRoundCount(0);
+                    startTurnRound();
+                }
+                else
+                    startBettingRound();                 
             }              
             
         });
@@ -1312,7 +1356,12 @@ public class TableControl extends AnchorPane implements Initializable {
             public void handle(ActionEvent event) {    
                 dealer.setRound(Round.TURN);
                 dealer.setRoundCount(0);
-                startBettingRound();                 
+                if(dealer.allFoldedOrAllIn() || dealer.allFoldedOrAllInExceptOne()){
+                    dealer.setRound(Round.RIVER);
+                    dealer.setRoundCount(0);
+                    startRiverRound();
+                }else
+                    startBettingRound();                 
             }              
             
         });
@@ -1392,7 +1441,10 @@ public class TableControl extends AnchorPane implements Initializable {
             public void handle(ActionEvent event) {    
                 dealer.setRound(Round.RIVER);
                 dealer.setRoundCount(0);
-                startBettingRound();                 
+                if(dealer.allFoldedOrAllIn() || dealer.allFoldedOrAllInExceptOne()){
+                    startShowDownRound();
+                }else
+                    startBettingRound();                 
             }              
             
         });
@@ -1680,7 +1732,8 @@ public class TableControl extends AnchorPane implements Initializable {
         
        lowWinnngCards.getChildren().clear();
         if(application.getLowHandWinner() == null){
-            lowWinnerName.setText("NO WINNER :(");            
+            lowWinnerName.setText("NO WINNER :(");  
+            lowWinnings.setText("$ 0");
         }else {
             Player lowWinner = application.getLowHandWinner();
             winners.add(lowWinner);

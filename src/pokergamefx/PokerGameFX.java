@@ -57,7 +57,6 @@ public class PokerGameFX extends Application {
         stackPane.getChildren().add(tableControl);
         StackPane.setAlignment(tableControl, Pos.CENTER);
         stackPane.setStyle("-fx-background-color: #eaa915;");
-        
         Scene scene = new Scene(stackPane);
         scene.setCamera(new PerspectiveCamera());
         stage.setScene(scene);        
@@ -70,6 +69,8 @@ public class PokerGameFX extends Application {
         //tableControl.startGame(); 
         
     }
+    
+    
     
     public void setHighHandWinner(Player player){
         highHandWinner = player;
@@ -119,11 +120,15 @@ public class PokerGameFX extends Application {
 
     private void createPlayers() {
         singlePlayer = new HumanPlayer("Single Player",0);
-		singlePlayer.setDealer(true);
+	singlePlayer.setDealer(true);
 		
 		computerPlayers = new ArrayList<Player>();
-		for(int i=1;i<GAME_PLAYERS;i++)
-			computerPlayers.add(new ComputerPlayer("CP"+i,i));
+		for(int i=1;i<GAME_PLAYERS;i++){
+                        Player player = new ComputerPlayer("CP"+i,i);
+                        if(i == 1 || i == 4) player.awardChips(400);
+			computerPlayers.add(player);
+                        
+                }
     }
 
     private void createTable() {

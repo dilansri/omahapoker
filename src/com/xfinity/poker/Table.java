@@ -139,5 +139,14 @@ public class Table implements TableRules {
         
         return true;
     }
+    
+    public boolean ifAnyoneAllIn(){
+        for(Player player: getPlayers()){
+            if(player.isAllIn())
+                return true;
+        }
+        
+        return false;
+    }
 
 }

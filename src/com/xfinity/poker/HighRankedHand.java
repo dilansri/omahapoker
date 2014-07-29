@@ -47,7 +47,7 @@ public class HighRankedHand {
     }
     
     public static Card straight(List<Card> cardsList){
-        if(cardsList == null || cardsList.isEmpty() ||cardsList.size() != 5 )
+        if(cardsList == null || cardsList.isEmpty() )
             return null;                
         Collections.sort(cardsList);        
         int checkValue = cardsList.get(0).getValue().getCardValue();

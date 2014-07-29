@@ -121,8 +121,8 @@ public class CardControl implements Initializable {
         suit.setFill(Paint.valueOf("116db8"));
         suit.setLayoutX(suit.getLayoutX());
         suit.setLayoutY(suit.getLayoutY()-5);
-        suit.setScaleX(1);
-        suit.setScaleY(1);
+        suit.setScaleX(0.7);
+        suit.setScaleY(0.7);
         faceDown = true;
     }
     

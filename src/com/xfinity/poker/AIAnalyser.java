@@ -333,6 +333,14 @@ class AIAnalyser {
                             //System.out.println("FOUR OF KIND");
                         }
                         
+                        if(HighRankedHand.straight(analyseCards) != null){
+                            highHandScore += 8;
+                        }
+                        
+                        if(HighRankedHand.flush(analyseCards) != null){
+                            highHandScore += 9;
+                        }
+                        
 
                         
                     }
@@ -346,6 +354,14 @@ class AIAnalyser {
                     if (threeOfKind != null && !threeOfKind.isEmpty()) {
                         highHandScore += 15;                        
                     }
+                    
+                    if(HighRankedHand.straight(analyseCards) != null){
+                            highHandScore += 5;
+                    }
+                    
+                    if(HighRankedHand.flush(analyseCards) != null){
+                            highHandScore += 6;
+                        }
                     
                 }
             }

@@ -16,13 +16,15 @@ public class Player implements PlayerRules {
 	private boolean isDealer;	
 	private boolean allIn;	
         private boolean folded;
+        private boolean calledForAllIn;
         
         private String winningHandType;
         
         private List<Card> winningCards;
         
         private List<Card> winningLowCards;
-        
+
+            
         public enum PlayerAction{CALL,RAISE,CHECK,FOLD,ALL_IN};	
 	
 	public Player(String name,int order){
@@ -149,6 +151,15 @@ public class Player implements PlayerRules {
             winningCards = null;
             winningLowCards = null;
         }
+        
+        public boolean isCalledForAllIn(){
+            return calledForAllIn;
+        }
+        
+        public void setCalledForAllIn(boolean value){
+            calledForAllIn = value;
+        }
+       
         
 	
 }

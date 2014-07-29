@@ -488,7 +488,7 @@
                   <Image url="@playnow_chip.png" />
                </image>
             </ImageView>
-            <Text layoutX="126.0" layoutY="337.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Omaha Hi Lo">
+            <Text fx:id="gameNameMain" layoutX="126.0" layoutY="337.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Omaha Hi Lo">
                <font>
                   <Font name="Comic Sans MS Bold" size="65.0" />
                </font>
@@ -498,11 +498,39 @@
                   <Font name="Comic Sans MS" size="43.0" />
                </font>
             </Text>
-            <ImageView fitHeight="250.0" fitWidth="264.0" layoutX="197.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="welcomeCardImage" fitHeight="250.0" fitWidth="264.0" layoutX="197.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@poker_hand.png" />
                </image>
+               <effect>
+                  <BoxBlur height="0.0" width="0.0" />
+               </effect>
             </ImageView>
+            <Text fx:id="howToPlayText" fill="WHITE" layoutX="223.0" layoutY="467.0" strokeType="OUTSIDE" strokeWidth="0.0" text="How To Play" textAlignment="CENTER" wrappingWidth="220.0">
+               <font>
+                  <Font name="Comic Sans MS" size="28.0" />
+               </font>
+            </Text>
+         </children>
+      </AnchorPane>
+      <AnchorPane id="AnchorPane" fx:id="tutorialAnchorPane" prefHeight="600" prefWidth="800" style="-fx-background-color: #eaa915;" visible="false">
+         <children>
+            <TextArea editable="false" layoutX="82.0" layoutY="50.0" prefHeight="492.0" prefWidth="656.0" style="-fx-border-radius: 10px;" text="&#10;There are only five players playing and there is a separate&#10;dealer to deal cards to the players. Before starting a round &#10;blinds will be collected by the dealer. Each player receives &#10;four cards from the dealer at the beginning of the game.&#10;&#10;And then, the table is opened for the first betting round. &#10;Players are allowed to call, fold, or raise their pot’s value. &#10;Dealer puts “Pre-Flop” to the table and another round start. &#10;After that dealer will put “flop, turn and, river” cards &#10;accordingly on table face up, where after putting each card &#10;a betting round will follow.&#10;&#10;Finally from the remaining players dealer will find &#10;the high hand winner by matching two cards from &#10;the player hand and three cards from the table. &#10;&#10;Then dealer will find the low hand winner&#10;(from 8 or lower cards). &#10;If there is low hand winner the table pot is divided between &#10;the high hand winner and low hand winner. &#10;&#10;If there is no low hand winner,&#10;the high hand winner gets it all." wrapText="true">
+               <font>
+                  <Font name="Georgia Bold" size="16.0" />
+               </font>
+            </TextArea>
+            <Button fx:id="tutorialBackButton" layoutX="576.0" layoutY="550.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="161.0" style="-fx-background-color:                                 #000000,                                 linear-gradient(#7ebcea, #2f4b8f),                                 linear-gradient(#426ab7, #263e75),                                 linear-gradient(#395cab, #223768);                             -fx-background-insets: 0,1,2,3;                             -fx-background-radius: 3,2,2,2;                             -fx-padding: 12 30 12 30;                             -fx-text-fill: white;                             -fx-font-size: 16px;" text="Back">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Button>
+            <Rectangle arcHeight="50.0" arcWidth="10.0" fill="#973a3a" height="34.0" layoutX="75.0" layoutY="16.0" stroke="#838282" strokeType="INSIDE" style="fx-border-radius: 10px;" width="670.0" />
+            <Text fill="WHITE" layoutX="240.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="How To Play" textAlignment="CENTER" wrappingWidth="322.0">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+            </Text>
          </children>
       </AnchorPane>
     </children>

@@ -199,10 +199,15 @@ public class Dealer implements DealerRules {
         double amount = player.takeChips(table.getHighestPotValue() - playerPotAmount);
         table.getTablePot().getPlayerPots().get(playerPosition).addToPot(amount);
         
+        if(table.ifAnyoneAllIn()){
+            player.setCalledForAllIn(true);
+        }
         if(player.getPlayerChips() == 0){
             player.setAllIn(true);
         }
     }
+    
+    
 
     public void setFlod(int position) {
         Player player = table.getPlayers().get(position);
@@ -227,7 +232,8 @@ public class Dealer implements DealerRules {
         PlayerPot playerPot = table.getTablePot().getPlayerPots().get(playerPosition);
         double amount = player.takeChips(player.getPlayerChips());
         playerPot.addToPot(amount);
-        table.setHighestPotValue(playerPot.getPlayerContribution());
+        if(playerPot.getPlayerContribution() > table.getHighestPotValue())
+            table.setHighestPotValue(playerPot.getPlayerContribution());
         player.setAllIn(true);
     }
     
