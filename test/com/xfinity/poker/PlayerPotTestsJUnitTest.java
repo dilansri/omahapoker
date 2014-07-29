@@ -240,7 +240,7 @@ public class PlayerPotTestsJUnitTest {
             for(int i=0;i<5;i++)
             {
                 ComputerPlayer player = (ComputerPlayer)table.getPlayers().get(i);
-                player.getAction(possibleActions, table.getCommunityCards(), Dealer.Round.RIVER, 1);                
+                player.getAction(possibleActions, table.getCommunityCards(), Dealer.Round.TURN, 1);                
             }
             /*
             for(Card card:table.getPlayers().get(0).getPlayerHand().getCards()){

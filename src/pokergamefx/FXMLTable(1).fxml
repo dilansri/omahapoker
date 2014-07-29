@@ -19,7 +19,7 @@
         <Circle fill="#3ba40e" layoutX="400.0" layoutY="102.0" radius="32.0" stroke="WHITE" strokeType="INSIDE" />
         <Circle fill="#3ba40e" layoutX="154.0" layoutY="159.0" radius="32.0" stroke="WHITE" strokeType="INSIDE" />
         <Circle fill="#3ba40e" layoutX="643.0" layoutY="159.0" radius="32.0" stroke="WHITE" strokeType="INSIDE" />
-        <Circle fill="#3ba40e" layoutX="154.0" layoutY="459.0" radius="32.0" stroke="WHITE" strokeType="INSIDE" />
+        <Circle fill="#c91c1c" layoutX="154.0" layoutY="459.0" radius="32.0" stroke="WHITE" strokeType="INSIDE" />
         <Circle fill="#3ba40e" layoutX="643.0" layoutY="459.0" radius="32.0" stroke="WHITE" strokeType="INSIDE" />
         <Circle fill="#1d2985" layoutX="400.0" layoutY="492.0" radius="32.0" stroke="#161749" strokeType="INSIDE" />
         <Ellipse fill="#e4e4e4" layoutX="127.0" layoutY="106.0" radiusX="5.0" radiusY="13.0" stroke="#ffffff00" strokeType="INSIDE" />
@@ -184,15 +184,15 @@
         </Group>
         <Group layoutX="307.0" layoutY="-52.0">
             <children>
-                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e4e4e4" height="60.0" layoutX="149.0" layoutY="57.0" stroke="#ffffff00" strokeType="INSIDE" width="75.0" />
-                <Text fx:id="player2Chips" layoutX="166.0" layoutY="74.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="58.34375" />
-                <Text layoutX="156.0" layoutY="74.0" strokeType="OUTSIDE" strokeWidth="0.0" text="\$" />
-                <Text layoutX="152.0" layoutY="104.0" strokeType="OUTSIDE" strokeWidth="0.0" text="\$" wrappingWidth="15.38671875">
+                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e4e4e4" height="60.0" layoutX="149.0" layoutY="55.0" stroke="#ffffff00" strokeType="INSIDE" width="75.0" />
+                <Text fx:id="player2Chips" layoutX="166.0" layoutY="72.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="58.34375" />
+                <Text layoutX="156.0" layoutY="72.0" strokeType="OUTSIDE" strokeWidth="0.0" text="\$" />
+                <Text layoutX="152.0" layoutY="102.0" strokeType="OUTSIDE" strokeWidth="0.0" text="\$" wrappingWidth="15.38671875">
                     <font>
                         <Font name="Agency FB Bold" size="24.0" />
                     </font>
                 </Text>
-                <Text fx:id="player2Pot" layoutX="161.0" layoutY="104.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="RIGHT" wrappingWidth="60.38671875">
+                <Text fx:id="player2Pot" layoutX="161.0" layoutY="102.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="RIGHT" wrappingWidth="60.38671875">
                     <font>
                         <Font name="Agency FB Bold" size="24.0" />
                     </font>
@@ -515,22 +515,183 @@
       </AnchorPane>
       <AnchorPane id="AnchorPane" fx:id="tutorialAnchorPane" prefHeight="600" prefWidth="800" style="-fx-background-color: #eaa915;" visible="false">
          <children>
-            <TextArea editable="false" layoutX="82.0" layoutY="50.0" prefHeight="492.0" prefWidth="656.0" style="-fx-border-radius: 10px;" text="&#10;There are only five players playing and there is a separate&#10;dealer to deal cards to the players. Before starting a round &#10;blinds will be collected by the dealer. Each player receives &#10;four cards from the dealer at the beginning of the game.&#10;&#10;And then, the table is opened for the first betting round. &#10;Players are allowed to call, fold, or raise their pot’s value. &#10;Dealer puts “Pre-Flop” to the table and another round start. &#10;After that dealer will put “flop, turn and, river” cards &#10;accordingly on table face up, where after putting each card &#10;a betting round will follow.&#10;&#10;Finally from the remaining players dealer will find &#10;the high hand winner by matching two cards from &#10;the player hand and three cards from the table. &#10;&#10;Then dealer will find the low hand winner&#10;(from 8 or lower cards). &#10;If there is low hand winner the table pot is divided between &#10;the high hand winner and low hand winner. &#10;&#10;If there is no low hand winner,&#10;the high hand winner gets it all." wrapText="true">
-               <font>
-                  <Font name="Georgia Bold" size="16.0" />
-               </font>
-            </TextArea>
-            <Button fx:id="tutorialBackButton" layoutX="576.0" layoutY="550.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="161.0" style="-fx-background-color:                                 #000000,                                 linear-gradient(#7ebcea, #2f4b8f),                                 linear-gradient(#426ab7, #263e75),                                 linear-gradient(#395cab, #223768);                             -fx-background-insets: 0,1,2,3;                             -fx-background-radius: 3,2,2,2;                             -fx-padding: 12 30 12 30;                             -fx-text-fill: white;                             -fx-font-size: 16px;" text="Back">
+            <Rectangle arcHeight="10.0" arcWidth="10.0" fill="WHITE" height="493.0" layoutX="49.0" layoutY="49.0" stroke="WHITE" strokeType="INSIDE" width="710.0" />
+            <Button fx:id="tutorialBackButton" layoutX="603.0" layoutY="551.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="161.0" style="-fx-background-color:                                 #000000,                                 linear-gradient(#7ebcea, #2f4b8f),                                 linear-gradient(#426ab7, #263e75),                                 linear-gradient(#395cab, #223768);                             -fx-background-insets: 0,1,2,3;                             -fx-background-radius: 3,2,2,2;                             -fx-padding: 12 30 12 30;                             -fx-text-fill: white;                             -fx-font-size: 16px;" text="Back">
                <font>
                   <Font size="15.0" />
                </font>
             </Button>
-            <Rectangle arcHeight="50.0" arcWidth="10.0" fill="#973a3a" height="34.0" layoutX="75.0" layoutY="16.0" stroke="#838282" strokeType="INSIDE" style="fx-border-radius: 10px;" width="670.0" />
+            <Rectangle arcHeight="50.0" arcWidth="10.0" fill="#973a3a" height="34.0" layoutX="44.0" layoutY="16.0" stroke="#838282" strokeType="INSIDE" style="fx-border-radius: 10px;" width="718.0" />
             <Text fill="WHITE" layoutX="240.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="How To Play" textAlignment="CENTER" wrappingWidth="322.0">
                <font>
                   <Font name="System Bold" size="24.0" />
                </font>
             </Text>
+            <Circle fill="#c91c1c" layoutX="233.0" layoutY="108.0" radius="32.0" scaleX="0.8" scaleY="0.8" stroke="BLACK" strokeType="INSIDE" />
+            <SVGPath content="M10 6c0-3.314 2.686-6 6-6s6 2.686 6 6c0 3.314-2.686 6-6 6s-6-2.686-6-6zM24.002 14h-1.107l-6.222 12.633 2.327-11.633-3-3-3 3 2.327 11.633-6.222-12.633h-1.107c-3.998 0-3.998 2.687-3.998 6v10h24v-10c0-3.313 0-6-3.998-6z" layoutX="217.0" layoutY="92.0" scaleX="1.35" scaleY="1.35" />
+            <Text layoutX="59.0" layoutY="117.0" strokeType="OUTSIDE" strokeWidth="0.0" text="There is you">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Text>
+            <Text layoutX="273.0" layoutY="117.0" strokeType="OUTSIDE" strokeWidth="0.0" text="and another">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Text>
+            <Circle fill="#3ba40e" layoutX="446.0" layoutY="108.0" radius="32.0" scaleX="0.8" scaleY="0.8" stroke="BLACK" strokeType="INSIDE" />
+            <SVGPath content="M10 6c0-3.314 2.686-6 6-6s6 2.686 6 6c0 3.314-2.686 6-6 6s-6-2.686-6-6zM24.002 14h-1.107l-6.222 12.633 2.327-11.633-3-3-3 3 2.327 11.633-6.222-12.633h-1.107c-3.998 0-3.998 2.687-3.998 6v10h24v-10c0-3.313 0-6-3.998-6z" layoutX="430.0" layoutY="92.0" scaleX="1.35" scaleY="1.35" />
+            <Text layoutX="481.0" layoutY="117.0" strokeType="OUTSIDE" strokeWidth="0.0" text="X 4 players playing">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Text>
+            <Button fx:id="callButton1" layoutX="178.0" layoutY="186.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="111.0" scaleX="0.7" scaleY="0.7" style="-fx-background-color:                                 linear-gradient(#ffd65b, #e68400),                                 linear-gradient(#ffef84, #f2ba44),                                 linear-gradient(#ffea6a, #efaa22),                                 linear-gradient(#ffe657 0%, #f8c202 50%, #eea10b 100%),                                 linear-gradient(from 0% 0% to 15% 50%, rgba(255,255,255,0.9), rgba(255,255,255,0));                             -fx-background-radius: 30;                             -fx-background-insets: 0,1,2,3,0;                             -fx-text-fill: #654b00;                             -fx-font-weight: bold;                             -fx-font-size: 14px;                             -fx-padding: 10 20 10 20;" text="CALL" textAlignment="RIGHT">
+               <font>
+                  <Font name="Lucida Handwriting Italic" size="18.0" />
+               </font>
+            </Button>
+            <Button fx:id="callButton11" layoutX="256.0" layoutY="186.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="111.0" scaleX="0.7" scaleY="0.7" style="-fx-background-color:                                 linear-gradient(#ffd65b, #e68400),                                 linear-gradient(#ffef84, #f2ba44),                                 linear-gradient(#ffea6a, #efaa22),                                 linear-gradient(#ffe657 0%, #f8c202 50%, #eea10b 100%),                                 linear-gradient(from 0% 0% to 15% 50%, rgba(255,255,255,0.9), rgba(255,255,255,0));                             -fx-background-radius: 30;                             -fx-background-insets: 0,1,2,3,0;                             -fx-text-fill: #654b00;                             -fx-font-weight: bold;                             -fx-font-size: 14px;                             -fx-padding: 10 20 10 20;" text="RAISE" textAlignment="RIGHT">
+               <font>
+                  <Font name="Lucida Handwriting Italic" size="18.0" />
+               </font>
+            </Button>
+            <Button fx:id="callButton111" layoutX="334.0" layoutY="186.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="111.0" scaleX="0.7" scaleY="0.7" style="-fx-background-color:                                 linear-gradient(#ffd65b, #e68400),                                 linear-gradient(#ffef84, #f2ba44),                                 linear-gradient(#ffea6a, #efaa22),                                 linear-gradient(#ffe657 0%, #f8c202 50%, #eea10b 100%),                                 linear-gradient(from 0% 0% to 15% 50%, rgba(255,255,255,0.9), rgba(255,255,255,0));                             -fx-background-radius: 30;                             -fx-background-insets: 0,1,2,3,0;                             -fx-text-fill: #654b00;                             -fx-font-weight: bold;                             -fx-font-size: 14px;                             -fx-padding: 10 20 10 20;" text="CHECK" textAlignment="RIGHT">
+               <font>
+                  <Font name="Lucida Handwriting Italic" size="18.0" />
+               </font>
+            </Button>
+            <Button fx:id="callButton1111" layoutX="412.0" layoutY="185.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="111.0" scaleX="0.7" scaleY="0.7" style="-fx-background-color:                                 linear-gradient(#ffd65b, #e68400),                                 linear-gradient(#ffef84, #f2ba44),                                 linear-gradient(#ffea6a, #efaa22),                                 linear-gradient(#ffe657 0%, #f8c202 50%, #eea10b 100%),                                 linear-gradient(from 0% 0% to 15% 50%, rgba(255,255,255,0.9), rgba(255,255,255,0));                             -fx-background-radius: 30;                             -fx-background-insets: 0,1,2,3,0;                             -fx-text-fill: #654b00;                             -fx-font-weight: bold;                             -fx-font-size: 14px;                             -fx-padding: 10 20 10 20;" text="FOLD" textAlignment="RIGHT">
+               <font>
+                  <Font name="Lucida Handwriting Italic" size="18.0" />
+               </font>
+            </Button>
+            <Button fx:id="callButton1112" layoutX="518.0" layoutY="186.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="111.0" scaleX="0.7" scaleY="0.7" style="-fx-background-color:                                 linear-gradient(#ffd65b, #e68400),                                 linear-gradient(#ffef84, #f2ba44),                                 linear-gradient(#ffea6a, #efaa22),                                 linear-gradient(#ffe657 0%, #f8c202 50%, #eea10b 100%),                                 linear-gradient(from 0% 0% to 15% 50%, rgba(255,255,255,0.9), rgba(255,255,255,0));                             -fx-background-radius: 30;                             -fx-background-insets: 0,1,2,3,0;                             -fx-text-fill: #654b00;                             -fx-font-weight: bold;                             -fx-font-size: 14px;                             -fx-padding: 10 20 10 20;" text="ALL IN">
+               <font>
+                  <Font name="Lucida Handwriting Italic" size="18.0" />
+               </font>
+            </Button>
+            <Text layoutX="102.0" layoutY="216.0" strokeType="OUTSIDE" strokeWidth="0.0" text="You can" textAlignment="RIGHT">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Text>
+            <Text layoutX="509.0" layoutY="216.0" strokeType="OUTSIDE" strokeWidth="0.0" text="or" textAlignment="RIGHT">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Text>
+            <Text layoutX="619.0" layoutY="215.0" strokeType="OUTSIDE" strokeWidth="0.0" text="your money" textAlignment="RIGHT">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Text>
+            <Group layoutX="72.0" layoutY="-4.0">
+               <children>
+                  <Rectangle arcHeight="15.0" arcWidth="15.0" fill="#cdc2c2" height="58.0" layoutX="121.0" layoutY="284.0" stroke="#d0d0d0" strokeType="INSIDE" width="42.0" />
+                  <SVGPath content="M25.549 10.88c-6.049-4.496-8.133-8.094-9.549-10.88v0c-0 0-0-0-0-0v0c-1.415 2.785-3.5 6.384-9.549 10.88-10.314 7.665-0.606 18.365 7.93 12.476-0.556 3.654-2.454 6.318-4.381 7.465v1.179h12.001v-1.179c-1.928-1.147-3.825-3.811-4.382-7.465 8.535 5.889 18.244-4.811 7.93-12.476z" layoutX="125.0" layoutY="304.0" scaleX="0.76" scaleY="0.76" />
+                  <Text layoutX="125.0" layoutY="304.0" strokeType="OUTSIDE" strokeWidth="0.0" text="A" wrappingWidth="31.13671875">
+                     <font>
+                        <Font size="19.0" />
+                     </font>
+                  </Text>
+               </children>
+            </Group>
+            <Text layoutX="59.0" layoutY="319.0" strokeType="OUTSIDE" strokeWidth="0.0" text="You recieve ">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Text>
+            <Text layoutX="241.0" layoutY="319.0" strokeType="OUTSIDE" strokeWidth="0.0" text="X 4 cards to play , table has">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Text>
+            <Group layoutX="434.0" layoutY="-4.0">
+               <children>
+                  <Rectangle arcHeight="15.0" arcWidth="15.0" fill="#cdc2c2" height="58.0" layoutX="121.0" layoutY="284.0" stroke="#d0d0d0" strokeType="INSIDE" width="42.0" />
+                  <SVGPath content="M25.549 10.88c-6.049-4.496-8.133-8.094-9.549-10.88v0c-0 0-0-0-0-0v0c-1.415 2.785-3.5 6.384-9.549 10.88-10.314 7.665-0.606 18.365 7.93 12.476-0.556 3.654-2.454 6.318-4.381 7.465v1.179h12.001v-1.179c-1.928-1.147-3.825-3.811-4.382-7.465 8.535 5.889 18.244-4.811 7.93-12.476z" layoutX="125.0" layoutY="304.0" scaleX="0.76" scaleY="0.76" />
+                  <Text layoutX="125.0" layoutY="304.0" strokeType="OUTSIDE" strokeWidth="0.0" text="A" wrappingWidth="31.13671875">
+                     <font>
+                        <Font size="19.0" />
+                     </font>
+                  </Text>
+               </children>
+            </Group>
+            <Text layoutX="603.0" layoutY="319.0" strokeType="OUTSIDE" strokeWidth="0.0" text="X 5 cards">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Text>
+            <Group layoutX="16.0" layoutY="100.0">
+               <children>
+                  <Rectangle arcHeight="15.0" arcWidth="15.0" fill="#cdc2c2" height="58.0" layoutX="121.0" layoutY="284.0" stroke="#d0d0d0" strokeType="INSIDE" width="42.0" />
+                  <SVGPath content="M25.549 10.88c-6.049-4.496-8.133-8.094-9.549-10.88v0c-0 0-0-0-0-0v0c-1.415 2.785-3.5 6.384-9.549 10.88-10.314 7.665-0.606 18.365 7.93 12.476-0.556 3.654-2.454 6.318-4.381 7.465v1.179h12.001v-1.179c-1.928-1.147-3.825-3.811-4.382-7.465 8.535 5.889 18.244-4.811 7.93-12.476z" layoutX="125.0" layoutY="304.0" scaleX="0.76" scaleY="0.76" />
+                  <Text layoutX="125.0" layoutY="304.0" strokeType="OUTSIDE" strokeWidth="0.0" text="A" wrappingWidth="31.13671875">
+                     <font>
+                        <Font size="19.0" />
+                     </font>
+                  </Text>
+               </children>
+            </Group>
+            <Text layoutX="185.0" layoutY="423.0" strokeType="OUTSIDE" strokeWidth="0.0" text="X 2 from you and" textAlignment="RIGHT">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Text>
+            <Group layoutX="265.0" layoutY="100.0">
+               <children>
+                  <Rectangle arcHeight="15.0" arcWidth="15.0" fill="#cdc2c2" height="58.0" layoutX="121.0" layoutY="284.0" stroke="#d0d0d0" strokeType="INSIDE" width="42.0" />
+                  <SVGPath content="M25.549 10.88c-6.049-4.496-8.133-8.094-9.549-10.88v0c-0 0-0-0-0-0v0c-1.415 2.785-3.5 6.384-9.549 10.88-10.314 7.665-0.606 18.365 7.93 12.476-0.556 3.654-2.454 6.318-4.381 7.465v1.179h12.001v-1.179c-1.928-1.147-3.825-3.811-4.382-7.465 8.535 5.889 18.244-4.811 7.93-12.476z" layoutX="125.0" layoutY="304.0" scaleX="0.76" scaleY="0.76" />
+                  <Text layoutX="125.0" layoutY="304.0" strokeType="OUTSIDE" strokeWidth="0.0" text="A" wrappingWidth="31.13671875">
+                     <font>
+                        <Font size="19.0" />
+                     </font>
+                  </Text>
+               </children>
+            </Group>
+            <Text layoutX="432.0" layoutY="423.0" strokeType="OUTSIDE" strokeWidth="0.0" text="X 3 from table  are evaluated" textAlignment="RIGHT">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Text>
+            <Line endX="606.0" layoutX="151.0" layoutY="153.0" startX="-100.0" />
+            <Line endX="606.0" layoutX="151.0" layoutY="259.0" startX="-100.0" />
+            <Line endX="606.0" layoutX="151.0" layoutY="362.0" startX="-100.0" />
+            <Line endX="606.0" layoutX="150.0" layoutY="470.0" startX="-100.0" />
+            <Circle fill="WHITE" layoutX="25.0" layoutY="107.0" radius="19.0" stroke="BLACK" strokeType="INSIDE" />
+            <Circle fill="WHITE" layoutX="779.0" layoutY="206.0" radius="19.0" stroke="BLACK" strokeType="INSIDE" />
+            <Circle fill="WHITE" layoutX="25.0" layoutY="309.0" radius="19.0" stroke="BLACK" strokeType="INSIDE" />
+            <Circle fill="WHITE" layoutX="780.0" layoutY="413.0" radius="19.0" stroke="BLACK" strokeType="INSIDE" />
+            <Text layoutX="18.0" layoutY="116.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Text>
+            <Text layoutX="772.0" layoutY="215.0" strokeType="OUTSIDE" strokeWidth="0.0" text="2">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Text>
+            <Text layoutX="18.0" layoutY="319.0" strokeType="OUTSIDE" strokeWidth="0.0" text="3">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Text>
+            <Text layoutX="773.0" layoutY="423.0" strokeType="OUTSIDE" strokeWidth="0.0" text="4">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Text>
+            <Button layoutX="207.0" layoutY="484.0" mnemonicParsing="false" style="-fx-background-color:                         #c3c4c4,                         linear-gradient(#d6d6d6 50%, white 100%),                         radial-gradient(center 50% -40%, radius 200%, #e6e6e6 45%, rgba(230,230,230,0) 50%);                     -fx-background-radius: 30;                     -fx-background-insets: 0,1,1;                     -fx-text-fill: black;                     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 );" text="High Rank Hands">
+               <font>
+                  <Font size="19.0" />
+               </font></Button>
+            <Button layoutX="449.0" layoutY="484.0" mnemonicParsing="false" style="-fx-background-color:                         #c3c4c4,                         linear-gradient(#d6d6d6 50%, white 100%),                         radial-gradient(center 50% -40%, radius 200%, #e6e6e6 45%, rgba(230,230,230,0) 50%);                     -fx-background-radius: 30;                     -fx-background-insets: 0,1,1;                     -fx-text-fill: black;                     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 );" text="Low Rank Hands">
+               <font>
+                  <Font size="19.0" />
+               </font>
+            </Button>
          </children>
       </AnchorPane>
     </children>

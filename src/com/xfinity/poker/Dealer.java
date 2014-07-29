@@ -119,14 +119,14 @@ public class Dealer implements DealerRules {
         dealToPlayers(players);
         
         //TESTING PURPOSES
-        
+        /*
         for(int i=0;i<table.getPlayers().size();i++){
             System.out.println("Player "+i);
             for(int j=0;j<4;j++){
                 System.out.print(table.getPlayers().get(i).getPlayerHand().getCards().get(j)+" , ");
             }
             System.out.println("------");
-        } 
+        } */
     }
 
     public void dealToPlayers(List<Player> players) {

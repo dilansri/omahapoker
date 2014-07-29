@@ -383,6 +383,12 @@ public class TableControl extends AnchorPane implements Initializable {
             cardList.getChildren().clear();
         }        
         tableCards.getChildren().clear();
+        
+        singlePlayerMessageText.setText("");
+        player1MessageText.setText("");
+        player2MessageText.setText("");
+        player3MessageText.setText("");
+        player4MessageText.setText("");
     }
     
     private void adjustDealer(){
@@ -1558,7 +1564,7 @@ public class TableControl extends AnchorPane implements Initializable {
             @Override
             public void handle(ActionEvent event) {
                 //showPlayerTurnAnimation(bettingTransitionsAfterPlayerChoice);
-                showFindingWinnersAnimation();             
+                showHighHandWinner();             
             }
         });
         seqShowCards.play();         
@@ -1571,6 +1577,8 @@ public class TableControl extends AnchorPane implements Initializable {
         ParallelTransition cardsRotating = new ParallelTransition();
         
         final String playerWinningHand = table.getPlayers().get(player).getWinningHandType();
+        
+        
         
         
         Rectangle messageBox = null;
@@ -1599,6 +1607,9 @@ public class TableControl extends AnchorPane implements Initializable {
         }    
         
         final Text finalMessageText = messageText;
+        
+        final String[] handText = {"","HIGH CARD","PAIR","TWO PAIRS","THREE OF KIND","STRAIGHT","FLUSH","FULL HOUSE",
+                            "FOUR OF KIND","STRAIGHT FLUSH","ROYAL FLUSH"};
 
         KeyValue valueBox = new KeyValue(messageBox.fillProperty(), Paint.valueOf("3ba40e"), Interpolator.EASE_IN);        
         KeyValue valueTextThinking = new KeyValue(messageText.textProperty(),"");
@@ -1641,37 +1652,10 @@ public class TableControl extends AnchorPane implements Initializable {
         cardsRotating.getChildren().add(timelineBox);
        
        return cardsRotating;
-    }
+    }    
     
-    private void showFindingWinnersAnimation(){
-       roundMessageText.setText("We are finding winners!!!");
-       roundMessageBox.setOpacity(0);
-       KeyValue valueOpacity = new KeyValue(roundMessageText.opacityProperty(),1,Interpolator.EASE_OUT);       
-       KeyValue valueBoxOpacity = new KeyValue(roundMessageBox.opacityProperty(),1,Interpolator.EASE_OUT);       
-       KeyFrame keyFrame = new KeyFrame(Duration.millis(2000), valueOpacity,valueBoxOpacity);       
-       Timeline timeline = new Timeline();
-       timeline.getKeyFrames().add(keyFrame);
-       timeline.setAutoReverse(true);
-       timeline.setCycleCount(2);
-       timeline.setDelay(Duration.millis(2000));
-       timeline.setOnFinished(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent event) {
-                //adjustShowDownCards();
-                
-                showHighHandWinner();
-            }
-
-           
-       });
-       timeline.play();
-    }
     
-    private void showHighHandWinner() {       
-       
-       String[] handText = {"","HIGH CARD","PAIR","TWO PAIRS","THREE OF KIND","STRAIGHT","FLUSH","FULL HOUSE",
-                            "FOUR OF KIND","STRAIGHT FLUSH","ROYAL FLUSH"};
+    private void showHighHandWinner() {   
         
        roundMessageText.setText(application.getHighHandWinner().getName()+" Wins HighHand. " + application.getHighHandWinner().getWinningHandType().toUpperCase());
        roundMessageText.setStyle("-fx-font-size:32;");
