@@ -130,7 +130,7 @@ public class TableControl extends AnchorPane implements Initializable {
     private Group dealerChip,smallBlindChip,bigBlindChip;
     
     @FXML
-    private ImageView playNowChip;
+    private ImageView playNowChip,welcomeCardImage;
     
     @FXML
     private Text gameNameMain,howToPlayText;
@@ -183,7 +183,8 @@ public class TableControl extends AnchorPane implements Initializable {
     }
     
     private void setUpWelcomeScreen(){
-        setUpPlayNowChipAnimation();        
+        setUpPlayNowChipAnimation(); 
+        welcomeScreenImageAnimation();
         welcomeScreenTextAnimations();
         
         howToPlayText.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -199,6 +200,18 @@ public class TableControl extends AnchorPane implements Initializable {
                 startScreen.setVisible(true);
             }
         });
+    }
+    
+    private void welcomeScreenImageAnimation(){
+        welcomeCardImage.setScaleX(0);
+        welcomeCardImage.setScaleY(0);
+        KeyValue valueX = new KeyValue(welcomeCardImage.scaleXProperty(), 1, Interpolator.EASE_OUT);
+        KeyValue valueY = new KeyValue(welcomeCardImage.scaleYProperty(),1, Interpolator.EASE_OUT);
+        KeyFrame keyFrame = new KeyFrame(Duration.millis(600), valueX,valueY);
+        final Timeline timeline = new Timeline();
+        timeline.setDelay(Duration.millis(100));
+        timeline.getKeyFrames().add(keyFrame);
+        timeline.play();
     }
     
     private void initializeTableControls(){
@@ -406,6 +419,7 @@ public class TableControl extends AnchorPane implements Initializable {
             }            
             player.getPlayerHand().clear();
             player.clearWinningHands();
+            player.setWinningHandType("");
             player.setAllIn(false); 
             player.setCalledForAllIn(false);
         }
@@ -746,7 +760,8 @@ public class TableControl extends AnchorPane implements Initializable {
         String source = new File("audio/"+sourceFile).toURI().toString();
         Media media = new Media(source);
         MediaPlayer mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.setAutoPlay(true);
+        mediaPlayer.stop();
+        mediaPlayer.play();
     }
     
     private HBox getPlayerCardsHBox(int player){
@@ -1269,7 +1284,7 @@ public class TableControl extends AnchorPane implements Initializable {
             public void handle(ActionEvent event) {    
                 dealer.setRound(Round.FLOP);
                 dealer.setRoundCount(0);
-                if(dealer.allFoldedOrAllIn() || dealer.allFoldedOrAllInExceptOne())
+                if(dealer.allFoldedOrAllIn() || (dealer.allFoldedOrAllInExceptOne() && dealer.everyoneCalledAllInFoldedOrAllIn()))
                 {
                     dealer.setRound(Round.TURN);
                     dealer.setRoundCount(0);
@@ -1356,7 +1371,7 @@ public class TableControl extends AnchorPane implements Initializable {
             public void handle(ActionEvent event) {    
                 dealer.setRound(Round.TURN);
                 dealer.setRoundCount(0);
-                if(dealer.allFoldedOrAllIn() || dealer.allFoldedOrAllInExceptOne()){
+                if(dealer.allFoldedOrAllIn() || (dealer.allFoldedOrAllInExceptOne() && dealer.everyoneCalledAllInFoldedOrAllIn())){
                     dealer.setRound(Round.RIVER);
                     dealer.setRoundCount(0);
                     startRiverRound();
@@ -1441,7 +1456,7 @@ public class TableControl extends AnchorPane implements Initializable {
             public void handle(ActionEvent event) {    
                 dealer.setRound(Round.RIVER);
                 dealer.setRoundCount(0);
-                if(dealer.allFoldedOrAllIn() || dealer.allFoldedOrAllInExceptOne()){
+                if(dealer.allFoldedOrAllIn() || (dealer.allFoldedOrAllInExceptOne() && dealer.everyoneCalledAllInFoldedOrAllIn())){
                     startShowDownRound();
                 }else
                     startBettingRound();                 
@@ -1508,9 +1523,15 @@ public class TableControl extends AnchorPane implements Initializable {
     }
     
     private void showPlayerCardsTransitions(){
-        int showDownStartingPlayer = dealer.getDealingPlayerOrder()+2;
+       PlayerBestHighHand bestHand = dealer.getHighHandWinner();       
+       application.setHighHandWinner(table.getPlayers().get(bestHand.getPlayerPosition()));
+       
+       
+       singlePlayerMessageText.setText(table.getPlayers().get(0).getWinningHandType());
+       
+       int showDownStartingPlayer = dealer.getDealingPlayerOrder()+2;
         
-        boolean playerPassed = false;
+        
         
         List<Transition> showDownTransitions = new ArrayList<>();
         
@@ -1519,9 +1540,7 @@ public class TableControl extends AnchorPane implements Initializable {
             
             //PlayerAction action = null;
             
-            if(player instanceof HumanPlayer){
-                //action = player.getAction();
-                playerPassed = true;
+            if(player instanceof HumanPlayer){                
                 continue;
             }else if(player instanceof ComputerPlayer){
                 //action = ((ComputerPlayer)player).getAction(dealer.getPlayerPossibleActions(i%GAME_PLAYERS),dealer.getRound());
@@ -1551,6 +1570,8 @@ public class TableControl extends AnchorPane implements Initializable {
                
         ParallelTransition cardsRotating = new ParallelTransition();
         
+        final String playerWinningHand = table.getPlayers().get(player).getWinningHandType();
+        
         
         Rectangle messageBox = null;
         Text messageText = null;
@@ -1575,7 +1596,9 @@ public class TableControl extends AnchorPane implements Initializable {
                 messageBox = player4MessageBox;
                 messageText = player4MessageText;
                 break;
-        }        
+        }    
+        
+        final Text finalMessageText = messageText;
 
         KeyValue valueBox = new KeyValue(messageBox.fillProperty(), Paint.valueOf("3ba40e"), Interpolator.EASE_IN);        
         KeyValue valueTextThinking = new KeyValue(messageText.textProperty(),"");
@@ -1590,6 +1613,9 @@ public class TableControl extends AnchorPane implements Initializable {
 
             @Override
             public void handle(ActionEvent event) {
+                finalMessageText.setText(playerWinningHand);
+                if(table.getPlayers().get(player).isFolded())
+                    finalMessageText.setText("FOLDED");
                 final HBox playerCards = getPlayerCardsHBox(player); 
                 playerCards.getChildren().clear();
 
@@ -1642,18 +1668,16 @@ public class TableControl extends AnchorPane implements Initializable {
        timeline.play();
     }
     
-    private void showHighHandWinner() {
-       PlayerBestHighHand bestHand = dealer.getHighHandWinner();       
-       application.setHighHandWinner(table.getPlayers().get(bestHand.getPlayerPosition()));
+    private void showHighHandWinner() {       
        
        String[] handText = {"","HIGH CARD","PAIR","TWO PAIRS","THREE OF KIND","STRAIGHT","FLUSH","FULL HOUSE",
                             "FOUR OF KIND","STRAIGHT FLUSH","ROYAL FLUSH"};
         
-       roundMessageText.setText(table.getPlayers().get(bestHand.getPlayerPosition()).getName()+" Wins HighHand. " + handText[bestHand.getPlayerBestHand()].toUpperCase());
+       roundMessageText.setText(application.getHighHandWinner().getName()+" Wins HighHand. " + application.getHighHandWinner().getWinningHandType().toUpperCase());
        roundMessageText.setStyle("-fx-font-size:32;");
        roundMessageBox.setOpacity(0);
        
-       System.out.println("WINNING HAND: " + table.getPlayers().get(bestHand.getPlayerPosition()).getWinningCards());
+       System.out.println("WINNING HAND: " + application.getHighHandWinner().getWinningCards());
        
        KeyValue valueOpacity = new KeyValue(roundMessageText.opacityProperty(),1,Interpolator.EASE_OUT);       
        KeyValue valueBoxOpacity = new KeyValue(roundMessageBox.opacityProperty(),1,Interpolator.EASE_OUT);       

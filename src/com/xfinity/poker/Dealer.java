@@ -17,7 +17,7 @@ public class Dealer implements DealerRules {
     
     private int roundCount;
 
-    
+      
 
     public enum Round {
 
@@ -286,5 +286,17 @@ public class Dealer implements DealerRules {
             winner.awardChips(givingAmount);
         }        
         table.clearTablePot();
+    }
+    
+    public boolean everyoneCalledAllInFoldedOrAllIn() {
+        for(Player player:table.getPlayers()){
+            if(player.isAllIn() || player.isFolded() || player.isCalledForAllIn()){
+                continue;
+            }else{
+                return false;
+            }
+        }
+        
+        return true;
     }
 }
