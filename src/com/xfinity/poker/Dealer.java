@@ -48,6 +48,10 @@ public class Dealer implements DealerRules {
         return roundCount;
     }
     
+    public void setDealingPlayerOrder(int pos){
+        dealingPlayerOrder = pos;
+    }
+    
     public void setRoundCount(int count){
         roundCount = count;
     }

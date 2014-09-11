@@ -159,6 +159,10 @@ public class Player implements PlayerRules {
         public void setCalledForAllIn(boolean value){
             calledForAllIn = value;
         }
+        
+        public void setPlayerChips(double chips){
+            playerChips.set(chips);
+        }
        
         
 	

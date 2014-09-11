@@ -20,6 +20,7 @@ import com.xfinity.poker.Player;
 import com.xfinity.poker.Player.PlayerAction;
 import com.xfinity.poker.PlayerBestHighHand;
 import com.xfinity.poker.PlayerBestLowHand;
+import static com.xfinity.poker.PlayerRules.PLAYER_INITIAL_CHIPS;
 import com.xfinity.poker.Table;
 import static com.xfinity.poker.TableRules.NUMBER_OF_FLOP_CARDS;
 import static com.xfinity.poker.TableRules.NUMBER_OF_RIVER_CARDS;
@@ -53,7 +54,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.ProgressIndicator;
-import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -112,7 +112,13 @@ public class TableControl extends AnchorPane implements Initializable {
     private Button callButton,raiseButton,checkButton,foldButton,allInButton;
     
     @FXML
-    private AnchorPane winnersAnchorPane;
+    private AnchorPane winnersAnchorPane,gameOverAnchorPane;
+    
+    @FXML
+    private Button newGameButton,quitGameButton;
+    
+    @FXML
+    private Text balanceText;
     
     @FXML
     private Text highWinnerName,lowWinnerName,highHandType;
@@ -124,7 +130,9 @@ public class TableControl extends AnchorPane implements Initializable {
     private Text highWinnings,lowWinnings;
     
     @FXML
-    private Button playAgainButton,exitGameButton;
+    private Button playAgainButton,exitGameButton,closeGameButton;
+    
+    
     
     @FXML
     private Group dealerChip,smallBlindChip,bigBlindChip;
@@ -144,6 +152,12 @@ public class TableControl extends AnchorPane implements Initializable {
     @FXML
     private Button tutorialBackButton;
     
+    @FXML
+    private AnchorPane rankHandsAnchorPane;
+    
+    @FXML 
+    private Button seeRankHands,closeRankHands;
+    
     
     private List<HBox> playerCardsList;
     
@@ -160,7 +174,7 @@ public class TableControl extends AnchorPane implements Initializable {
     private int roundsCount = 0;
     
     public TableControl(Dealer dealerRef,final PokerGameFX application){
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXMLTable(1).fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXMLTable.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
         this.dealer = dealerRef;
@@ -178,8 +192,18 @@ public class TableControl extends AnchorPane implements Initializable {
         
         setUpWinnerScreenActions();
         
+        setUpHowToPlay();
+        
         initializeTableControls();      
 
+    }
+    
+    private void setUpHowToPlay(){
+        seeRankHands.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+                rankHandsAnchorPane.setVisible(true);
+            }
+        });
     }
     
     private void setUpWelcomeScreen(){
@@ -309,14 +333,44 @@ public class TableControl extends AnchorPane implements Initializable {
                     changeChipsPositionsAnimations();
                     startGame();
                 }else{
-                    //showGameOver();
+                    showGameOver();
                 }
+            }
+        });
+        
+        newGameButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+                application.startGame();
+                gameOverAnchorPane.setVisible(false);
+                gameOverAnchorPane.setLayoutY(winnersAnchorPane.getLayoutY()-10);
+                resetWinners();
+                clearTable();
+                adjustDealer();
+                adjustTable();               
+                adjustPlayersNewGame();  
+                dealer.setDealingPlayerOrder(1);
+                startGame();
             }
         });
         
         exitGameButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
                 Platform.exit();
+            }
+        });        
+        closeGameButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+                Platform.exit();
+            }
+        });
+        quitGameButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+                Platform.exit();
+            }
+        });        
+        closeRankHands.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+                rankHandsAnchorPane.setVisible(false);
             }
         });
     }
@@ -407,6 +461,19 @@ public class TableControl extends AnchorPane implements Initializable {
         table.setHighestPotValue(0);
     }
     
+    private void adjustPlayersNewGame(){
+        for(Player player : table.getPlayers()){
+            player.setFolded(false);            
+            player.setPlayerChips(PLAYER_INITIAL_CHIPS);                    
+            player.getPlayerHand().clear();
+            player.clearWinningHands();
+            player.setWinningHandType("");
+            player.setAllIn(false); 
+            player.setCalledForAllIn(false);
+        }
+        
+    }
+    
     private boolean adjustPlayers(){
         int foldCount = 0;
         for(Player player : table.getPlayers()){
@@ -436,7 +503,7 @@ public class TableControl extends AnchorPane implements Initializable {
         return true;
     }
     
-    private void changeChipsPositionsAnimations(){
+    public void changeChipsPositionsAnimations(){
         int[] xCordinates = {106,106,345,486,492};
         int[] yCordinates = {253,-40,-70,-40,253};
         
@@ -471,6 +538,15 @@ public class TableControl extends AnchorPane implements Initializable {
         trans.play();
     }
     
+    private void showGameOver(){
+        gameOverAnchorPane.setVisible(true);
+        gameOverAnchorPane.setScaleX(0.635);
+        gameOverAnchorPane.setScaleY(0.635);
+        gameOverAnchorPane.setLayoutY(winnersAnchorPane.getLayoutY()+10);
+        balanceText.setText("$ "+table.getPlayers().get(0).getPlayerChips());
+        
+    }
+    
     private void hidePlayerControls() {
         playerActionsPane.setOpacity(0);
         playerTimeIndicatior.setVisible(false);
@@ -497,6 +573,7 @@ public class TableControl extends AnchorPane implements Initializable {
     }
 
     void showDealingToPlayerAnimation(int dealingOrder) {
+        playAudio("game_started.mp3");
         clearPlayerCards();
         final CardControl showingCard = new CardControl("DIAMONDS",Value.CardValue.TWO);
         final Pane card = showingCard.getCard();        
@@ -840,7 +917,10 @@ public class TableControl extends AnchorPane implements Initializable {
     }
     
     private void startBettingRound() {
-                
+        
+        if(dealer.getRoundCount() == 0 )
+         playAudio(dealer.getRound().toString().toLowerCase()+"_round.mp3");   
+        
         int betStartingPlayer = (dealer.getDealingPlayerOrder()+2)%GAME_PLAYERS; 
         dealer.incrementRoundCount();
         
@@ -915,6 +995,7 @@ public class TableControl extends AnchorPane implements Initializable {
 
                 @Override
                 public void handle(ActionEvent event) { 
+                    playAudio("your_turn.mp3");
                    showAndWaitPlayerControls(afterTransitions);
                 }
             });
@@ -998,7 +1079,7 @@ public class TableControl extends AnchorPane implements Initializable {
         
         if(afterTransitions.isEmpty()){
                 
-                if(table.isSamePotValues() || dealer.allFoldedOrAllIn() || dealer.allFoldedOrAllInExceptOne()){
+                if(table.isSamePotValues() || dealer.allFoldedOrAllIn() || dealer.everyoneCalledAllInFoldedOrAllIn()){
                     if(dealer.getRound() == Round.PRE_FLOP)
                         startFlopRound();
                     else if(dealer.getRound() == Round.FLOP)
@@ -1022,7 +1103,7 @@ public class TableControl extends AnchorPane implements Initializable {
 
                 @Override
                 public void handle(ActionEvent event) {                
-                    if (table.isSamePotValues() || dealer.allFoldedOrAllIn() || dealer.allFoldedOrAllInExceptOne()) {
+                    if (table.isSamePotValues() || dealer.allFoldedOrAllIn() || dealer.everyoneCalledAllInFoldedOrAllIn()) {
                         if (dealer.getRound() == Round.PRE_FLOP) {
                             startFlopRound();
                         } else if (dealer.getRound() == Round.FLOP) {
@@ -1683,7 +1764,7 @@ public class TableControl extends AnchorPane implements Initializable {
     }
     
     private void showLowHandWinner() {
-        PlayerBestLowHand lowHand = dealer.getLowHandWinner();
+        final PlayerBestLowHand lowHand = dealer.getLowHandWinner();
         if(lowHand == null)
             roundMessageText.setText("Nobody wins Low Hand");
         else{
@@ -1705,6 +1786,8 @@ public class TableControl extends AnchorPane implements Initializable {
        timeline.setOnFinished(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                if(lowHand != null)
+                    playAudio("applause.mp3");
                 showWinnersDetails();
             }
        });

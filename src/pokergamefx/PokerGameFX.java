@@ -47,12 +47,7 @@ public class PokerGameFX extends Application {
         //Parent root = FXMLLoader.load(getClass().getResource("FXMLTable.fxml"));
         //clickShow();
         primaryOwner = stage;
-        createPlayers();
-        createTable();
-        createDealer();
-        tableControl = new TableControl(dealer,this);
-        tableControl.setMaxWidth(800);
-        tableControl.setMaxHeight(600);
+        startGame();
         StackPane stackPane = new StackPane();
         stackPane.getChildren().add(tableControl);
         StackPane.setAlignment(tableControl, Pos.CENTER);
@@ -68,6 +63,16 @@ public class PokerGameFX extends Application {
         stage.show();
         //tableControl.startGame(); 
         
+    }
+    
+    public void startGame(){
+        createPlayers();
+        createTable();
+        createDealer();
+        tableControl = new TableControl(dealer,this);
+        tableControl.setMaxWidth(800);
+        tableControl.setMaxHeight(600);
+        tableControl.changeChipsPositionsAnimations();
     }
     
     
@@ -124,10 +129,8 @@ public class PokerGameFX extends Application {
 		
 		computerPlayers = new ArrayList<Player>();
 		for(int i=1;i<GAME_PLAYERS;i++){
-                        Player player = new ComputerPlayer("CP"+i,i);
-                        if(i == 1 || i == 4) player.awardChips(400);
+                        Player player = new ComputerPlayer("CP"+i,i);                        
 			computerPlayers.add(player);
-                        
                 }
     }
 
